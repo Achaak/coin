@@ -1,0 +1,52 @@
+{
+  "name": "@pikas-template/translate",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build:tsc": "tsc",
+    "build:tsc:watch": "tsc --watch",
+    "format": "prettier --cache --write \"./**/*.{ts,tsx}\"",
+    "i18n": "typesafe-i18n",
+    "i18n:noWatch": "typesafe-i18n --no-watch",
+    "prelint": "pnpm build",
+    "lint": "cross-env TIMING=1 eslint src --fix",
+    "clean": "rm -rf .turbo node_modules dist",
+    "build": "run-s i18n:noWatch format build:tsc",
+    "dev": "run-p build:tsc:watch i18n"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@types/react": "^18.0.28",
+    "react": "18.2.0",
+    "typesafe-i18n": "^5.24.1"
+  },
+  "devDependencies": {
+    "@pikas-template/prettier": "workspace:*",
+    "@pikas-template/tsconfig": "workspace:*",
+    "@types/node": "^18.14.1",
+    "@types/react": "^18.0.20",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.34.0",
+    "eslint-config-custom": "workspace:*",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.4",
+    "typescript": "4.9.5"
+  },
+  "node": "12.20.0 || 14.13.1 || >=16.0.0"
+}
