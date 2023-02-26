@@ -23,18 +23,22 @@ const seed = async (): Promise<void> => {
               ...user,
             },
             create: {
-              ...user,
+              email: user.email!,
+              name: user.name,
             },
           })
           .then((u) => {
+            // eslint-disable-next-line no-console
             console.log(`Created user: ${u.name ?? u.id}`);
           })
           .catch((error) => {
+            // eslint-disable-next-line no-console
             console.error(error);
           })
       )
     );
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
     process.exit(1);
   } finally {

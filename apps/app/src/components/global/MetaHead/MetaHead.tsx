@@ -38,8 +38,8 @@ export const MetaHead: FC = () => (
       color="#5bbad5"
     />
     <link rel="shortcut icon" href="/favicons/favicon.ico" />
-    <meta name="apple-mobile-web-app-title" content="Pikas-template" />
-    <meta name="application-name" content="Pikas-template" />
+    <meta name="apple-mobile-web-app-title" content="My-coin" />
+    <meta name="application-name" content="My-coin" />
     <meta name="msapplication-TileColor" content="#ffffff" />
     <meta
       name="msapplication-TileImage"

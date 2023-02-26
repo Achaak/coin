@@ -4,5 +4,8 @@ export const { getLink } = routes({
   origin: 'http://localhost:3000',
   links: {
     home: '/home',
+    settings: '/settings',
+    login: '/login',
+    'admin.dashboard': '/admin/dashboard',
   },
 });

@@ -7,6 +7,6 @@
     "rootDir": "./src"
   },
   "exclude": ["node_modules"],
-  "extends": "@pikas-template/tsconfig/base.json",
+  "extends": "@my-coin/tsconfig/base.json",
   "include": ["src"]
 }

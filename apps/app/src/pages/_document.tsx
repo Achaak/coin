@@ -1,4 +1,4 @@
-import { getCssText } from '@pikas-template/ui';
+import { getCssText } from '@my-coin/ui';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import { MetaHead } from '../components/global/MetaHead';
 

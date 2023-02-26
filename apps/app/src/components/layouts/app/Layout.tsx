@@ -1,85 +1,70 @@
-import { styled } from '@pikas-template/ui/dist/core/pikas-ui/Styles';
-import { FC, ReactNode } from 'react';
+import { styled } from '@my-coin/ui/dist/core/pikas-ui/Styles';
+import { useSession } from 'next-auth/react';
+import { FC, ReactNode, useEffect } from 'react';
+import { AppLayoutLarge } from './large';
+import { AppLayoutSettingsBar } from './settingsBar';
+import { userStore } from '../../../store/user';
+import { useStore } from 'zustand';
 
 const Container = styled('div', {
-  backgroundColor: '$BACKGROUND',
+  backgroundColor: '$background',
   position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
+  top: '$0',
+  left: '$0',
+  right: '$0',
+  bottom: '$0',
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
+  transition: 'all 0.3s ease',
+  margin: '$16',
+
+  '@lg': {
+    margin: '$40',
+    columnGap: '$40',
+  },
 });
 
 const Content = styled('div', {
   display: 'flex',
-  justifyContent: 'center',
-  flex: 1,
-  marginTop: 56,
-  paddingTop: 24,
-  paddingBottom: 24,
-  overflow: 'auto',
-  width: '100%',
-
-  '@md': {
-    marginTop: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-});
-
-const Child = styled('div', {
-  padding: 8,
-  flex: 1,
-  gridCols: 12,
-  width: '100%',
-  maxWidth: 1400,
-  customRowGap: 40,
-  customColumnGap: 16,
+  justifyContent: 'start',
   alignItems: 'start',
-  alignContent: 'strech',
-  overflow: 'auto',
+  flexDirection: 'column',
+  flex: 1,
+  rowGap: '$8',
+  transition: 'all 0.3s ease',
+  overflowY: 'auto',
 
-  '@md': {
-    padding: 32,
-    customRowGap: 40,
-    customColumnGap: 40,
+  '@lg': {
+    rowGap: '$40',
   },
 });
 
-type CustomProps = {
+type AppLayoutProps = {
   children?: ReactNode;
 };
 
-export const AppLayout: FC<CustomProps> = ({ children }) => (
-  // const { data, status } = useSession({
-  //   required: true,
-  //   onUnauthenticated: () => signIn(),
-  // });
+export const AppLayout: FC<AppLayoutProps> = ({ children }) => {
+  const { data } = useSession();
 
-  // useEffect(() => {
-  //   setMe({ me: data?.user || null });
-  // }, [data]);
+  const { setMe } = useStore(userStore, (state) => ({
+    setMe: state.setMe,
+  }));
 
-  // return (
-  //   <>
-  //     {status === 'authenticated' && (
-  //       <Container>
-  //         <Content>
-  //           <Child>{children}</Child>
-  //         </Content>
-  //       </Container>
-  //     )}
-  //   </>
-  // );
-  <>
-    {
-      <Container>
-        <Content>
-          <Child>{children}</Child>
-        </Content>
-      </Container>
+  useEffect(() => {
+    if (data?.user) {
+      setMe(data.user);
     }
-  </>
-);
+  }, [data?.user, setMe]);
+
+  return (
+    <Container>
+      <AppLayoutLarge />
+
+      <Content>
+        <AppLayoutSettingsBar />
+
+        {children}
+      </Content>
+    </Container>
+  );
+};

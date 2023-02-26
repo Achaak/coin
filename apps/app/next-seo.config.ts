@@ -16,7 +16,7 @@ const seo: NextSeoProps = {
   defaultTitle: 'Pikas Template',
   languageAlternates: [
     {
-      href: 'https://www.pikas-template.com/fr',
+      href: 'https://www.my-coin.com/fr',
       hrefLang: 'fr-FR',
     },
   ],

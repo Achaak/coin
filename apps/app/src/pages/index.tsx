@@ -1,4 +1,4 @@
-import { useI18nContext } from '@pikas-template/translate';
+import { useI18nContext } from '@my-coin/translate';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { NextSeo } from 'next-seo';
 import { FC, ReactNode, useCallback } from 'react';
@@ -38,7 +38,7 @@ const AuthShowcase: FC = () => {
   );
 };
 
-const Home: NextPageWithLayout = () => {
+const HomePage: NextPageWithLayout = () => {
   const { LL } = useI18nContext();
 
   return (
@@ -50,8 +50,10 @@ const Home: NextPageWithLayout = () => {
   );
 };
 
-Home.getLayout = (page: ReactNode): ReactNode => <AppLayout>{page}</AppLayout>;
+HomePage.getLayout = (page: ReactNode): ReactNode => (
+  <AppLayout>{page}</AppLayout>
+);
 
-Home.namespaces = [...globalNamespaces];
+HomePage.namespaces = [...globalNamespaces];
 
-export default Home;
+export default HomePage;

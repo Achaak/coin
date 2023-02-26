@@ -1,4 +1,4 @@
-import type { Prisma } from '@pikas-template/database';
+import type { Prisma } from '@my-coin/database';
 
 import type { CheckSelectKeys } from './types';
 

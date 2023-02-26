@@ -1,4 +1,5 @@
 import type { DefaultSession } from 'next-auth';
+import type { UserRole } from '@my-coin/database';
 
 declare module 'next-auth' {
   /**
@@ -9,6 +10,7 @@ declare module 'next-auth' {
     user?: DefaultSession['user'] & {
       id: string;
       emailVerified: Date | null;
+      role: UserRole;
     };
   }
 }

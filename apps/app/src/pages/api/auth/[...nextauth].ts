@@ -1,4 +1,4 @@
-import { prisma } from '@pikas-template/database';
+import { prisma } from '@my-coin/database';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import type { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth';
@@ -28,11 +28,13 @@ export const authOptions: NextAuthOptions = {
           where: { id: user.id },
           select: {
             emailVerified: true,
+            role: true,
           },
         });
 
         if (userRes) {
           session.user.emailVerified = userRes.emailVerified;
+          session.user.role = userRes.role;
         }
       }
       return session;

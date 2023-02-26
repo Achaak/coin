@@ -5,7 +5,7 @@ import { forwardRef } from 'react';
 // https://github.com/microsoft/TypeScript/issues/48212
 import {} from '@pikas-ui/icons';
 
-export type {
+export {
   textfieldPadding,
   textfieldGap,
   textfieldType,
@@ -20,7 +20,9 @@ export type {
 } from '@pikas-ui/textfield';
 
 export const Textfield = forwardRef<HTMLInputElement, TextfieldProps>(
-  (props, ref) => <TextfieldPikasUI ref={ref} {...props} />
+  (props, ref) => (
+    <TextfieldPikasUI ref={ref} boxShadow="none" borderRadius="xl" {...props} />
+  )
 );
 
 Textfield.displayName = 'Textfield';

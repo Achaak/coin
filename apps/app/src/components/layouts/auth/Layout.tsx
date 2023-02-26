@@ -1,4 +1,4 @@
-import { styled } from '@pikas-template/ui/dist/core/pikas-ui/Styles';
+import { styled } from '@my-coin/ui/dist/core/pikas-ui/Styles';
 import { FC, ReactNode } from 'react';
 
 const Container = styled('div', {
@@ -11,7 +11,6 @@ const Container = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   padding: '24px 8px',
-  overflow: 'auto',
   backgroundColor: '$BACKGROUND',
 
   '@md': {

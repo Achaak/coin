@@ -1,5 +1,5 @@
 {
-  "name": "@pikas-template/prettier",
+  "name": "@my-coin/prettier",
   "version": "0.0.0",
   "license": "MIT",
   "main": "index.cjs",

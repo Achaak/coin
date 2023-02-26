@@ -2,14 +2,14 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider             = "postgresql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity", "interactiveTransactions", "metrics"]
+  previewFeatures = ["metrics"]
   binaryTargets   = ["native", "linux-musl"]
 }
 
@@ -29,6 +29,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -36,16 +37,21 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String     @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  wishlist      Coin[]     @relation("userWishlist")
+  coins         UserCoin[]
+  role          UserRole   @default(USER)
 }
 
 model VerificationToken {
@@ -54,4 +60,95 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Country {
+  code    String    @unique
+  name    String
+  CoinRef CoinRef[]
+}
+
+model CoinRef {
+  id           String   @id @default(cuid())
+  name         String
+  country      Country  @relation(fields: [countryCode], references: [code])
+  countryCode  String
+  coins        Coin[]
+  type         TypeCoin
+  denomination String
+  composition  String
+  weight       Float
+  diameter     Float
+  thickness    Float
+  edge         String
+  shape        String
+
+  obverseCreator     String
+  obverseDescription String
+  reverseCreator     String
+  reverseDescription String
+
+  @@index([countryCode])
+}
+
+model Coin {
+  id            String     @id @default(cuid())
+  ref           CoinRef    @relation(fields: [refId], references: [id])
+  refId         String
+  year          Int
+  mintageQtyUNC Int?
+  mintageQtyBU  Int?
+  mintageQtyPRF Int?
+  catalog       Catalog?   @relation(fields: [catalogId], references: [id])
+  catalogId     String?
+  userCoin      UserCoin[]
+  userWishlist  User[]     @relation("userWishlist")
+
+  @@index([refId])
+  @@index([catalogId])
+}
+
+model Catalog {
+  id    String @id @default(cuid())
+  name  String
+  coins Coin[]
+
+  @@index([name])
+}
+
+model UserCoin {
+  id           String        @id @default(cuid())
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  coin         Coin          @relation(fields: [coinId], references: [id], onDelete: Cascade)
+  coinId       String
+  condition    ConditionCoin
+  comment      String?
+  price        Float?
+  exchangeable Boolean       @default(false)
+
+  @@index([userId])
+  @@index([coinId])
+}
+
+enum ConditionCoin {
+  G
+  VG
+  F
+  VF
+  XF
+  UNC
+  BU
+  PRF
+}
+
+enum TypeCoin {
+  CIRCULATION
+  COLLECTOR
+  COMMEMORATIVE
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }

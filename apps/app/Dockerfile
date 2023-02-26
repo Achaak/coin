@@ -5,7 +5,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 RUN yarn global add turbo
 COPY . .
-RUN turbo prune --scope=@pikas-template/app --docker
+RUN turbo prune --scope=@my-coin/app --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM node:alpine AS installer
@@ -33,7 +33,7 @@ RUN pnpm add -C ./apps/app sharp
 # Build the project
 COPY --from=builder /app/out/full/ .
 COPY .env.local .
-RUN pnpm turbo build --filter=@pikas-template/app...
+RUN pnpm turbo build --filter=@my-coin/app...
 RUN rm .env.local
 
 FROM node:alpine AS runner

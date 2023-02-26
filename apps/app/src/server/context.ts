@@ -1,7 +1,7 @@
 import type { inferAsyncReturnType } from '@trpc/server';
 import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { type Session } from 'next-auth';
-import { prisma } from '@pikas-template/database';
+import { prisma } from '@my-coin/database';
 import { getServerAuthSession } from '../utils/get-server-auth-session';
 
 type CreateContextOptions = {

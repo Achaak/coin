@@ -1,23 +1,23 @@
-import { themeDefault } from '@pikas-template/ui/dist/styles/theme-default';
-import { themeDark } from '@pikas-template/ui/dist/styles/theme-dark';
-import { customGlobalCss } from '@pikas-template/ui/dist/styles/globalCss';
+import { themeDefault } from '@my-coin/ui/dist/styles/theme-default';
+import { themeDark } from '@my-coin/ui/dist/styles/theme-dark';
+import { customGlobalCss } from '@my-coin/ui/dist/styles/globalCss';
 import type {
   Locales,
   Namespaces,
-} from '@pikas-template/translate/dist/i18n/i18n-types';
-import { CustomTypesafeI18n } from '@pikas-template/translate/dist/CustomTypesafeI18n/index';
+} from '@my-coin/translate/dist/i18n/i18n-types';
+import { CustomTypesafeI18n } from '@my-coin/translate/dist/CustomTypesafeI18n/index';
 import {
   baseLocale,
   detectLocale,
-} from '@pikas-template/translate/dist/i18n/i18n-util';
-import { loadLocaleAsync } from '@pikas-template/translate/dist/i18n/i18n-util.async';
+} from '@my-coin/translate/dist/i18n/i18n-util';
+import { loadLocaleAsync } from '@my-coin/translate/dist/i18n/i18n-util.async';
 import type { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
 import { ReactNode, useEffect, useState } from 'react';
 import SEO from '../../next-seo.config';
-import { PikasUIProvider } from '@pikas-template/ui/dist/core/pikas-ui/Styles';
+import { PikasUIProvider } from '@my-coin/ui/dist/core/pikas-ui/Styles';
 import type { Session } from 'next-auth';
 import { trpc } from '../utils/trpc';
 

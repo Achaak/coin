@@ -1,3 +1,3 @@
-import type { Namespaces } from '@pikas-template/translate';
+import type { Namespaces } from '@my-coin/translate';
 
 export const globalNamespaces: Namespaces[] = ['common'];

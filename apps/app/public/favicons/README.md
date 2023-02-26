@@ -18,8 +18,8 @@ Insert the following code in the `head` section of your pages:
     <link rel="manifest" href="/favicons/site.webmanifest">
     <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
     <link rel="shortcut icon" href="/favicons/favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="Pikas-template">
-    <meta name="application-name" content="Pikas-template">
+    <meta name="apple-mobile-web-app-title" content="My-coin">
+    <meta name="application-name" content="My-coin">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/favicons/mstile-144x144.png">
     <meta name="msapplication-config" content="/favicons/browserconfig.xml">

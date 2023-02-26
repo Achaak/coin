@@ -1,5 +1,5 @@
 {
-  "name": "@pikas-template/common",
+  "name": "@my-coin/common",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
@@ -19,8 +19,8 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@pikas-template/prettier": "workspace:*",
-    "@pikas-template/tsconfig": "workspace:*",
+    "@my-coin/prettier": "workspace:*",
+    "@my-coin/tsconfig": "workspace:*",
     "@types/node": "^18.14.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.34.0",

@@ -1,8 +1,8 @@
-import { Button } from '@pikas-template/ui/dist/components/inputs/button/index';
-import { Textfield } from '@pikas-template/ui/dist/components/inputs/textfield/index';
-import { IconByName } from '@pikas-template/ui/dist/core/pikas-ui/Icons';
-import { getLink } from '@pikas-template/router/dist/app';
-import { styled } from '@pikas-template/ui/dist/core/pikas-ui/Styles';
+import { Button } from '@my-coin/ui/dist/components/inputs/button/index';
+import { Textfield } from '@my-coin/ui/dist/components/inputs/textfield/index';
+import { IconByName } from '@my-coin/ui/dist/core/pikas-ui/Icons';
+import { getLink } from '@my-coin/router/dist/app';
+import { styled } from '@my-coin/ui/dist/core/pikas-ui/Styles';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import {
   ClientSafeProvider,
@@ -13,7 +13,7 @@ import {
 } from 'next-auth/react';
 import Link from 'next/link';
 import { ReactNode, useState } from 'react';
-import { useI18nContext } from '@pikas-template/translate';
+import { useI18nContext } from '@my-coin/translate';
 import { AuthLayout } from '../../components/layouts/auth';
 import { globalNamespaces } from '../../configs/globalNamespaces';
 import type { NextPageWithLayout } from '../_app';

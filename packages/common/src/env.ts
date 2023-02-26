@@ -69,7 +69,7 @@ export const getLink = ({
   }
 
   let protocol = 'https://';
-  let domain = 'pikas-template.com';
+  let domain = 'my-coin.com';
   if (process.env.NODE_ENV === 'development') {
     domain = 'localhost:3000';
     envStr = '';

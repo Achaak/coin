@@ -1,5 +1,5 @@
 {
-  "name": "@pikas-template/database",
+  "name": "@my-coin/database",
   "version": "1.0.0",
   "license": "MIT",
   "exports": {
@@ -39,8 +39,8 @@
     "@prisma/client": "^4.10.1"
   },
   "devDependencies": {
-    "@pikas-template/prettier": "workspace:*",
-    "@pikas-template/tsconfig": "workspace:*",
+    "@my-coin/prettier": "workspace:*",
+    "@my-coin/tsconfig": "workspace:*",
     "@types/node": "^18.14.1",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.0.0",

@@ -1,1 +1,1 @@
-# pikas-template
+# my-coin

@@ -1,5 +1,5 @@
 {
-  "extends": "@pikas-template/tsconfig/react-library.json",
+  "extends": "@my-coin/tsconfig/react-library.json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules", "tsup.config.ts"],
   "compilerOptions": {
