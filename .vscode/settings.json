@@ -21,7 +21,6 @@
     "source.fixAll.eslint": true
   },
   "eslint.workingDirectories": [{ "mode": "auto" }],
-
   // "eslint.workingDirectories": ["./packages/*", "./apps/*"],
-  "cSpell.words": ["Typesafe", "zustand"]
+  "cSpell.words": ["superjson", "Typesafe", "zustand"]
 }
