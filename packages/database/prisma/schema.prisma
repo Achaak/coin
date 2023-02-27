@@ -52,6 +52,8 @@ model User {
   wishlist      Coin[]     @relation("userWishlist")
   coins         UserCoin[]
   role          UserRole   @default(USER)
+  messagesFrom  Message[]  @relation("messagesFrom")
+  messagesTo    Message[]  @relation("messagesTo")
 }
 
 model VerificationToken {
@@ -129,6 +131,20 @@ model UserCoin {
 
   @@index([userId])
   @@index([coinId])
+}
+
+model Message {
+  id      String   @id @default(cuid())
+  message String
+  from    User     @relation("messagesFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  fromId  String
+  to      User     @relation("messagesTo", fields: [toId], references: [id], onDelete: Cascade)
+  toId    String
+  read    Boolean  @default(false)
+  date    DateTime @default(now())
+
+  @@index([fromId])
+  @@index([toId])
 }
 
 enum ConditionCoin {

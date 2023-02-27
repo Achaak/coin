@@ -5,13 +5,13 @@ import type {} from '@stitches/react';
 
 export const themeDefault = createTheme({
   colors: {
-    'primary-darker': '#295180',
-    'primary-dark': '#3D79BF',
-    primary: '#52A2FF',
-    'primary-light': '#A8D0FF',
-    'primary-lighter': '#D4E8FF',
-    'primary-lightest-2': '#EDF6FF',
-    'primary-lightest-1': '#F6FAFF',
+    'primary-darker': '#20266d',
+    'primary-dark': '#3038a4',
+    primary: '#404bda',
+    'primary-light': '#a0a5ed',
+    'primary-lighter': '#cfd2f6',
+    'primary-lightest-2': '#ecedfb',
+    'primary-lightest-1': '#f5f6fd',
 
     'primary-fixed-darker': '#295180',
     'primary-fixed-dark': '#3D79BF',
@@ -81,7 +81,7 @@ export const themeDefault = createTheme({
 
     'gray-darker': '#7d7d7b',
     'gray-dark': '#bbbbb8',
-    gray: '#f9f9f5',
+    gray: '#f9f9f9',
     'gray-light': '#fcfcfa',
     'gray-lighter': '#fefefd',
     'gray-lightest-2': '#fefefe',

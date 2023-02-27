@@ -9,13 +9,14 @@ import Link from 'next/link';
 import { getLink } from '@my-coin/router/dist/app';
 import { useRouter } from 'next/router';
 import { CogIcon } from '@my-coin/ui/dist/icons/Cog';
+import { LogInIcon } from '@my-coin/ui/dist/icons/LogIn';
 
 const Container = styled('nav', {
   display: 'flex',
+  alignItems: 'center',
   flexDirection: 'column',
-  rowGap: 32,
+  rowGap: 40,
   flex: 1,
-  width: '100%',
   userSelect: 'none',
 });
 
@@ -79,6 +80,7 @@ const Menu = styled('ul', {
   justifyContent: 'center',
   rowGap: 28,
   transition: 'all 0.3s ease',
+  width: '100%',
 });
 
 const MenuBottom = styled('ul', {
@@ -86,6 +88,7 @@ const MenuBottom = styled('ul', {
   flexDirection: 'column',
   rowGap: 28,
   marginTop: 'auto',
+  width: '100%',
 });
 
 type CustomProps = {
@@ -133,13 +136,24 @@ export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
       </Menu>
 
       <MenuBottom>
-        {dataSession?.user && (
+        {dataSession?.user ? (
           <AppLayoutMenuItem
             item={{
               icon: CogIcon,
               label: 'Settings',
               link: getLink('settings'),
-              linkAs: getLink('settings'),
+              linkAs: [getLink('settings')],
+              type: 'link',
+            }}
+            onClosed={onClosed}
+          />
+        ) : (
+          <AppLayoutMenuItem
+            item={{
+              icon: LogInIcon,
+              label: 'Login',
+              link: getLink('login'),
+              linkAs: [getLink('login')],
               type: 'link',
             }}
             onClosed={onClosed}

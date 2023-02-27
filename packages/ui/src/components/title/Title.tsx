@@ -16,4 +16,15 @@ export {
   titleVariant,
 } from '@pikas-ui/title';
 
-export const Title: FC<TitleProps> = (props) => <TitlePikasUI {...props} />;
+export const Title: FC<TitleProps> = (props) => (
+  <TitlePikasUI
+    {...props}
+    css={{
+      ...props.css,
+      h1: {
+        fontWeight: '$bold',
+        ...props.css?.h1,
+      },
+    }}
+  />
+);

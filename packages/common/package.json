@@ -21,9 +21,9 @@
   "devDependencies": {
     "@my-coin/prettier": "workspace:*",
     "@my-coin/tsconfig": "workspace:*",
-    "@types/node": "^18.14.1",
+    "@types/node": "^18.14.2",
     "cross-env": "^7.0.3",
-    "eslint": "^8.34.0",
+    "eslint": "^8.35.0",
     "eslint-config-custom": "workspace:*",
     "prettier": "2.8.4",
     "tsup": "^6.6.3",

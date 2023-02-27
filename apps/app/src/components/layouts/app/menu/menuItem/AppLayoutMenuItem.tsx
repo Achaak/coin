@@ -17,14 +17,13 @@ const MenuLabel = styled('span', {
   overflow: 'hidden',
   display: 'flex',
   whiteSpace: 'nowrap',
+  color: '$black',
+  fontSize: '$em-large',
 
   variants: {
     isSelected: {
       true: {
-        color: '$primary',
-      },
-      false: {
-        color: '$black',
+        fontWeight: '$bold',
       },
     },
   },
@@ -43,7 +42,7 @@ export const AppLayoutMenuItem: FC<CustomProps> = ({ item, onClosed }) => {
       return false;
     }
 
-    if (item.linkAs && router.pathname.includes(item.linkAs)) {
+    if (item?.linkAs?.some((link) => router.asPath === link)) {
       return true;
     }
 
@@ -57,10 +56,14 @@ export const AppLayoutMenuItem: FC<CustomProps> = ({ item, onClosed }) => {
       {item.type === 'link' && (
         <Link href={item.link}>
           <MenuItem onClick={onClosed}>
-            <item.icon
-              colorName={isSelected ? 'primary' : 'black'}
-              size="1.5em"
-            />
+            {isSelected && item.iconActive ? (
+              <item.iconActive colorName="primary" size="1.5em" />
+            ) : (
+              <item.icon
+                colorName={isSelected ? 'primary' : 'black'}
+                size="1.5em"
+              />
+            )}
             <MenuLabel isSelected={isSelected}>{item.label}</MenuLabel>
           </MenuItem>
         </Link>
@@ -72,10 +75,14 @@ export const AppLayoutMenuItem: FC<CustomProps> = ({ item, onClosed }) => {
             item.onClick();
           }}
         >
-          <item.icon
-            colorName={isSelected ? 'primary' : 'black'}
-            size="1.5em"
-          />
+          {isSelected && item.iconActive ? (
+            <item.iconActive colorName="primary" size="1.5em" />
+          ) : (
+            <item.icon
+              colorName={isSelected ? 'primary' : 'black'}
+              size="1.5em"
+            />
+          )}
           <MenuLabel isSelected={isSelected}>{item.label}</MenuLabel>
         </MenuItem>
       )}

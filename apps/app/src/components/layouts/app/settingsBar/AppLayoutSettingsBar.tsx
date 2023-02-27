@@ -9,6 +9,8 @@ import { useMediaScreenValid } from '@pikas-utils/screen';
 import { Select } from '@my-coin/ui/dist/components/inputs/select/index';
 import { useI18nContext } from '@my-coin/translate';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { getLink } from '@my-coin/router/dist/app';
 
 const Container = styled('div', {
   width: '100%',
@@ -19,34 +21,28 @@ const Container = styled('div', {
 
 const Left = styled('div', {
   display: 'flex',
-  order: 1,
   flex: 1,
-
-  '@lg': {
-    order: 0,
-  },
 });
 
 const Right = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  columnGap: 8,
-  order: 0,
-
-  '@lg': {
-    order: 1,
-  },
+  columnGap: 16,
 });
 
 const UserName = styled('span', {
   fontWeight: '$medium',
-  fontSize: '$LARGE',
-  order: 1,
+  fontSize: '$em-large',
   color: '$black',
+});
 
-  '@lg': {
-    order: 0,
-  },
+const Login = styled('span', {
+  fontWeight: '$medium',
+  backgroundColor: '$primary',
+  fontSize: '$em-base',
+  color: '$white',
+  borderRadius: '$full',
+  padding: '$8 $24',
 });
 
 export const AppLayoutSettingsBar: FC = () => {
@@ -85,21 +81,6 @@ export const AppLayoutSettingsBar: FC = () => {
               },
             }}
           />
-          <MenuIcon
-            size={32}
-            colorName="black"
-            onClick={(): void => setIsMenuOpen(true)}
-            css={{
-              container: {
-                cursor: 'pointer',
-                display: 'flex',
-
-                '@lg': {
-                  display: 'none',
-                },
-              },
-            }}
-          />
         </Left>
         <Right>
           <Select
@@ -129,8 +110,13 @@ export const AppLayoutSettingsBar: FC = () => {
             defaultValue={locale}
             width="auto"
             backgroundColorName="gray"
+            css={{
+              trigger: {
+                fontWeight: '$medium',
+              },
+            }}
           />
-          {dataSession?.user && (
+          {dataSession?.user ? (
             <>
               <UserName>{dataSession.user.name}</UserName>
               <Avatar
@@ -141,7 +127,26 @@ export const AppLayoutSettingsBar: FC = () => {
                 src={dataSession.user.image ?? undefined}
               />
             </>
+          ) : (
+            <Link href={getLink('login')}>
+              <Login>Login / Register</Login>
+            </Link>
           )}
+          <MenuIcon
+            size={32}
+            colorName="black"
+            onClick={(): void => setIsMenuOpen(true)}
+            css={{
+              container: {
+                cursor: 'pointer',
+                display: 'flex',
+
+                '@lg': {
+                  display: 'none',
+                },
+              },
+            }}
+          />
         </Right>
       </Container>
     </>

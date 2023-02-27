@@ -3,9 +3,11 @@ import { routes } from '@pikas-utils/router';
 export const { getLink } = routes({
   origin: 'http://localhost:3000',
   links: {
-    home: '/home',
+    home: '/',
     settings: '/settings',
     login: '/login',
+    exchange: '/exchange',
+    'my-collection': '/my-collection',
     'admin.dashboard': '/admin/dashboard',
   },
 });

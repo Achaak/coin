@@ -2,19 +2,26 @@ import { prisma } from '@my-coin/database';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import type { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth';
-import GitHubProvider from 'next-auth/providers/github';
+import EmailProvider from 'next-auth/providers/email';
 import { env } from '../../../env/server.mjs';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
-    GitHubProvider({
-      clientId: env.GITHUB_ID,
-      clientSecret: env.GITHUB_SECRET,
+    EmailProvider({
+      server: {
+        host: env.EMAIL_SERVER_HOST,
+        port: env.EMAIL_SERVER_PORT,
+        auth: {
+          user: env.EMAIL_SERVER_USER,
+          pass: env.EMAIL_SERVER_PASSWORD,
+        },
+      },
+      from: env.EMAIL_FROM,
     }),
   ],
   pages: {
-    signIn: '/auth/signIn',
+    signIn: '/login',
   },
   session: {
     maxAge: 30 * 24 * 60 * 60,

@@ -6,10 +6,12 @@ const Container = styled('div', {
   display: 'none',
   flexDirection: 'column',
   alignItems: 'center',
+  justifyContent: 'center',
   overflow: 'auto',
   backgroundColor: '$gray',
   borderRadius: '$3xl',
   transition: 'all 0.3s ease',
+  minWidth: 250,
 
   '@lg': {
     display: 'flex',
