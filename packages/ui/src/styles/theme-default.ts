@@ -79,11 +79,11 @@ export const themeDefault = createTheme({
     'white-fixed-lightest-2': 'rgba(249, 247, 247, 0.35)',
     'white-fixed-lightest-1': 'rgba(249, 247, 247, 0.25)',
 
-    'gray-darker': '#7d7d7b',
-    'gray-dark': '#bbbbb8',
-    gray: '#f9f9f9',
-    'gray-light': '#fcfcfa',
-    'gray-lighter': '#fefefd',
+    'gray-darker': '#7c7c7c',
+    'gray-dark': '#b9b9b9',
+    gray: '#f7f7f7',
+    'gray-light': '#fbfbfb',
+    'gray-lighter': '#fdfdfd',
     'gray-lightest-2': '#fefefe',
     'gray-lightest-1': '#ffffff',
 

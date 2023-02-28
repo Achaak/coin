@@ -20,6 +20,7 @@ import SEO from '../../next-seo.config';
 import { PikasUIProvider } from '@my-coin/ui/dist/core/pikas-ui/Styles';
 import type { Session } from 'next-auth';
 import { trpc } from '../utils/trpc';
+import { ToastProvider } from '@my-coin/ui/dist/core/pikas-ui/Toast';
 
 export type NextPageWithLayout<
   T extends Record<string, unknown> = Record<string, unknown>
@@ -57,16 +58,18 @@ const MyApp = ({
     <>
       <DefaultSeo {...SEO} />
       <PikasUIProvider lightTheme={themeDefault} darkTheme={themeDark}>
-        <SessionProvider session={session}>
-          {locale && (
-            <CustomTypesafeI18n
-              locale={locale}
-              namespaces={Component.namespaces}
-            >
-              {getLayout(<Component {...pageProps} />)}
-            </CustomTypesafeI18n>
-          )}
-        </SessionProvider>
+        <ToastProvider position="top-right">
+          <SessionProvider session={session}>
+            {locale && (
+              <CustomTypesafeI18n
+                locale={locale}
+                namespaces={Component.namespaces}
+              >
+                {getLayout(<Component {...pageProps} />)}
+              </CustomTypesafeI18n>
+            )}
+          </SessionProvider>
+        </ToastProvider>
       </PikasUIProvider>
     </>
   );

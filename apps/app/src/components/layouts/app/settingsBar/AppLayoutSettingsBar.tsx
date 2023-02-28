@@ -4,7 +4,7 @@ import { MenuIcon } from '@my-coin/ui/dist/icons/Menu';
 import { Avatar } from '@my-coin/ui/dist/components/avatar/index';
 import { FC, useState } from 'react';
 import { AppLayoutSmall } from '../small';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useMediaScreenValid } from '@pikas-utils/screen';
 import { Select } from '@my-coin/ui/dist/components/inputs/select/index';
 import { useI18nContext } from '@my-coin/translate';
@@ -12,7 +12,9 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { getLink } from '@my-coin/router/dist/app';
 import { ButtonIcon } from '@my-coin/ui/dist/components/inputs/button/index';
+import { DropdownMenu } from '@my-coin/ui/dist/components/dropdownMenu/index';
 import { SearchIcon } from '@my-coin/ui/dist/icons/Search';
+import { LogOutIcon } from '@my-coin/ui/dist/icons/LogOut';
 
 const Container = styled('div', {
   width: '100%',
@@ -43,7 +45,7 @@ const Left = styled('div', {
 const Right = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  columnGap: 16,
+  columnGap: '$16',
 });
 
 const UserName = styled('span', {
@@ -147,13 +149,39 @@ export const AppLayoutSettingsBar: FC = () => {
           />
           {dataSession?.user ? (
             <>
-              <UserName>{dataSession.user.name}</UserName>
-              <Avatar
-                alt={dataSession.user.name ?? undefined}
-                borderRadius="full"
-                fallback="D"
-                size={largeScreenValid ? 40 : 32}
-                src={dataSession.user.image ?? undefined}
+              <Link
+                href={getLink('user', {
+                  queries: {
+                    userId: dataSession.user.id,
+                  },
+                })}
+              >
+                <UserName>{dataSession.user.name}</UserName>
+              </Link>
+              <DropdownMenu
+                triggerContent={
+                  <Avatar
+                    alt={dataSession.user.name ?? undefined}
+                    borderRadius="full"
+                    fallback={dataSession.user.name?.[0] ?? undefined}
+                    size={largeScreenValid ? 40 : 32}
+                    src={dataSession.user.image ?? undefined}
+                  />
+                }
+                data={[
+                  {
+                    items: [
+                      {
+                        label: 'Logout',
+                        type: 'item',
+                        onClick: () => {
+                          void signOut();
+                        },
+                        Icon: LogOutIcon,
+                      },
+                    ],
+                  },
+                ]}
               />
             </>
           ) : (

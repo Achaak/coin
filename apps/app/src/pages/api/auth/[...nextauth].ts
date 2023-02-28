@@ -4,6 +4,7 @@ import type { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 import { env } from '../../../env/server.mjs';
+import { randUserName } from '@ngneat/falso';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -35,13 +36,45 @@ export const authOptions: NextAuthOptions = {
           where: { id: user.id },
           select: {
             emailVerified: true,
-            role: true,
+            id: true,
+            email: true,
+            name: true,
+            image: true,
           },
         });
 
         if (userRes) {
           session.user.emailVerified = userRes.emailVerified;
-          session.user.role = userRes.role;
+          session.user.email = userRes.email;
+          session.user.name = userRes.name;
+          session.user.image = userRes.image;
+
+          if (!userRes.name) {
+            let taken = true;
+            let name = '';
+            do {
+              name = randUserName();
+              // eslint-disable-next-line no-await-in-loop
+              const count = await prisma.user.count({
+                where: {
+                  name,
+                },
+              });
+
+              taken = count !== 0;
+            } while (taken);
+
+            await prisma.user.update({
+              where: {
+                id: user.id,
+              },
+              data: {
+                name,
+              },
+            });
+
+            session.user.name = name;
+          }
         }
       }
       return session;

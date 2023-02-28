@@ -1,47 +1,45 @@
 import { Button } from '@my-coin/ui/dist/components/inputs/button/index';
 import { Textfield } from '@my-coin/ui/dist/components/inputs/textfield/index';
 import { styled } from '@my-coin/ui/dist/core/pikas-ui/Styles';
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import {
-  ClientSafeProvider,
-  getCsrfToken,
-  getProviders,
-  LiteralUnion,
-} from 'next-auth/react';
-import { ReactNode } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { ReactNode, useState } from 'react';
 import { useI18nContext } from '@my-coin/translate';
 import { globalNamespaces } from '../configs/globalNamespaces';
 import type { NextPageWithLayout } from './_app';
-import { BuiltInProviderType } from 'next-auth/providers';
 import { AppLayout } from '../components/layouts/app';
 import { NextSeo } from 'next-seo';
+import { Card } from '../components/global/Card';
+import { Title } from '@my-coin/ui/dist/components/title/index';
+import { useRouter } from 'next/router';
+import { getLink } from '@my-coin/router/dist/app';
 
-const Container = styled('div', {
+const Form = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   flexDirection: 'column',
-  backgroundColor: '$white',
-  padding: 32,
-  br: 'lg',
-  customRowGap: 8,
+  rowGap: 8,
   width: '100%',
 });
 
-const Form = styled('form', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexDirection: 'column',
-  width: '100%',
-});
-
-const LoginPage: NextPageWithLayout<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ providers, csrfToken }) => {
+const LoginPage: NextPageWithLayout = () => {
   const { LL } = useI18nContext();
+  const [email, setEmail] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+  const { status } = useSession();
+  const router = useRouter();
 
-  if (!providers) {
+  const handleSignIn = async () => {
+    if (!email) {
+      setError('Email is required');
+      return;
+    }
+
+    await signIn('email', { email });
+  };
+
+  if (status === 'authenticated') {
+    void router.push(getLink('home'));
     return null;
   }
 
@@ -49,9 +47,22 @@ const LoginPage: NextPageWithLayout<
     <>
       <NextSeo description={LL.common.seo.description()} />
 
-      <Container>
-        <Form method="post" action="/api/auth/signIn/email">
-          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+      <Card
+        paddingHorizontal={{
+          default: 32,
+        }}
+        paddingVertical={{
+          default: 24,
+        }}
+        css={{
+          rowGap: '$16',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Title as="h2">Se connecter</Title>
+
+        <Form>
           <Textfield
             type="email"
             id="email"
@@ -59,12 +70,17 @@ const LoginPage: NextPageWithLayout<
             label={LL.app_signIn.email.label()}
             borderRadius="md"
             placeholder={LL.app_signIn.email.placeholder()}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError(null);
+            }}
+            textError={error ?? undefined}
           />
-          <Button type="submit" style={{ marginTop: 8 }}>
+          <Button style={{ marginTop: 8 }} onClick={handleSignIn}>
             {LL.app_signIn.email.button()}
           </Button>
         </Form>
-      </Container>
+      </Card>
     </>
   );
 };
@@ -74,24 +90,5 @@ LoginPage.getLayout = (page: ReactNode): ReactNode => (
 );
 
 LoginPage.namespaces = [...globalNamespaces, 'app_signIn'];
-
-type Props = {
-  providers: Record<
-    LiteralUnion<BuiltInProviderType>,
-    ClientSafeProvider
-  > | null;
-  csrfToken: string | undefined;
-};
-
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
-  const providers = await getProviders();
-  const csrfToken = await getCsrfToken(context);
-
-  return {
-    props: { providers, csrfToken },
-  };
-};
 
 export default LoginPage;

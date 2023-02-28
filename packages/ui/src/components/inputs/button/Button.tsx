@@ -41,16 +41,18 @@ export {
   buttonType,
 } from '@pikas-ui/button';
 
-export const Button: FC<ButtonProps> = (props) => <ButtonPikasUI {...props} />;
+export const Button: FC<ButtonProps> = (props) => (
+  <ButtonPikasUI borderRadius="full" {...props} />
+);
 
 export const ButtonLink: FC<ButtonLinkProps> = (props) => (
-  <ButtonLinkPikasUI {...props} />
+  <ButtonLinkPikasUI borderRadius="full" {...props} />
 );
 
 export const ButtonIcon: FC<ButtonIconProps> = (props) => (
-  <ButtonIconPikasUI {...props} />
+  <ButtonIconPikasUI borderRadius="full" {...props} />
 );
 
 export const ButtonIconLink: FC<ButtonIconLinkProps> = (props) => (
-  <ButtonIconLinkPikasUI {...props} />
+  <ButtonIconLinkPikasUI borderRadius="full" {...props} />
 );

@@ -21,7 +21,12 @@ export type {
 
 export const Textfield = forwardRef<HTMLInputElement, TextfieldProps>(
   (props, ref) => (
-    <TextfieldPikasUI ref={ref} boxShadow="none" borderRadius="xl" {...props} />
+    <TextfieldPikasUI
+      ref={ref}
+      {...props}
+      boxShadow="none"
+      borderRadius="full"
+    />
   )
 );
 

@@ -4,19 +4,21 @@
   "license": "MIT",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./dist/*": {
-      "import": "./dist/*.mjs",
-      "require": "./dist/*.js",
-      "types": "./dist/*.d.ts"
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js",
+      "require": "./dist/*.cjs"
     }
   },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist/**/*"
+    "dist/**"
   ],
   "scripts": {
     "build": "tsup",
@@ -38,8 +40,8 @@
     "@pikas-ui/icons": "^4.0.2",
     "@pikas-ui/loader": "^4.0.2",
     "@pikas-ui/progress": "^2.0.2",
-    "@pikas-ui/searchbar": "^4.0.4",
-    "@pikas-ui/select": "^5.1.4",
+    "@pikas-ui/searchbar": "^4.0.6",
+    "@pikas-ui/select": "^5.1.6",
     "@pikas-ui/separator": "^4.0.2",
     "@pikas-ui/skeleton": "^3.0.2",
     "@pikas-ui/styles": "^4.0.2",
@@ -47,9 +49,10 @@
     "@pikas-ui/table": "^4.1.9",
     "@pikas-ui/tabs": "^3.0.2",
     "@pikas-ui/text": "^5.0.2",
-    "@pikas-ui/textarea": "^4.0.2",
-    "@pikas-ui/textfield": "^4.0.4",
+    "@pikas-ui/textarea": "^4.0.4",
+    "@pikas-ui/textfield": "^4.0.6",
     "@pikas-ui/title": "^2.0.2",
+    "@pikas-ui/toast": "^2.0.2",
     "@pikas-ui/tooltip": "^4.0.2",
     "@stitches/react": "^1.2.8",
     "react": "18.2.0",

@@ -1,3 +1,10 @@
 import { FC } from 'react';
+import { User } from '../../../selector/user';
 
-export const UserItemContainer: FC = () => <div>Home</div>;
+type UserItemContainerProps = {
+  user: User | null;
+};
+
+export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => (
+  <>{user?.name}</>
+);
