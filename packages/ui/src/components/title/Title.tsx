@@ -25,6 +25,11 @@ export const Title: FC<TitleProps> = (props) => (
         fontWeight: '$bold',
         ...props.css?.h1,
       },
+      h2: {
+        fontWeight: '$bold',
+        fontSize: '$em-x-large',
+        ...props.css?.h2,
+      },
     }}
   />
 );

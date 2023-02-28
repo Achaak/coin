@@ -292,6 +292,7 @@ importers:
       '@pikas-ui/skeleton': ^3.0.2
       '@pikas-ui/styles': ^4.0.2
       '@pikas-ui/switch': ^3.0.2
+      '@pikas-ui/table': ^4.1.9
       '@pikas-ui/tabs': ^3.0.2
       '@pikas-ui/text': ^5.0.2
       '@pikas-ui/textarea': ^4.0.2
@@ -327,6 +328,7 @@ importers:
       '@pikas-ui/skeleton': 3.0.2_biqbaboplfbrettd7655fr4n2y
       '@pikas-ui/styles': 4.0.2_biqbaboplfbrettd7655fr4n2y
       '@pikas-ui/switch': 3.0.2_zula6vjvt3wdocc4mwcxqa6nzi
+      '@pikas-ui/table': 4.1.9_zula6vjvt3wdocc4mwcxqa6nzi
       '@pikas-ui/tabs': 3.0.2_biqbaboplfbrettd7655fr4n2y
       '@pikas-ui/text': 5.0.2_biqbaboplfbrettd7655fr4n2y
       '@pikas-ui/textarea': 4.0.2_zula6vjvt3wdocc4mwcxqa6nzi
@@ -1683,6 +1685,61 @@ packages:
     resolution: {integrity: sha512-PX90bEnrLdxd5e6rSFWsghExMuSw0Uov3fWJuuaoFuUQIS/446diu/4seExK5b+43L+SOBbd2uBGwYUkG1JfCw==}
     dev: true
 
+  /@dnd-kit/accessibility/3.0.1_react@18.2.0:
+    resolution: {integrity: sha512-HXRrwS9YUYQO9lFRc/49uO/VICbM+O+ZRpFDe9Pd1rwVv2PCNkRiTZRdxrDgng/UkvdC3Re9r2vwPpXXrWeFzg==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      tslib: 2.5.0
+    dev: false
+
+  /@dnd-kit/core/6.0.8_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-lYaoP8yHTQSLlZe6Rr9qogouGUz9oRUj4AHhDQGQzq/hqaJRpFo65X+JKsdHf8oUFBzx5A+SJPUvxAwTF2OabA==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      '@dnd-kit/accessibility': 3.0.1_react@18.2.0
+      '@dnd-kit/utilities': 3.2.1_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      tslib: 2.5.0
+    dev: false
+
+  /@dnd-kit/modifiers/6.0.1_52scne4zmdeyjh2otzkgz2xfvu:
+    resolution: {integrity: sha512-rbxcsg3HhzlcMHVHWDuh9LCjpOVAgqbV78wLGI8tziXY3+qcMQ61qVXIvNKQFuhj75dSfD+o+PYZQ/NUk2A23A==}
+    peerDependencies:
+      '@dnd-kit/core': ^6.0.6
+      react: '>=16.8.0'
+    dependencies:
+      '@dnd-kit/core': 6.0.8_biqbaboplfbrettd7655fr4n2y
+      '@dnd-kit/utilities': 3.2.1_react@18.2.0
+      react: 18.2.0
+      tslib: 2.5.0
+    dev: false
+
+  /@dnd-kit/sortable/7.0.2_52scne4zmdeyjh2otzkgz2xfvu:
+    resolution: {integrity: sha512-wDkBHHf9iCi1veM834Gbk1429bd4lHX4RpAwT0y2cHLf246GAvU2sVw/oxWNpPKQNQRQaeGXhAVgrOl1IT+iyA==}
+    peerDependencies:
+      '@dnd-kit/core': ^6.0.7
+      react: '>=16.8.0'
+    dependencies:
+      '@dnd-kit/core': 6.0.8_biqbaboplfbrettd7655fr4n2y
+      '@dnd-kit/utilities': 3.2.1_react@18.2.0
+      react: 18.2.0
+      tslib: 2.5.0
+    dev: false
+
+  /@dnd-kit/utilities/3.2.1_react@18.2.0:
+    resolution: {integrity: sha512-OOXqISfvBw/1REtkSK2N3Fi2EQiLMlWUlqnOK/UpOISqBZPWpE6TqL+jcPtMOkE8TqYGiURvRdPSI9hltNUjEA==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      tslib: 2.5.0
+    dev: false
+
   /@esbuild-kit/cjs-loader/2.4.2:
     resolution: {integrity: sha512-BDXFbYOJzT/NBEtp71cvsrGPwGAMGRB/349rwKuoxNSiKjPraNNnlK6MIIabViCjqZugu6j+xeMDlEkWdHHJSg==}
     dependencies:
@@ -2612,6 +2669,24 @@ packages:
       - '@types/react'
     dev: false
 
+  /@pikas-ui/select/5.1.6_zula6vjvt3wdocc4mwcxqa6nzi:
+    resolution: {integrity: sha512-w2wwSJbpOBqldXx+mnEC11mc9QS5G8qUdsRTQe+C09XKDBpAjbcEZIQ/f8K3HKrVOyJnryKcBpcYbqxlY4PxOA==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      '@pikas-ui/icons': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/styles': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/text': 5.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/textfield': 4.0.6_zula6vjvt3wdocc4mwcxqa6nzi
+      '@pikas-ui/tooltip': 4.0.2_zula6vjvt3wdocc4mwcxqa6nzi
+      '@radix-ui/react-select': 1.2.0_zula6vjvt3wdocc4mwcxqa6nzi
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - '@types/react'
+    dev: false
+
   /@pikas-ui/separator/4.0.2_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-AsI2bAw1LYa/Oxs4syipEd+Nja0K0lOxPC9wYUFfD1pPrtQjVYNLW1jlyc+ufGjwvmR+tazAq6KR4kZmQ5t7Vw==}
     peerDependencies:
@@ -2680,6 +2755,33 @@ packages:
       - '@types/react'
     dev: false
 
+  /@pikas-ui/table/4.1.9_zula6vjvt3wdocc4mwcxqa6nzi:
+    resolution: {integrity: sha512-YaZgDxpnXNPHh7QlVOUuvCkoebsmxdHVYhtk1QYvwdvQqHa7QLRT2Byjdl9l9GBzjOoaPHw4OrxApanIIUbImA==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      '@dnd-kit/core': 6.0.8_biqbaboplfbrettd7655fr4n2y
+      '@dnd-kit/modifiers': 6.0.1_52scne4zmdeyjh2otzkgz2xfvu
+      '@dnd-kit/sortable': 7.0.2_52scne4zmdeyjh2otzkgz2xfvu
+      '@dnd-kit/utilities': 3.2.1_react@18.2.0
+      '@pikas-ui/button': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/checkbox': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/icons': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/loader': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/select': 5.1.6_zula6vjvt3wdocc4mwcxqa6nzi
+      '@pikas-ui/styles': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/textfield': 4.0.6_zula6vjvt3wdocc4mwcxqa6nzi
+      '@pikas-utils/color': 2.0.1_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/match-sorter-utils': 8.7.6
+      '@tanstack/react-table': 8.7.9_biqbaboplfbrettd7655fr4n2y
+      lodash.once: 4.1.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - '@types/react'
+    dev: false
+
   /@pikas-ui/tabs/3.0.2_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-Y3i+Tl4WiR+QJgHMJppzgI86L4y5nhkBpX9Trk7PmfEK4jLcYefPJelhJxEU73iKIL7OTCNQUTDKV+FPYHbXuw==}
     peerDependencies:
@@ -2723,6 +2825,25 @@ packages:
 
   /@pikas-ui/textfield/4.0.4_zula6vjvt3wdocc4mwcxqa6nzi:
     resolution: {integrity: sha512-fEN7l1OHeulP0CmuIm9BpAs1pfdaR+mAkX0zf05iVW70Zhm6iTB4+XOvrb5zDK75jUg8lb0+z9rziQk797mV0A==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      '@pikas-ui/icons': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/styles': 4.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/text': 5.0.2_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/tooltip': 4.0.2_zula6vjvt3wdocc4mwcxqa6nzi
+      '@pikas-utils/color': 2.0.1_biqbaboplfbrettd7655fr4n2y
+      '@pikas-utils/hooks': 2.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-label': 2.0.0_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - '@types/react'
+    dev: false
+
+  /@pikas-ui/textfield/4.0.6_zula6vjvt3wdocc4mwcxqa6nzi:
+    resolution: {integrity: sha512-PIESkJEFOCFsG/HtNEAFhRlqtfpsdyNaC2iuZXwGCuq99ZXX7HmH2xuSZP+CjhoZyzN8lyfMqzDEWrYsfsPFQw==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -3520,6 +3641,13 @@ packages:
     dependencies:
       tslib: 2.5.0
 
+  /@tanstack/match-sorter-utils/8.7.6:
+    resolution: {integrity: sha512-2AMpRiA6QivHOUiBpQAVxjiHAA68Ei23ZUMNaRJrN6omWiSFLoYrxGcT6BXtuzp0Jw4h6HZCmGGIM/gbwebO2A==}
+    engines: {node: '>=12'}
+    dependencies:
+      remove-accents: 0.4.2
+    dev: false
+
   /@tanstack/query-core/4.24.10:
     resolution: {integrity: sha512-2QywqXEAGBIUoTdgn1lAB4/C8QEqwXHj2jrCLeYTk2xVGtLiPEUD8jcMoeB2noclbiW2mMt4+Fq7fZStuz3wAQ==}
     dev: false
@@ -3540,6 +3668,23 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/react-table/8.7.9_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-6MbbQn5AupSOkek1+6IYu+1yZNthAKTRZw9tW92Vi6++iRrD1GbI3lKTjJalf8lEEKOqapPzQPE20nywu0PjCA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.7.9
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/table-core/8.7.9:
+    resolution: {integrity: sha512-4RkayPMV1oS2SKDXfQbFoct1w5k+pvGpmX18tCXMofK/VDRdA2hhxfsQlMvsJ4oTX8b0CI4Y3GDKn5T425jBCw==}
+    engines: {node: '>=12'}
     dev: false
 
   /@trpc/client/10.13.0_@trpc+server@10.13.0:
@@ -7135,6 +7280,10 @@ packages:
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
+  /lodash.once/4.1.1:
+    resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
+    dev: false
+
   /lodash.snakecase/4.1.1:
     resolution: {integrity: sha512-QZ1d4xoBHYUeuouhEq3lk3Uq7ldgyFXGBhg04+oRLnIz8o9T65Eh+8YdroUwn846zchkA9yDsDl5CVVaV2nqYw==}
     dev: true
@@ -8083,6 +8232,10 @@ packages:
     hasBin: true
     dependencies:
       jsesc: 0.5.0
+
+  /remove-accents/0.4.2:
+    resolution: {integrity: sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==}
+    dev: false
 
   /require-directory/2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}

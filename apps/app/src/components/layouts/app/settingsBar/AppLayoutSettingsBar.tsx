@@ -11,12 +11,28 @@ import { useI18nContext } from '@my-coin/translate';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { getLink } from '@my-coin/router/dist/app';
+import { ButtonIcon } from '@my-coin/ui/dist/components/inputs/button/index';
+import { SearchIcon } from '@my-coin/ui/dist/icons/Search';
 
 const Container = styled('div', {
   width: '100%',
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  zIndex: '$x-high',
+  height: '$64',
+  background: 'linear-gradient($white 40%, $transparent)',
+  paddingRight: '$16',
+  alignItems: 'start',
+
+  '@lg': {
+    paddingRight: '$40',
+    height: '$80',
+  },
 });
 
 const Left = styled('div', {
@@ -80,6 +96,19 @@ export const AppLayoutSettingsBar: FC = () => {
                 },
               },
             }}
+          />
+          <ButtonIcon
+            Icon={SearchIcon}
+            css={{
+              button: {
+                display: 'initial',
+
+                '@lg': {
+                  display: 'none',
+                },
+              },
+            }}
+            size={24}
           />
         </Left>
         <Right>

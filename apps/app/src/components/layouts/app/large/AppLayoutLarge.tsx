@@ -12,10 +12,12 @@ const Container = styled('div', {
   borderRadius: '$3xl',
   transition: 'all 0.3s ease',
   minWidth: 250,
+  margin: '$16 0 $16 $16',
 
   '@lg': {
     display: 'flex',
     padding: '$40',
+    margin: '$40 0 $40 $40',
   },
 });
 

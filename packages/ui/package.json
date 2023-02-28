@@ -44,6 +44,7 @@
     "@pikas-ui/skeleton": "^3.0.2",
     "@pikas-ui/styles": "^4.0.2",
     "@pikas-ui/switch": "^3.0.2",
+    "@pikas-ui/table": "^4.1.9",
     "@pikas-ui/tabs": "^3.0.2",
     "@pikas-ui/text": "^5.0.2",
     "@pikas-ui/textarea": "^4.0.2",

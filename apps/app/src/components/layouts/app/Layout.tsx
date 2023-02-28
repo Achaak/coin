@@ -16,11 +16,27 @@ const Container = styled('div', {
   display: 'flex',
   flexDirection: 'row',
   transition: 'all 0.3s ease',
-  margin: '$16',
+  // padding: '$16',
 
   '@lg': {
-    margin: '$40',
+    //   padding: '$40 0 $40 $40',
     columnGap: '$40',
+  },
+});
+
+const Right = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1,
+  rowGap: '$8',
+  position: 'relative',
+  marginTop: '$16',
+  marginLeft: '$16',
+
+  '@lg': {
+    rowGap: '$40',
+    marginTop: '$40',
+    marginLeft: '$0',
   },
 });
 
@@ -30,12 +46,15 @@ const Content = styled('div', {
   alignItems: 'start',
   flexDirection: 'column',
   flex: 1,
-  rowGap: '$8',
-  transition: 'all 0.3s ease',
   overflowY: 'auto',
+  rowGap: '$8',
+  paddingTop: '$64',
+  paddingRight: '$16',
 
   '@lg': {
     rowGap: '$40',
+    paddingRight: '$40',
+    paddingTop: '$80',
   },
 });
 
@@ -60,11 +79,11 @@ export const AppLayout: FC<AppLayoutProps> = ({ children }) => {
     <Container>
       <AppLayoutLarge />
 
-      <Content>
+      <Right>
         <AppLayoutSettingsBar />
 
-        {children}
-      </Content>
+        <Content>{children}</Content>
+      </Right>
     </Container>
   );
 };

@@ -78,6 +78,7 @@ model CoinRef {
   coins        Coin[]
   type         TypeCoin
   denomination String
+  mark         String?
   composition  String
   weight       Float
   diameter     Float
@@ -87,24 +88,33 @@ model CoinRef {
 
   obverseCreator     String
   obverseDescription String
+  observeImage       String?
+
   reverseCreator     String
   reverseDescription String
+  reverseImage       String?
 
   @@index([countryCode])
 }
 
 model Coin {
-  id            String     @id @default(cuid())
-  ref           CoinRef    @relation(fields: [refId], references: [id])
-  refId         String
-  year          Int
+  id        String   @id @default(cuid())
+  year      Int
+  ref       CoinRef  @relation(fields: [refId], references: [id])
+  refId     String
+  catalog   Catalog? @relation(fields: [catalogId], references: [id])
+  catalogId String?
+  mark      String?
+
   mintageQtyUNC Int?
   mintageQtyBU  Int?
   mintageQtyPRF Int?
-  catalog       Catalog?   @relation(fields: [catalogId], references: [id])
-  catalogId     String?
-  userCoin      UserCoin[]
-  userWishlist  User[]     @relation("userWishlist")
+
+  observeImage String?
+  reverseImage String?
+
+  userCoin     UserCoin[]
+  userWishlist User[]     @relation("userWishlist")
 
   @@index([refId])
   @@index([catalogId])
@@ -120,14 +130,17 @@ model Catalog {
 
 model UserCoin {
   id           String        @id @default(cuid())
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
-  coin         Coin          @relation(fields: [coinId], references: [id], onDelete: Cascade)
-  coinId       String
   condition    ConditionCoin
   comment      String?
   price        Float?
   exchangeable Boolean       @default(false)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  coin         Coin          @relation(fields: [coinId], references: [id], onDelete: Cascade)
+  coinId       String
+
+  observeImage String?
+  reverseImage String?
 
   @@index([userId])
   @@index([coinId])
@@ -136,12 +149,13 @@ model UserCoin {
 model Message {
   id      String   @id @default(cuid())
   message String
-  from    User     @relation("messagesFrom", fields: [fromId], references: [id], onDelete: Cascade)
-  fromId  String
-  to      User     @relation("messagesTo", fields: [toId], references: [id], onDelete: Cascade)
-  toId    String
   read    Boolean  @default(false)
   date    DateTime @default(now())
+
+  from   User   @relation("messagesFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  fromId String
+  to     User   @relation("messagesTo", fields: [toId], references: [id], onDelete: Cascade)
+  toId   String
 
   @@index([fromId])
   @@index([toId])

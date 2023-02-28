@@ -4,6 +4,7 @@ import type { FC, ReactNode } from 'react';
 const Container = styled('div', {
   backgroundColor: '$gray',
   borderRadius: '$3xl',
+  width: '100%',
 });
 
 export type CardPaddingHorizontal = {
