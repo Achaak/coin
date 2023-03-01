@@ -3,46 +3,37 @@ import { styled } from '@my-coin/ui';
 import { Avatar } from '@my-coin/ui/dist/components/avatar/index';
 import { Title } from '@my-coin/ui/dist/components/title/index';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { User } from '../../../../selector/user';
-import { trpc } from '../../../../utils/trpc';
 
 const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  rowGap: '$24',
+  rowGap: '$16',
 });
 
 const UsersContainer = styled('ul', {
   display: 'flex',
+  width: '100%',
 });
 
-export const SearchUsersContainer: FC = () => {
-  const router = useRouter();
-  const { q } = router.query;
-
-  const { data: usersData, isLoading: userIsLoading } =
-    trpc.user.search.useQuery({
-      query: q as string,
-    });
-
-  return (
-    <Container>
-      <Title as="h2">Users</Title>
-
-      {userIsLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <UsersContainer>
-          {usersData?.map((user) => (
-            <UserItem key={user.id} user={user} />
-          ))}
-        </UsersContainer>
-      )}
-    </Container>
-  );
+type SearchUsersContainerProps = {
+  users: User[];
 };
+
+export const SearchUsersContainer: FC<SearchUsersContainerProps> = ({
+  users,
+}) => (
+  <Container>
+    <Title as="h2">Users</Title>
+
+    <UsersContainer>
+      {users?.map((user) => (
+        <UserItem key={user.id} user={user} />
+      ))}
+    </UsersContainer>
+  </Container>
+);
 
 const UserItemStyled = styled('li', {
   display: 'flex',

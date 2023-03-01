@@ -1,9 +1,8 @@
-import { PikasCSS, PikasSize, styled } from '@my-coin/ui';
+import { PikasCSS, PikasRadius, PikasSize, styled } from '@my-coin/ui';
 import type { FC, ReactNode } from 'react';
 
 const Container = styled('div', {
   backgroundColor: '$gray',
-  borderRadius: '$3xl',
   width: '100%',
 });
 
@@ -32,6 +31,7 @@ export type CardProps = {
   paddingHorizontal?: CardPaddingHorizontal;
   paddingVertical?: CardPaddingVertical;
   css?: PikasCSS;
+  borderRadius?: PikasRadius;
 };
 
 export const Card: FC<CardProps> = ({
@@ -39,9 +39,12 @@ export const Card: FC<CardProps> = ({
   paddingHorizontal,
   paddingVertical,
   css,
+  borderRadius = '3xl',
 }) => (
   <Container
     css={{
+      borderRadius: `$${borderRadius}`,
+
       paddingLeft: paddingHorizontal?.default,
       paddingRight: paddingHorizontal?.default,
       paddingTop: paddingVertical?.default,

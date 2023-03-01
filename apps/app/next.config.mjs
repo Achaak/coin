@@ -1,7 +1,6 @@
 // @ts-check
 import { env } from './src/env/server.mjs';
 import WithPWA from 'next-pwa';
-import withPlugins from 'next-compose-plugins';
 import WithBundleAnalyzer from '@next/bundle-analyzer';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
@@ -16,8 +15,6 @@ const withPWA = WithPWA({
 	dest: 'public',
 });
 
-const plugins = [withBundleAnalyzer, withPWA];
-
 /** @type {import("next").NextConfig} */
 const config = {
 	reactStrictMode: true,
@@ -30,4 +27,4 @@ const config = {
 		defaultLocale: "en",
 	},
 };
-export default withPlugins(plugins, config);
+export default withBundleAnalyzer(withPWA(config));

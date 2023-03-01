@@ -1,7 +1,5 @@
 import type { DefaultSession } from 'next-auth';
 import type { UserRole } from '@my-coin/database';
-import { CoinWishlist } from '../selector/coinWishlist';
-import { CoinRefWishlist } from '../selector/coinRefWishlist';
 
 declare module 'next-auth' {
   /**
@@ -13,8 +11,6 @@ declare module 'next-auth' {
       id: string;
       emailVerified: Date | null;
       role: UserRole;
-      coinsWishlist: CoinWishlist[];
-      coinsRefWishlist: CoinRefWishlist[];
     };
   }
 }

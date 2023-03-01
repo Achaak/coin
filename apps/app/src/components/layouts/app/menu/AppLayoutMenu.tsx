@@ -1,8 +1,8 @@
 import { styled } from '@my-coin/ui';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { FC } from 'react';
-import { AppLayoutMenuItem } from './menuItem';
+import { FC, useMemo } from 'react';
+import { AppLayoutMenuItem, MenuConfig } from './menuItem';
 import logo from '../../../../../public/images/500x500.png';
 import Link from 'next/link';
 import { getLink } from '@my-coin/router/dist/app';
@@ -16,6 +16,8 @@ import { HeartIcon } from '@my-coin/ui/dist/icons/Heart';
 import { HeartSolidIcon } from '@my-coin/ui/dist/icons/HeartSolid';
 import { LayerIcon } from '@my-coin/ui/dist/icons/Layer';
 import { LayerSolidIcon } from '@my-coin/ui/dist/icons/LayerSolid';
+import { UserIcon } from '@my-coin/ui/dist/icons/User';
+import { UserSolidIcon } from '@my-coin/ui/dist/icons/UserSolid';
 
 const Container = styled('nav', {
   display: 'flex',
@@ -106,6 +108,78 @@ export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
 
   const router = useRouter();
 
+  const menuAdmin = useMemo<MenuConfig[]>(
+    () => [
+      {
+        type: 'link',
+        icon: LayerIcon,
+        label: 'Dashboard',
+        link: getLink('admin.dashboard'),
+        linkAs: [getLink('admin.dashboard')],
+      },
+    ],
+    []
+  );
+
+  const menuUser = useMemo<MenuConfig[]>(
+    () => [
+      {
+        type: 'link',
+        icon: LayerIcon,
+        iconActive: LayerSolidIcon,
+        label: 'Catalog',
+        link: getLink('home'),
+        linkAs: [getLink('home')],
+      },
+      {
+        type: 'link',
+        icon: CoinIcon,
+        iconActive: CoinSolidIcon,
+        label: 'My Collection',
+        link: getLink('my-collection'),
+        linkAs: [getLink('my-collection')],
+      },
+      ...(status === 'authenticated'
+        ? ([
+            {
+              type: 'link',
+              icon: HeartIcon,
+              iconActive: HeartSolidIcon,
+              label: 'My wishlist',
+              link: getLink('user.wishlist', {
+                queries: {
+                  userId: dataSession?.user?.id ?? '',
+                },
+              }),
+              linkAs: [
+                getLink('user.wishlist', {
+                  queries: {
+                    userId: dataSession?.user?.id ?? '',
+                  },
+                }),
+              ],
+            },
+          ] as MenuConfig[])
+        : []),
+      {
+        type: 'link',
+        icon: TransferIcon,
+        label: 'Exchange',
+        link: getLink('exchange'),
+        linkAs: [getLink('exchange')],
+      },
+      {
+        type: 'link',
+        icon: UserIcon,
+        iconActive: UserSolidIcon,
+        label: 'Contacts',
+        link: getLink('contacts'),
+        linkAs: [getLink('contacts')],
+      },
+    ],
+    [status, dataSession]
+  );
+
   return (
     <Container>
       <Link
@@ -141,66 +215,11 @@ export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
       )}
 
       <Menu>
-        {(router.pathname.includes('admin')
-          ? [
-              {
-                type: 'link',
-                icon: LayerIcon,
-                label: 'Dashboard',
-                link: getLink('admin.dashboard'),
-                linkAs: [getLink('admin.dashboard')],
-              },
-            ]
-          : [
-              {
-                type: 'link',
-                icon: LayerIcon,
-                iconActive: LayerSolidIcon,
-                label: 'Catalog',
-                link: getLink('home'),
-                linkAs: [getLink('home')],
-              },
-              {
-                type: 'link',
-                icon: CoinIcon,
-                label: 'My Collection',
-                link: getLink('my-collection'),
-                linkAs: [getLink('my-collection')],
-              },
-              ...(status === 'authenticated'
-                ? [
-                    {
-                      type: 'link',
-                      icon: HeartIcon,
-                      iconActive: HeartSolidIcon,
-                      label: 'My wishlist',
-                      link: getLink('user.wishlist', {
-                        queries: {
-                          userId: dataSession?.user?.id ?? '',
-                        },
-                      }),
-                      linkAs: [
-                        getLink('user.wishlist', {
-                          queries: {
-                            userId: dataSession?.user?.id ?? '',
-                          },
-                        }),
-                      ],
-                    },
-                  ]
-                : []),
-              {
-                type: 'link',
-                icon: TransferIcon,
-                iconActive: CoinSolidIcon,
-                label: 'Exchange',
-                link: getLink('exchange'),
-                linkAs: [getLink('exchange')],
-              },
-            ]
-        ).map((item, itemKey) => (
-          <AppLayoutMenuItem item={item} key={itemKey} onClosed={onClosed} />
-        ))}
+        {(router.pathname.includes('admin') ? menuAdmin : menuUser).map(
+          (item, itemKey) => (
+            <AppLayoutMenuItem item={item} key={itemKey} onClosed={onClosed} />
+          )
+        )}
       </Menu>
 
       <MenuBottom>

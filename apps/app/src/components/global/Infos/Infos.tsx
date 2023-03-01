@@ -36,12 +36,14 @@ const Label = styled('span', {
 
 const Value = styled('span', {});
 
+export type InfosData = {
+  label: string;
+  value: string;
+};
+
 export type InfosProps = {
   css?: PikasCSS;
-  data: Array<{
-    label: string;
-    value: string;
-  }>;
+  data: InfosData[];
 };
 
 export const Infos: FC<InfosProps> = ({ css, data }) => (

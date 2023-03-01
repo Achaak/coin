@@ -13,6 +13,7 @@ export const { getLink } = routes({
     coinRef: '/coin/:coinRefId',
     coin: '/coin/:coinRefId/:coinId',
     search: '/search',
+    contacts: '/contacts',
     catalog: '/catalog/:catalogId',
     'my-collection': '/my-collection',
     'admin.dashboard': '/admin/dashboard',

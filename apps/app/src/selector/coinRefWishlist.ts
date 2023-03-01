@@ -1,5 +1,5 @@
 import type { Prisma } from '@my-coin/database';
-import { selectCoin } from './coin';
+import { selectCoinRef } from './coinRef';
 import type { CheckSelectKeys } from './types';
 import { selectUser } from './user';
 
@@ -10,7 +10,7 @@ const createCoinRefWishlistSelect = <T extends Prisma.CoinRefWishlistSelect>(
 export const selectCoinRefWishlist = createCoinRefWishlistSelect({
   id: true,
   coinRef: {
-    select: selectCoin,
+    select: selectCoinRef,
   },
   coinRefId: true,
   user: {

@@ -47,10 +47,12 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
   } = trpc.catalog.countCountryByUserId.useQuery({
     userId: user.id,
   });
-  const { data: lastCoinsByUserIdData, isLoading: lastCoinsByUserIdIsLoading } =
-    trpc.userCoin.lastByUserId.useQuery({
-      userId: user.id,
-    });
+  const {
+    data: lastCoinsByUserIdData,
+    // isLoading: lastCoinsByUserIdIsLoading, TODO
+  } = trpc.userCoin.lastByUserId.useQuery({
+    userId: user.id,
+  });
 
   return (
     <>
@@ -158,20 +160,21 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
           <CoinCard
             key={coin.id}
             composition={coin.coin.ref.composition}
-            country={coin.coin.ref.catalog.country}
             year={coin.coin.year}
             denomination={coin.coin.ref.denomination}
             diameter={coin.coin.ref.diameter}
             weight={coin.coin.ref.weight}
-            observeImage={
-              coin.observeImage ?? coin.coin.ref.observeImage ?? undefined
-            }
-            reverseImage={
-              coin.reverseImage ?? coin.coin.ref.reverseImage ?? undefined
-            }
-            price={coin.price ?? undefined}
+            observeImage={coin.observeImage ?? coin.coin.ref.observeImage}
+            reverseImage={coin.reverseImage ?? coin.coin.ref.reverseImage}
+            price={coin.price}
             type={coin.coin.ref.type}
             yearRange={[1996, 1997]}
+            link={getLink('coin', {
+              queries: {
+                coinId: coin.coin.id,
+                coinRefId: coin.coin.ref.id,
+              },
+            })}
           />
         ))}
       </Card>

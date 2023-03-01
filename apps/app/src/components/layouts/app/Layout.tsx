@@ -5,6 +5,7 @@ import { AppLayoutLarge } from './large';
 import { AppLayoutSettingsBar } from './settingsBar';
 import { userStore } from '../../../store/user';
 import { useStore } from 'zustand';
+import { wishlistStore } from '../../../store/wishlist';
 
 const Container = styled('div', {
   backgroundColor: '$background',
@@ -16,10 +17,8 @@ const Container = styled('div', {
   display: 'flex',
   flexDirection: 'row',
   transition: 'all 0.3s ease',
-  // padding: '$16',
 
   '@lg': {
-    //   padding: '$40 0 $40 $40',
     columnGap: '$40',
   },
 });
@@ -40,12 +39,21 @@ const Right = styled('div', {
   },
 });
 
+const ContentContainer = styled('div', {
+  flex: 1,
+  position: 'relative',
+});
+
 const Content = styled('div', {
+  position: 'absolute',
+  top: '$0',
+  left: '$0',
+  right: '$0',
+  bottom: '$0',
   display: 'flex',
   justifyContent: 'start',
   alignItems: 'start',
   flexDirection: 'column',
-  flex: 1,
   overflowY: 'auto',
   rowGap: '$8',
   paddingTop: '$64',
@@ -68,12 +76,16 @@ export const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   const { setMe } = useStore(userStore, (state) => ({
     setMe: state.setMe,
   }));
+  const { init: initWishlist } = useStore(wishlistStore, (state) => ({
+    init: state.init,
+  }));
 
   useEffect(() => {
     if (data?.user) {
       setMe(data.user);
+      initWishlist();
     }
-  }, [data?.user, setMe]);
+  }, [data?.user, setMe, initWishlist]);
 
   return (
     <Container>
@@ -82,7 +94,9 @@ export const AppLayout: FC<AppLayoutProps> = ({ children }) => {
       <Right>
         <AppLayoutSettingsBar />
 
-        <Content>{children}</Content>
+        <ContentContainer>
+          <Content>{children}</Content>
+        </ContentContainer>
       </Right>
     </Container>
   );

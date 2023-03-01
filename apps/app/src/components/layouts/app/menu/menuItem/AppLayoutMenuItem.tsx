@@ -1,8 +1,8 @@
 import { styled } from '@my-coin/ui';
+import { IconProps } from '@my-coin/ui/dist/core/pikas-ui/Icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { MenuConfig } from '../../../../../configs/menu';
 
 const MenuItem = styled('li', {
   display: 'flex',
@@ -28,6 +28,26 @@ const MenuLabel = styled('span', {
     },
   },
 });
+
+type MenuConfigDefault = {
+  icon: FC<IconProps>;
+  iconActive?: FC<IconProps>;
+  label: string;
+  type: 'button' | 'link';
+};
+
+type MenuConfigLink = MenuConfigDefault & {
+  type: 'link';
+  link: string;
+  linkAs?: string[];
+};
+
+type MenuConfigButton = MenuConfigDefault & {
+  type: 'button';
+  onClick: () => void;
+};
+
+export type MenuConfig = MenuConfigButton | MenuConfigLink;
 
 type CustomProps = {
   item: MenuConfig;

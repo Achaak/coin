@@ -20,7 +20,7 @@ const UserItemPage: NextPageWithLayout = () => {
   return (
     <>
       <NextSeo description={LL.common.seo.description()} />
-      {!userIsLoading && userData && <UserItemContainer user={userData} />}{' '}
+      {!userIsLoading && userData && <UserItemContainer user={userData} />}
     </>
   );
 };

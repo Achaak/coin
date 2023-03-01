@@ -72,26 +72,28 @@ model Country {
 }
 
 model CoinRef {
-  id           String   @id @default(cuid())
-  coins        Coin[]
-  type         CoinType
-  denomination String
-  composition  String
-  weight       Float
-  diameter     Float
-  thickness    Float
-  edge         String
-  shape        String
+  id              String   @id @default(cuid())
+  coins           Coin[]
+  type            CoinType
+  denomination    String
+  composition     String?
+  weight          Float?
+  diameter        Float?
+  thickness       Float?
+  edgeType        String?
+  edgeDescription String?
+  shape           String?
+  alignment       CoinAlignment?
 
   catalog   Catalog @relation(fields: [catalogId], references: [id])
   catalogId String
 
-  obverseCreator     String
-  obverseDescription String
+  obverseCreator     String?
+  obverseDescription String?
   observeImage       String?
 
-  reverseCreator     String
-  reverseDescription String
+  reverseCreator     String?
+  reverseDescription String?
   reverseImage       String?
 
   created_at DateTime          @default(now())
@@ -103,7 +105,7 @@ model CoinRef {
 
 model Coin {
   id    String  @id @default(cuid())
-  year  Int
+  year  Int?
   ref   CoinRef @relation(fields: [refId], references: [id])
   refId String
 
@@ -218,6 +220,12 @@ enum CoinType {
   CIRCULATION
   COLLECTOR
   COMMEMORATIVE
+}
+
+enum CoinAlignment {
+  MEDAL
+  COIN
+  VARIOUS
 }
 
 enum UserRole {

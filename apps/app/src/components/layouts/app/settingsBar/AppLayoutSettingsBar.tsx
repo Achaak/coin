@@ -26,7 +26,7 @@ const Container = styled('div', {
   left: 0,
   right: 0,
   zIndex: '$x-high',
-  height: '$40',
+  height: '$64',
   background: 'linear-gradient($white 40%, $transparent)',
   paddingRight: '$16',
   alignItems: 'start',

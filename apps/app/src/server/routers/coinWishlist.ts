@@ -6,13 +6,15 @@ export const coinWishlistRouter = router({
   byUserId: publicProcedure
     .input(
       z.object({
-        userId: z.string(),
+        userId: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       const { userId } = input;
+      const { session } = ctx;
+
       const wishlist = await ctx.prisma.coinWishlist.findMany({
-        where: { userId },
+        where: { userId: userId ?? session?.user?.id },
         select: selectCoinWishlist,
       });
 

@@ -21,9 +21,7 @@ const WishlistPage: NextPageWithLayout = () => {
   return (
     <>
       <NextSeo description={LL.common.seo.description()} />
-      {!userIsLoading && userData && (
-        <UserWishlistContainer user={userData} />
-      )}{' '}
+      {!userIsLoading && userData && <UserWishlistContainer user={userData} />}
     </>
   );
 };

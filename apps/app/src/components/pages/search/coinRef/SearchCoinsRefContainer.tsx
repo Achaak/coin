@@ -1,63 +1,61 @@
 import { getLink } from '@my-coin/router/dist/app';
 import { styled } from '@my-coin/ui';
+import { Grid } from '@my-coin/ui/dist/components/grid/index';
 import { Title } from '@my-coin/ui/dist/components/title/index';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { CoinRefWithCatalog } from '../../../../selector/coinRef';
-import { trpc } from '../../../../utils/trpc';
+import { CoinRef } from '../../../../selector/coinRef';
+import { CoinCard } from '../../../global/CoinCard';
 
 const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  rowGap: '$24',
+  rowGap: '$16',
+  width: '100%',
 });
 
-const CoinsRefsContainer = styled('ul', {
-  display: 'flex',
-});
-
-export const SearchCoinsRefsContainer: FC = () => {
-  const router = useRouter();
-  const { q } = router.query;
-
-  const { data: coinsRefsData, isLoading: coinsRefIsLoading } =
-    trpc.coinRef.search.useQuery({
-      query: q as string,
-    });
-
-  return (
-    <Container>
-      <Title as="h2">Coins</Title>
-
-      {coinsRefIsLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <CoinsRefsContainer>
-          {coinsRefsData?.map((coinRef) => (
-            <CoinRefItem key={coinRef.id} coinsRef={coinRef} />
-          ))}
-        </CoinsRefsContainer>
-      )}
-    </Container>
-  );
+type SearchCoinsRefsContainerProps = {
+  coinsRefs: CoinRef[];
 };
 
-const CoinRefItemStyled = styled('li', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-});
+export const SearchCoinsRefsContainer: FC<SearchCoinsRefsContainerProps> = ({
+  coinsRefs,
+}) => (
+  <Container>
+    <Title as="h2">Coins</Title>
 
-const CoinRefItem: FC<{ coinsRef: CoinRefWithCatalog }> = ({ coinsRef }) => (
-  <Link
-    href={getLink('coin', {
-      queries: {
-        coinId: coinsRef.id,
-      },
-    })}
-  >
-    <CoinRefItemStyled>{coinsRef.denomination}</CoinRefItemStyled>
-  </Link>
+    <Grid
+      type="container"
+      cols={{
+        default: 1,
+        lg: 2,
+        xl: 3,
+      }}
+      columnGap={{
+        default: '$16',
+      }}
+      rowGap={{
+        default: '$16',
+      }}
+    >
+      {coinsRefs?.map((coinRef) => (
+        <CoinCard
+          key={coinRef.id}
+          denomination={coinRef.denomination}
+          observeImage={coinRef.observeImage}
+          reverseImage={coinRef.reverseImage}
+          composition={coinRef.composition}
+          diameter={coinRef.diameter}
+          price={1}
+          weight={coinRef.weight}
+          type={coinRef.type}
+          link={getLink('coinRef', {
+            queries: {
+              coinRefId: coinRef.id,
+            },
+          })}
+          yearRange={[2000, 2042]}
+        />
+      ))}
+    </Grid>
+  </Container>
 );
