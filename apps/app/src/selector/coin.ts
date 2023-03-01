@@ -1,4 +1,5 @@
 import type { Prisma } from '@my-coin/database';
+import { selectCoinRef } from './coinRef';
 
 import type { CheckSelectKeys } from './types';
 
@@ -8,31 +9,18 @@ const createCoinSelect = <T extends Prisma.CoinSelect>(
 
 export const selectCoin = createCoinSelect({
   id: true,
-  catalogId: true,
   mintageQtyBU: true,
   mintageQtyPRF: true,
   mintageQtyUNC: true,
   year: true,
+  observeImage: true,
+  reverseImage: true,
+  updated_at: true,
+  created_at: true,
   ref: {
-    select: {
-      id: true,
-      name: true,
-      countryCode: true,
-      composition: true,
-      country: true,
-      denomination: true,
-      weight: true,
-      type: true,
-      edge: true,
-      diameter: true,
-      thickness: true,
-      shape: true,
-      obverseCreator: true,
-      obverseDescription: true,
-      reverseCreator: true,
-      reverseDescription: true,
-    },
+    select: selectCoinRef,
   },
+  refId: true,
 });
 
 export type Coin = Prisma.UserGetPayload<{

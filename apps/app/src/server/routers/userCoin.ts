@@ -132,4 +132,43 @@ export const userCoinRouter = router({
         ...userCoin,
       };
     }),
+  countByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = input;
+
+      const count = await ctx.prisma.userCoin.count({
+        where: { userId },
+      });
+
+      return count;
+    }),
+  lastByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        take: z.number().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId, take = 10 } = input;
+
+      const userCoin = await ctx.prisma.userCoin.findMany({
+        where: { userId },
+        orderBy: { created_at: 'desc' },
+        select: selectUserCoin,
+        take: take && take > 100 ? 100 : take,
+      });
+
+      return userCoin;
+    }),
+  count: publicProcedure.query(async ({ ctx }) => {
+    const count = await ctx.prisma.userCoin.count();
+
+    return count;
+  }),
 });

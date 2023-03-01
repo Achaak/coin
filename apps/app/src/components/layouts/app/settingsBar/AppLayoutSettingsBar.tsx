@@ -1,5 +1,4 @@
 import { styled } from '@my-coin/ui';
-import { Searchbar } from '@my-coin/ui/dist/components/inputs/searchbar/index';
 import { MenuIcon } from '@my-coin/ui/dist/icons/Menu';
 import { Avatar } from '@my-coin/ui/dist/components/avatar/index';
 import { FC, useState } from 'react';
@@ -15,6 +14,7 @@ import { ButtonIcon } from '@my-coin/ui/dist/components/inputs/button/index';
 import { DropdownMenu } from '@my-coin/ui/dist/components/dropdownMenu/index';
 import { SearchIcon } from '@my-coin/ui/dist/icons/Search';
 import { LogOutIcon } from '@my-coin/ui/dist/icons/LogOut';
+import { Textfield } from '@my-coin/ui/dist/components/inputs/textfield/index';
 
 const Container = styled('div', {
   width: '100%',
@@ -26,7 +26,7 @@ const Container = styled('div', {
   left: 0,
   right: 0,
   zIndex: '$x-high',
-  height: '$64',
+  height: '$40',
   background: 'linear-gradient($white 40%, $transparent)',
   paddingRight: '$16',
   alignItems: 'start',
@@ -39,6 +39,7 @@ const Container = styled('div', {
 
 const Left = styled('div', {
   display: 'flex',
+  alignItems: 'center',
   flex: 1,
 });
 
@@ -72,6 +73,11 @@ export const AppLayoutSettingsBar: FC = () => {
   });
   const router = useRouter();
   const { locale } = useI18nContext();
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (): void => {
+    void router.push(getLink('search', { queries: { q: search } }));
+  };
 
   return (
     <>
@@ -81,14 +87,18 @@ export const AppLayoutSettingsBar: FC = () => {
       />
       <Container>
         <Left>
-          <Searchbar
-            textfield={{
-              placeholder: 'Search',
-              padding: 'lg',
-            }}
+          <Textfield
+            placeholder="Search"
+            backgroundColorName="gray"
             width="50%"
-            onSearch={() => []}
-            searchFunction={(): Promise<[]> => Promise.resolve([])}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+              }
+            }}
             css={{
               container: {
                 display: 'none',
@@ -97,7 +107,23 @@ export const AppLayoutSettingsBar: FC = () => {
                   display: 'initial',
                 },
               },
+              input: {
+                height: 35,
+                paddingLeft: '$24',
+              },
             }}
+            rightChildren={
+              <SearchIcon
+                size={16}
+                colorName="black"
+                css={{
+                  container: {
+                    paddingRight: '$8',
+                  },
+                }}
+                onClick={handleSearch}
+              />
+            }
           />
           <ButtonIcon
             Icon={SearchIcon}
@@ -110,7 +136,9 @@ export const AppLayoutSettingsBar: FC = () => {
                 },
               },
             }}
-            size={24}
+            size={20}
+            padding="sm"
+            outlined
           />
         </Left>
         <Right>

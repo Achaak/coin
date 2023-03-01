@@ -8,13 +8,13 @@ const createUserSelect = <T extends Prisma.UserSelect>(
 
 export const selectUser = createUserSelect({
   id: true,
-  email: true,
   image: true,
   name: true,
 });
 
 export const selectUserFull = createUserSelect({
   ...selectUser,
+  email: true,
   emailVerified: true,
 });
 

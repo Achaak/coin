@@ -102,7 +102,15 @@ export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
 
   return (
     <Container>
-      <Image src={logo} height={120} width={120} alt="Logo My Coin" />
+      <Link
+        href={
+          dataSession?.user?.role === 'ADMIN'
+            ? getLink('admin.dashboard')
+            : getLink('home')
+        }
+      >
+        <Image src={logo} height={120} width={120} alt="Logo My Coin" />
+      </Link>
 
       {dataSession?.user?.role === 'ADMIN' && (
         <SwitchRoleContainer>

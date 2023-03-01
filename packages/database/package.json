@@ -25,7 +25,7 @@
     "db:migrate:deploy": "pnpm with-env migrate deploy",
     "db:migrate:dev": "pnpm with-env migrate dev",
     "db:push": "pnpm with-env db push",
-    "db:seed": "tsx src/seed.ts",
+    "db:seed": "dotenv -c -e ../../.env -- tsx src/seed.ts",
     "predev": "pnpm run generate",
     "dev": "tsup --watch",
     "format": "prisma format && prettier --cache --write \"**/*.{ts,tsx}\"",

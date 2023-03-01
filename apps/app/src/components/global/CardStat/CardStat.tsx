@@ -2,12 +2,18 @@ import { styled } from '@my-coin/ui';
 import { IconProps } from '@my-coin/ui/dist/core/pikas-ui/Icons';
 import type { FC, ReactNode } from 'react';
 import { Card, CardPaddingHorizontal, CardPaddingVertical } from '../Card/Card';
+import { PulseLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
 
 const Left = styled('div', {
   display: 'flex',
+  columnGap: '$16',
 });
 
-const Right = styled('div', {
+const LeftStart = styled('div', {
+  display: 'flex',
+});
+
+const LeftEnd = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   rowGap: '$4',
@@ -22,6 +28,10 @@ const Value = styled('span', {
 const Label = styled('span', {
   color: '$gray-dark',
   fontSize: '$em-small',
+});
+
+const Right = styled('div', {
+  display: 'flex',
 });
 
 const IconContainer = styled('div', {
@@ -39,6 +49,8 @@ type CardProps = {
   label: ReactNode;
   paddingHorizontal?: CardPaddingHorizontal;
   paddingVertical?: CardPaddingVertical;
+  right?: ReactNode;
+  loading?: boolean;
 };
 
 export const CardStat: FC<CardProps> = ({
@@ -47,6 +59,8 @@ export const CardStat: FC<CardProps> = ({
   label,
   paddingHorizontal,
   paddingVertical,
+  right,
+  loading,
 }) => (
   <Card
     paddingHorizontal={paddingHorizontal}
@@ -54,17 +68,21 @@ export const CardStat: FC<CardProps> = ({
     css={{
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'space-between',
       columnGap: '$16',
     }}
   >
     <Left>
-      <IconContainer>
-        <Icon colorName="primary" size={24} />
-      </IconContainer>
+      <LeftStart>
+        <IconContainer>
+          <Icon colorName="primary" size={24} />
+        </IconContainer>
+      </LeftStart>
+      <LeftEnd>
+        <Value>{loading ? <PulseLoader size={8} /> : value}</Value>
+        <Label>{label}</Label>
+      </LeftEnd>
     </Left>
-    <Right>
-      <Value>{value}</Value>
-      <Label>{label}</Label>
-    </Right>
+    {right && <Right>{right}</Right>}
   </Card>
 );

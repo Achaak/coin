@@ -28,4 +28,8 @@ export const coinRouter = router({
         ...coin,
       };
     }),
+  count: publicProcedure.query(async ({ ctx }) => {
+    const count = await ctx.prisma.coin.count();
+    return count;
+  }),
 });

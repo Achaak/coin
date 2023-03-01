@@ -49,7 +49,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  wishlist      Coin[]     @relation("userWishlist")
+  wishlists     Coin[]     @relation("userWishlist")
   coins         UserCoin[]
   role          UserRole   @default(USER)
   messagesFrom  Message[]  @relation("messagesFrom")
@@ -65,26 +65,25 @@ model VerificationToken {
 }
 
 model Country {
-  code    String    @unique
-  name    String
-  CoinRef CoinRef[]
+  code     String    @unique
+  name     String
+  catalogs Catalog[]
 }
 
 model CoinRef {
   id           String   @id @default(cuid())
-  name         String
-  country      Country  @relation(fields: [countryCode], references: [code])
-  countryCode  String
   coins        Coin[]
-  type         TypeCoin
+  type         CoinType
   denomination String
-  mark         String?
   composition  String
   weight       Float
   diameter     Float
   thickness    Float
   edge         String
   shape        String
+
+  catalog   Catalog @relation(fields: [catalogId], references: [id])
+  catalogId String
 
   obverseCreator     String
   obverseDescription String
@@ -94,17 +93,17 @@ model CoinRef {
   reverseDescription String
   reverseImage       String?
 
-  @@index([countryCode])
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@index([catalogId])
 }
 
 model Coin {
-  id        String   @id @default(cuid())
-  year      Int
-  ref       CoinRef  @relation(fields: [refId], references: [id])
-  refId     String
-  catalog   Catalog? @relation(fields: [catalogId], references: [id])
-  catalogId String?
-  mark      String?
+  id    String  @id @default(cuid())
+  year  Int
+  ref   CoinRef @relation(fields: [refId], references: [id])
+  refId String
 
   mintageQtyUNC Int?
   mintageQtyBU  Int?
@@ -113,19 +112,27 @@ model Coin {
   observeImage String?
   reverseImage String?
 
-  userCoin     UserCoin[]
-  userWishlist User[]     @relation("userWishlist")
+  usersCoin     UserCoin[]
+  usersWishlist User[]     @relation("userWishlist")
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
 
   @@index([refId])
-  @@index([catalogId])
 }
 
 model Catalog {
-  id    String @id @default(cuid())
-  name  String
-  coins Coin[]
+  id          String    @id @default(cuid())
+  name        String
+  coinsRef    CoinRef[]
+  country     Country   @relation(fields: [countryCode], references: [code])
+  countryCode String
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
 
   @@index([name])
+  @@index([countryCode])
 }
 
 model UserCoin {
@@ -142,6 +149,9 @@ model UserCoin {
   observeImage String?
   reverseImage String?
 
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
   @@index([userId])
   @@index([coinId])
 }
@@ -156,6 +166,8 @@ model Message {
   fromId String
   to     User   @relation("messagesTo", fields: [toId], references: [id], onDelete: Cascade)
   toId   String
+
+  created_at DateTime @default(now())
 
   @@index([fromId])
   @@index([toId])
@@ -172,7 +184,7 @@ enum ConditionCoin {
   PRF
 }
 
-enum TypeCoin {
+enum CoinType {
   CIRCULATION
   COLLECTOR
   COMMEMORATIVE

@@ -21,8 +21,12 @@ export const selectUserCoin = createUserCoinSelect({
     select: selectUser,
   },
   userId: true,
+  observeImage: true,
+  reverseImage: true,
+  created_at: true,
+  updated_at: true,
 });
 
-export type Coin = Prisma.UserGetPayload<{
+export type UserCoin = Prisma.UserGetPayload<{
   select: typeof selectUserCoin;
 }>;
