@@ -1,5 +1,4 @@
 import type { Prisma } from '@my-coin/database';
-import { selectCoinRef } from './coinRef';
 
 import type { CheckSelectKeys } from './types';
 
@@ -17,12 +16,9 @@ export const selectCoin = createCoinSelect({
   reverseImage: true,
   updated_at: true,
   created_at: true,
-  ref: {
-    select: selectCoinRef,
-  },
   refId: true,
 });
 
-export type Coin = Prisma.UserGetPayload<{
+export type Coin = Prisma.CoinGetPayload<{
   select: typeof selectCoin;
 }>;

@@ -18,6 +18,6 @@ export const selectCatalog = createCatalogSelect({
   updated_at: true,
 });
 
-export type Catalog = Prisma.UserGetPayload<{
+export type Catalog = Prisma.CatalogGetPayload<{
   select: typeof selectCatalog;
 }>;

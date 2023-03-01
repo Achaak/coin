@@ -4,7 +4,7 @@ import { Title } from '@my-coin/ui/dist/components/title/index';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { CoinRef } from '../../../../selector/coinRef';
+import { CoinRefWithCatalog } from '../../../../selector/coinRef';
 import { trpc } from '../../../../utils/trpc';
 
 const Container = styled('div', {
@@ -50,7 +50,7 @@ const CoinRefItemStyled = styled('li', {
   justifyContent: 'center',
 });
 
-const CoinRefItem: FC<{ coinsRef: CoinRef }> = ({ coinsRef }) => (
+const CoinRefItem: FC<{ coinsRef: CoinRefWithCatalog }> = ({ coinsRef }) => (
   <Link
     href={getLink('coin', {
       queries: {

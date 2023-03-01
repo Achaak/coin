@@ -42,18 +42,19 @@ model Session {
 }
 
 model User {
-  id            String     @id @default(cuid())
-  name          String?
-  email         String     @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  wishlists     Coin[]     @relation("userWishlist")
-  coins         UserCoin[]
-  role          UserRole   @default(USER)
-  messagesFrom  Message[]  @relation("messagesFrom")
-  messagesTo    Message[]  @relation("messagesTo")
+  id               String            @id @default(cuid())
+  name             String?
+  email            String            @unique
+  emailVerified    DateTime?
+  image            String?
+  accounts         Account[]
+  sessions         Session[]
+  coins            UserCoin[]
+  role             UserRole          @default(USER)
+  messagesFrom     Message[]         @relation("messagesFrom")
+  messagesTo       Message[]         @relation("messagesTo")
+  coinsWishlist    CoinWishlist[]
+  coinsRefWishlist CoinRefWishlist[]
 }
 
 model VerificationToken {
@@ -93,8 +94,9 @@ model CoinRef {
   reverseDescription String
   reverseImage       String?
 
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  created_at DateTime          @default(now())
+  updated_at DateTime?         @updatedAt
+  wishlist   CoinRefWishlist[]
 
   @@index([catalogId])
 }
@@ -112,11 +114,11 @@ model Coin {
   observeImage String?
   reverseImage String?
 
-  usersCoin     UserCoin[]
-  usersWishlist User[]     @relation("userWishlist")
+  usersCoin UserCoin[]
 
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  created_at DateTime       @default(now())
+  updated_at DateTime?      @updatedAt
+  wishlist   CoinWishlist[]
 
   @@index([refId])
 }
@@ -171,6 +173,34 @@ model Message {
 
   @@index([fromId])
   @@index([toId])
+}
+
+model CoinWishlist {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  coin   Coin   @relation(fields: [coinId], references: [id], onDelete: Cascade)
+  coinId String
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@index([userId])
+  @@index([coinId])
+}
+
+model CoinRefWishlist {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  coinRef   CoinRef @relation(fields: [coinRefId], references: [id], onDelete: Cascade)
+  coinRefId String
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@index([userId])
+  @@index([coinRefId])
 }
 
 enum ConditionCoin {

@@ -1,5 +1,6 @@
 import type { Prisma } from '@my-coin/database';
 import { selectCatalog } from './catalog';
+import { selectCoin } from './coin';
 import type { CheckSelectKeys } from './types';
 
 const createCoinRefSelect = <T extends Prisma.CoinRefSelect>(
@@ -24,12 +25,45 @@ export const selectCoinRef = createCoinRefSelect({
   type: true,
   reverseImage: true,
   shape: true,
-  catalog: {
-    select: selectCatalog,
-  },
   catalogId: true,
 });
 
-export type CoinRef = Prisma.UserGetPayload<{
+export type CoinRef = Prisma.CoinRefGetPayload<{
   select: typeof selectCoinRef;
+}>;
+
+export const selectCoinRefWithCatalog = createCoinRefSelect({
+  ...selectCoinRef,
+  catalog: {
+    select: selectCatalog,
+  },
+});
+
+export type CoinRefWithCatalog = Prisma.CoinRefGetPayload<{
+  select: typeof selectCoinRefWithCatalog;
+}>;
+
+export const selectCoinRefWithCoins = createCoinRefSelect({
+  ...selectCoinRef,
+  coins: {
+    select: selectCoin,
+  },
+});
+
+export type CoinRefWithCoins = Prisma.CoinRefGetPayload<{
+  select: typeof selectCoinRefWithCoins;
+}>;
+
+export const selectCoinRefFull = createCoinRefSelect({
+  ...selectCoinRef,
+  catalog: {
+    select: selectCatalog,
+  },
+  coins: {
+    select: selectCoin,
+  },
+});
+
+export type CoinRefFull = Prisma.CoinRefGetPayload<{
+  select: typeof selectCoinRefFull;
 }>;

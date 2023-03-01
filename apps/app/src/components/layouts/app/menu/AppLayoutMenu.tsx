@@ -2,7 +2,6 @@ import { styled } from '@my-coin/ui';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { FC } from 'react';
-import { menuConfig, menuConfigAdmin } from '../../../../configs/menu';
 import { AppLayoutMenuItem } from './menuItem';
 import logo from '../../../../../public/images/500x500.png';
 import Link from 'next/link';
@@ -10,6 +9,13 @@ import { getLink } from '@my-coin/router/dist/app';
 import { useRouter } from 'next/router';
 import { CogIcon } from '@my-coin/ui/dist/icons/Cog';
 import { LogInIcon } from '@my-coin/ui/dist/icons/LogIn';
+import { TransferIcon } from '@my-coin/ui/dist/icons/Transfer';
+import { CoinIcon } from '@my-coin/ui/dist/icons/Coin';
+import { CoinSolidIcon } from '@my-coin/ui/dist/icons/CoinSolid';
+import { HeartIcon } from '@my-coin/ui/dist/icons/Heart';
+import { HeartSolidIcon } from '@my-coin/ui/dist/icons/HeartSolid';
+import { LayerIcon } from '@my-coin/ui/dist/icons/Layer';
+import { LayerSolidIcon } from '@my-coin/ui/dist/icons/LayerSolid';
 
 const Container = styled('nav', {
   display: 'flex',
@@ -96,7 +102,7 @@ type CustomProps = {
 };
 
 export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
-  const { data: dataSession } = useSession();
+  const { data: dataSession, status } = useSession();
 
   const router = useRouter();
 
@@ -136,8 +142,62 @@ export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
 
       <Menu>
         {(router.pathname.includes('admin')
-          ? menuConfigAdmin()
-          : menuConfig()
+          ? [
+              {
+                type: 'link',
+                icon: LayerIcon,
+                label: 'Dashboard',
+                link: getLink('admin.dashboard'),
+                linkAs: [getLink('admin.dashboard')],
+              },
+            ]
+          : [
+              {
+                type: 'link',
+                icon: LayerIcon,
+                iconActive: LayerSolidIcon,
+                label: 'Catalog',
+                link: getLink('home'),
+                linkAs: [getLink('home')],
+              },
+              {
+                type: 'link',
+                icon: CoinIcon,
+                label: 'My Collection',
+                link: getLink('my-collection'),
+                linkAs: [getLink('my-collection')],
+              },
+              ...(status === 'authenticated'
+                ? [
+                    {
+                      type: 'link',
+                      icon: HeartIcon,
+                      iconActive: HeartSolidIcon,
+                      label: 'My wishlist',
+                      link: getLink('user.wishlist', {
+                        queries: {
+                          userId: dataSession?.user?.id ?? '',
+                        },
+                      }),
+                      linkAs: [
+                        getLink('user.wishlist', {
+                          queries: {
+                            userId: dataSession?.user?.id ?? '',
+                          },
+                        }),
+                      ],
+                    },
+                  ]
+                : []),
+              {
+                type: 'link',
+                icon: TransferIcon,
+                iconActive: CoinSolidIcon,
+                label: 'Exchange',
+                link: getLink('exchange'),
+                linkAs: [getLink('exchange')],
+              },
+            ]
         ).map((item, itemKey) => (
           <AppLayoutMenuItem item={item} key={itemKey} onClosed={onClosed} />
         ))}

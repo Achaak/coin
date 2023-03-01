@@ -1,5 +1,5 @@
 import type { Prisma } from '@my-coin/database';
-import { selectCoin } from './coin';
+import { selectCoinFull } from './coinFull';
 import type { CheckSelectKeys } from './types';
 import { selectUser } from './user';
 
@@ -14,7 +14,7 @@ export const selectUserCoin = createUserCoinSelect({
   condition: true,
   exchangeable: true,
   coin: {
-    select: selectCoin,
+    select: selectCoinFull,
   },
   coinId: true,
   user: {
@@ -27,6 +27,6 @@ export const selectUserCoin = createUserCoinSelect({
   updated_at: true,
 });
 
-export type UserCoin = Prisma.UserGetPayload<{
+export type UserCoin = Prisma.UserCoinGetPayload<{
   select: typeof selectUserCoin;
 }>;

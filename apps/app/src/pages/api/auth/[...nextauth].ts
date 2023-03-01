@@ -5,6 +5,8 @@ import NextAuth from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 import { env } from '../../../env/server.mjs';
 import { randUserName } from '@ngneat/falso';
+import { selectCoinWishlist } from '../../../selector/coinWishlist.js';
+import { selectCoinRefWishlist } from '../../../selector/coinRefWishlist.js';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -40,6 +42,12 @@ export const authOptions: NextAuthOptions = {
             email: true,
             name: true,
             image: true,
+            coinsWishlist: {
+              select: selectCoinWishlist,
+            },
+            coinsRefWishlist: {
+              select: selectCoinRefWishlist,
+            },
           },
         });
 
@@ -48,6 +56,8 @@ export const authOptions: NextAuthOptions = {
           session.user.email = userRes.email;
           session.user.name = userRes.name;
           session.user.image = userRes.image;
+          session.user.coinsWishlist = userRes.coinsWishlist;
+          session.user.coinsRefWishlist = userRes.coinsRefWishlist;
 
           if (!userRes.name) {
             let taken = true;

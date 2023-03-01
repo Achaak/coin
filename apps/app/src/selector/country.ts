@@ -10,6 +10,6 @@ export const selectCountry = createCountrySelect({
   name: true,
 });
 
-export type Country = Prisma.UserGetPayload<{
+export type Country = Prisma.CountryGetPayload<{
   select: typeof selectCountry;
 }>;
