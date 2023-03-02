@@ -1,5 +1,4 @@
 import { themeDefault } from '@my-coin/ui/dist/styles/theme-default';
-import { themeDark } from '@my-coin/ui/dist/styles/theme-dark';
 import { customGlobalCss } from '@my-coin/ui/dist/styles/globalCss';
 import type {
   Locales,
@@ -57,7 +56,7 @@ const MyApp = ({
   return (
     <>
       <DefaultSeo {...SEO} />
-      <PikasUIProvider lightTheme={themeDefault} darkTheme={themeDark}>
+      <PikasUIProvider lightTheme={themeDefault} darkTheme={themeDefault}>
         <ToastProvider position="top-right">
           <SessionProvider session={session}>
             {locale && (
