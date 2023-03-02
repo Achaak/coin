@@ -1,5 +1,4 @@
 import { Grid } from '@my-coin/ui/dist/components/grid/index';
-import { Button } from '@my-coin/ui/dist/components/inputs/button/index';
 import { Title } from '@my-coin/ui/dist/components/title/index';
 import { FC, useMemo } from 'react';
 import { Breadcrumb } from '../../../global/Breadcrumb';
@@ -16,6 +15,8 @@ import { CoinImagesContainer } from '../images';
 import { CoinInformationContainer } from '../information';
 import { formatYears, getMinAndMaxYear } from '../../../../utils/date';
 import { CoinExchangeContainer } from '../exchange';
+import { CoinItemMyCollectionContainer } from './my-collection';
+import { useSession } from 'next-auth/react';
 
 type CoinItemContainerProps = {
   coin: Coin;
@@ -26,6 +27,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
   coin,
   coinRef,
 }) => {
+  const { status } = useSession();
   const { coinsWishlist, refreshCoinsWishlist } = useStore(
     wishlistStore,
     (state) => ({
@@ -92,6 +94,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
           ) ?? false
         }
         price={1}
+        countryCode={coinRef.catalog.country.code}
       />
       <Grid
         type="container"
@@ -138,12 +141,6 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
             type={coinRef.type}
           />
           <Card
-            paddingHorizontal={{
-              default: 32,
-            }}
-            paddingVertical={{
-              default: 24,
-            }}
             css={{
               rowGap: '$16',
               display: 'flex',
@@ -212,18 +209,9 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
             rowGap: '$32',
           }}
         >
-          <Card
-            paddingHorizontal={{
-              default: 32,
-            }}
-            paddingVertical={{
-              default: 24,
-            }}
-          >
-            <Title as="h2">Ma Collection</Title>
-
-            <Button>+ Ajouter à ma collection</Button>
-          </Card>
+          {status === 'authenticated' && (
+            <CoinItemMyCollectionContainer coin={coin} />
+          )}
           <CoinExchangeContainer />
         </Grid>
       </Grid>

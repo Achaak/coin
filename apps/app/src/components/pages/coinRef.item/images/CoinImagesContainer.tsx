@@ -10,10 +10,15 @@ const CoinImageContainer = styled('div', {
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '$16',
+  padding: '$8',
   backgroundColor: '$white',
-  borderRadius: '$3xl',
+  borderRadius: '$xl',
   height: '$256',
+
+  '@xl': {
+    padding: '$16',
+    borderRadius: '$2xl',
+  },
 });
 
 type CoinImagesContainerProps = {
@@ -42,19 +47,15 @@ export const CoinImagesContainer: FC<CoinImagesContainerProps> = ({
       '2xl': 2,
     }}
     columnGap={{
-      default: 24,
+      default: 16,
+      xl: 24,
     }}
     rowGap={{
-      default: 24,
+      default: 16,
+      xl: 24,
     }}
   >
     <Card
-      paddingHorizontal={{
-        default: 32,
-      }}
-      paddingVertical={{
-        default: 24,
-      }}
       css={{
         rowGap: '$16',
         display: 'flex',
@@ -90,12 +91,6 @@ export const CoinImagesContainer: FC<CoinImagesContainerProps> = ({
       />
     </Card>
     <Card
-      paddingHorizontal={{
-        default: 32,
-      }}
-      paddingVertical={{
-        default: 24,
-      }}
       css={{
         rowGap: '$16',
         display: 'flex',

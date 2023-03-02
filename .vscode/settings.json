@@ -22,7 +22,13 @@
   },
   "eslint.workingDirectories": [{ "mode": "auto" }],
   // "eslint.workingDirectories": ["./packages/*", "./apps/*"],
-  "cSpell.words": ["roboto", "superjson", "Typesafe", "zustand"],
+  "cSpell.words": [
+    "Formik",
+    "roboto",
+    "superjson",
+    "Typesafe",
+    "zustand"
+  ],
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#1f6fd0",
     "activityBar.background": "#1f6fd0",

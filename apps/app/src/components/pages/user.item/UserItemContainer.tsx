@@ -72,12 +72,6 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
         }}
       >
         <CardStat
-          paddingHorizontal={{
-            default: 32,
-          }}
-          paddingVertical={{
-            default: 24,
-          }}
           Icon={CoinIcon}
           label="Coins"
           value={
@@ -98,24 +92,8 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
             </Link>
           }
         />
+        <CardStat Icon={CoinIcon} label="Rank" value={'#1'} />
         <CardStat
-          paddingHorizontal={{
-            default: 32,
-          }}
-          paddingVertical={{
-            default: 24,
-          }}
-          Icon={CoinIcon}
-          label="Rank"
-          value={'#1'}
-        />
-        <CardStat
-          paddingHorizontal={{
-            default: 32,
-          }}
-          paddingVertical={{
-            default: 24,
-          }}
           Icon={CoinIcon}
           label="Pays"
           value={
@@ -126,12 +104,6 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
           loading={catalogCountCountryByUserIdIsLoading}
         />
         <CardStat
-          paddingHorizontal={{
-            default: 32,
-          }}
-          paddingVertical={{
-            default: 24,
-          }}
           Icon={CoinIcon}
           label="Catalogue"
           value={
@@ -143,12 +115,6 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
         />
       </Grid>
       <Card
-        paddingHorizontal={{
-          default: 32,
-        }}
-        paddingVertical={{
-          default: 24,
-        }}
         css={{
           rowGap: '$16',
           display: 'flex',
@@ -158,6 +124,12 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
         <Title as="h2">Last coin</Title>
         {lastCoinsByUserIdData?.map((coin) => (
           <CoinCard
+            paddingHorizontal={{
+              default: 0,
+            }}
+            paddingVertical={{
+              default: 0,
+            }}
             key={coin.id}
             composition={coin.coin.ref.composition}
             year={coin.coin.year}
@@ -179,12 +151,6 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
         ))}
       </Card>
       <Card
-        paddingHorizontal={{
-          default: 32,
-        }}
-        paddingVertical={{
-          default: 24,
-        }}
         css={{
           rowGap: '$16',
           display: 'flex',

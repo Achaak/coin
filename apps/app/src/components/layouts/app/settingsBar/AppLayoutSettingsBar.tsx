@@ -15,6 +15,7 @@ import { DropdownMenu } from '@my-coin/ui/dist/components/dropdownMenu/index';
 import { SearchIcon } from '@my-coin/ui/dist/icons/Search';
 import { LogOutIcon } from '@my-coin/ui/dist/icons/LogOut';
 import { Textfield } from '@my-coin/ui/dist/components/inputs/textfield/index';
+import { UserIcon } from '@my-coin/ui/dist/icons/User';
 
 const Container = styled('div', {
   width: '100%',
@@ -46,13 +47,30 @@ const Left = styled('div', {
 const Right = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  columnGap: '$16',
+  columnGap: '$8',
+
+  '@xs': {
+    columnGap: '$12',
+  },
+  '@md': {
+    columnGap: '$16',
+  },
 });
 
 const UserName = styled('span', {
   fontWeight: '$medium',
   fontSize: '$em-large',
   color: '$black',
+  maxWidth: '$64',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  display: 'block',
+
+  '@lg': {
+    display: 'block',
+    maxWidth: '$120',
+  },
 });
 
 const Login = styled('span', {
@@ -172,20 +190,27 @@ export const AppLayoutSettingsBar: FC = () => {
             css={{
               trigger: {
                 fontWeight: '$medium',
+                padding: '$4 $8',
+
+                '@lg': {
+                  padding: '$8 $16',
+                },
               },
             }}
           />
           {dataSession?.user ? (
             <>
-              <Link
-                href={getLink('user', {
-                  queries: {
-                    userId: dataSession.user.id,
-                  },
-                })}
-              >
-                <UserName>{dataSession.user.name}</UserName>
-              </Link>
+              {largeScreenValid && (
+                <Link
+                  href={getLink('user', {
+                    queries: {
+                      userId: dataSession.user.id,
+                    },
+                  })}
+                >
+                  <UserName>{dataSession.user.name}</UserName>
+                </Link>
+              )}
               <DropdownMenu
                 triggerContent={
                   <Avatar
@@ -197,6 +222,24 @@ export const AppLayoutSettingsBar: FC = () => {
                   />
                 }
                 data={[
+                  {
+                    items: [
+                      {
+                        label: 'Profile',
+                        type: 'item',
+                        Icon: UserIcon,
+                        onClick: () => {
+                          void router.push(
+                            getLink('user', {
+                              queries: {
+                                userId: dataSession.user?.id ?? '',
+                              },
+                            })
+                          );
+                        },
+                      },
+                    ],
+                  },
                   {
                     items: [
                       {

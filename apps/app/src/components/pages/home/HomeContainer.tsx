@@ -47,12 +47,6 @@ export const HomeContainer: FC = () => {
         }}
       >
         <CardStat
-          paddingHorizontal={{
-            default: 24,
-          }}
-          paddingVertical={{
-            default: 24,
-          }}
           Icon={CoinSolidIcon}
           value={
             coinsCountData !== undefined
@@ -63,12 +57,6 @@ export const HomeContainer: FC = () => {
           label="Total of coins"
         />
         <CardStat
-          paddingHorizontal={{
-            default: 24,
-          }}
-          paddingVertical={{
-            default: 24,
-          }}
           Icon={LayerSolidIcon}
           value={
             catalogsCountData !== undefined ? catalogsCountData : undefined
@@ -77,12 +65,6 @@ export const HomeContainer: FC = () => {
           label="Total of catalogs"
         />
         <CardStat
-          paddingHorizontal={{
-            default: 24,
-          }}
-          paddingVertical={{
-            default: 24,
-          }}
           Icon={CoinSolidIcon}
           value={
             userCoinsCountData !== undefined
@@ -93,12 +75,6 @@ export const HomeContainer: FC = () => {
           label="Total of coins entered"
         />
         <CardStat
-          paddingHorizontal={{
-            default: 24,
-          }}
-          paddingVertical={{
-            default: 24,
-          }}
           Icon={CoinSolidIcon}
           value={`$${formatNumber.format(123946465)}`}
           label="Total of coins valued"

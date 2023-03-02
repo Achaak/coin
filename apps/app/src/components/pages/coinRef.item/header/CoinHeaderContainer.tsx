@@ -5,6 +5,7 @@ import { Title } from '@my-coin/ui/dist/components/title/index';
 import { HeartSolidIcon } from '@my-coin/ui/dist/icons/HeartSolid';
 import { useSession } from 'next-auth/react';
 import { ClipLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
+import Image from 'next/image';
 
 const Header = styled('div', {
   display: 'flex',
@@ -40,6 +41,12 @@ const LoaderContainer = styled('div', {
   display: 'flex',
 });
 
+const ImageContainer = styled('div', {
+  borderRadius: '$lg',
+  overflow: 'hidden',
+  display: 'flex',
+});
+
 type CoinHeaderContainerProps = {
   title: string;
   price: number;
@@ -47,6 +54,7 @@ type CoinHeaderContainerProps = {
   id: string;
   onAddOrRemoveToFavorites: (id: string) => void;
   isLoadingAddOrRemoveToFavorites: boolean;
+  countryCode: string;
 };
 
 export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
@@ -56,6 +64,7 @@ export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
   isFavorite,
   onAddOrRemoveToFavorites,
   isLoadingAddOrRemoveToFavorites,
+  countryCode,
 }) => {
   const { status } = useSession();
 
@@ -114,6 +123,14 @@ export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
     <Header>
       <HeaderLeft>
         {favoriteContent}
+        <ImageContainer>
+          <Image
+            src={`/flags/${countryCode}.svg`}
+            height={32}
+            width={32}
+            alt="Logo My Coin"
+          />
+        </ImageContainer>
         <Title as="h1">{title}</Title>
       </HeaderLeft>
 

@@ -18,8 +18,8 @@ const Container = styled('div', {
   flexDirection: 'row',
   transition: 'all 0.3s ease',
 
-  '@lg': {
-    columnGap: '$40',
+  '@xl': {
+    columnGap: '$32',
   },
 });
 
@@ -27,14 +27,19 @@ const Right = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
-  rowGap: '$8',
+  rowGap: '$16',
   position: 'relative',
-  marginTop: '$16',
-  marginLeft: '$16',
+  marginTop: '$8',
+  marginLeft: '$8',
 
-  '@lg': {
-    rowGap: '$40',
-    marginTop: '$40',
+  '@md': {
+    marginTop: '$16',
+    marginLeft: '$16',
+  },
+
+  '@xl': {
+    rowGap: '$32',
+    marginTop: '$32',
     marginLeft: '$0',
   },
 });
@@ -55,14 +60,21 @@ const Content = styled('div', {
   alignItems: 'start',
   flexDirection: 'column',
   overflowY: 'auto',
-  rowGap: '$8',
+  rowGap: '$16',
   paddingTop: '$64',
-  paddingRight: '$16',
+  paddingRight: '$8',
+  paddingBottom: '$8',
 
-  '@lg': {
-    rowGap: '$40',
-    paddingRight: '$40',
-    paddingTop: '$80',
+  '@md': {
+    paddingRight: '$16',
+    paddingBottom: '$16',
+  },
+
+  '@xl': {
+    rowGap: '$32',
+    paddingRight: '$32',
+    paddingTop: '$64',
+    paddingBottom: '$32',
   },
 });
 

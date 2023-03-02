@@ -8,6 +8,7 @@ export type {
   CustomDialogGapElement,
   CustomDialogGap,
   CustomDialogPaddingElement,
+  DialogProps,
 } from '@pikas-ui/dialog';
 
 export { DialogTitle } from '@pikas-ui/dialog';

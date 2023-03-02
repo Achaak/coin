@@ -22,10 +22,14 @@ const Container = styled('div', {
 const Element = styled('span', {
   backgroundColor: '$gray',
   borderRadius: '$3xl',
-  padding: '$8 $16',
+  padding: '$4 $8',
   color: '$black',
   transition: 'all 0.2s ease-in-out',
   fontSize: '$em-small',
+
+  '@lg': {
+    padding: '$8 $16',
+  },
 
   variants: {
     current: {

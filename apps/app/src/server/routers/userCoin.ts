@@ -1,4 +1,4 @@
-import { ConditionCoin } from '@my-coin/database';
+import { CoinCondition } from '@my-coin/database';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { selectUserCoin } from '../../selector/userCoin';
@@ -9,12 +9,24 @@ export const userCoinRouter = router({
     .input(
       z.object({
         id: z.string(),
+        userId: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const { id } = input;
-      const userCoin = await ctx.prisma.userCoin.findUnique({
-        where: { id },
+      const { id, userId } = input;
+      const { session } = ctx;
+
+      const userIdRes = userId ?? session?.user?.id;
+
+      if (userIdRes === undefined) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'User is not authenticated or userId is not provided',
+        });
+      }
+
+      const userCoin = await ctx.prisma.userCoin.findMany({
+        where: { id, userId: userIdRes },
         select: selectUserCoin,
       });
 
@@ -25,9 +37,41 @@ export const userCoinRouter = router({
         });
       }
 
-      return {
-        ...userCoin,
-      };
+      return userCoin[0];
+    }),
+  byCoinId: publicProcedure
+    .input(
+      z.object({
+        coinId: z.string(),
+        userId: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { coinId, userId } = input;
+      const { session } = ctx;
+
+      const userIdRes = userId ?? session?.user?.id;
+
+      if (userIdRes === undefined) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'User is not authenticated or userId is not provided',
+        });
+      }
+
+      const userCoin = await ctx.prisma.userCoin.findMany({
+        where: { coinId, userId: userIdRes },
+        select: selectUserCoin,
+      });
+
+      if (!userCoin) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `No coin with id '${coinId}'`,
+        });
+      }
+
+      return userCoin;
     }),
   remove: protectedProcedure
     .input(
@@ -35,7 +79,7 @@ export const userCoinRouter = router({
         id: z.string(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { id } = input;
       const userCoin = await ctx.prisma.userCoin.findUnique({
         where: { id },
@@ -60,14 +104,14 @@ export const userCoinRouter = router({
   add: protectedProcedure
     .input(
       z.object({
-        comment: z.string(),
-        price: z.number(),
-        condition: z.nativeEnum(ConditionCoin),
+        comment: z.string().optional().nullable(),
+        price: z.number().optional().nullable(),
+        condition: z.nativeEnum(CoinCondition),
         exchangeable: z.boolean(),
         coinId: z.string(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { comment, price, condition, exchangeable, coinId } = input;
       const { user } = ctx.session;
 
@@ -98,15 +142,14 @@ export const userCoinRouter = router({
     .input(
       z.object({
         id: z.string(),
-        comment: z.string(),
-        price: z.number(),
-        condition: z.nativeEnum(ConditionCoin),
+        comment: z.string().optional().nullable(),
+        price: z.number().optional().nullable(),
+        condition: z.nativeEnum(CoinCondition),
         exchangeable: z.boolean(),
-        coinId: z.string(),
       })
     )
-    .query(async ({ ctx, input }) => {
-      const { id, comment, price, condition, exchangeable, coinId } = input;
+    .mutation(async ({ ctx, input }) => {
+      const { id, comment, price, condition, exchangeable } = input;
       const { user } = ctx.session;
 
       if (user?.id === undefined) {
@@ -123,7 +166,6 @@ export const userCoinRouter = router({
           price,
           condition,
           exchangeable,
-          coinId,
         },
         select: selectUserCoin,
       });

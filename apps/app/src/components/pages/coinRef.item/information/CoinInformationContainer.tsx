@@ -34,12 +34,6 @@ export const CoinInformationContainer: FC<CoinInformationContainerProps> = ({
   alignment,
 }) => (
   <Card
-    paddingHorizontal={{
-      default: 32,
-    }}
-    paddingVertical={{
-      default: 24,
-    }}
     css={{
       rowGap: '$16',
       display: 'flex',

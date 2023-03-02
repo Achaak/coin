@@ -79,6 +79,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
           ) ?? false
         }
         price={1}
+        countryCode={coinRef.catalog.country.code}
       />
 
       <Grid
@@ -134,14 +135,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             rowGap: '$32',
           }}
         >
-          <Card
-            paddingHorizontal={{
-              default: 32,
-            }}
-            paddingVertical={{
-              default: 24,
-            }}
-          >
+          <Card>
             <Title as="h2">Variété</Title>
           </Card>
           <CoinExchangeContainer />

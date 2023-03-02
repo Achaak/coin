@@ -11,5 +11,5 @@ export type {
 export { textareaPadding, textareaResize } from '@pikas-ui/textarea';
 
 export const Textarea: FC<TextareaProps> = (props) => (
-  <TextareaPikasUI {...props} />
+  <TextareaPikasUI boxShadow="none" borderRadius="xl" {...props} />
 );

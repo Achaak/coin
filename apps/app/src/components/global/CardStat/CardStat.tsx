@@ -57,8 +57,16 @@ export const CardStat: FC<CardProps> = ({
   Icon,
   value,
   label,
-  paddingHorizontal,
-  paddingVertical,
+  paddingHorizontal = {
+    default: 8,
+    md: 16,
+    xl: 20,
+  },
+  paddingVertical = {
+    default: 8,
+    md: 16,
+    xl: 20,
+  },
   right,
   loading,
 }) => (

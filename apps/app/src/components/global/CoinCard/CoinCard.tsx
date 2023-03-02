@@ -1,38 +1,27 @@
 import { CoinType } from '@my-coin/database';
 import { styled } from '@my-coin/ui';
-import { CameraOffIcon } from '@my-coin/ui/dist/icons/CameraOff';
 import Link from 'next/link';
 import type { FC } from 'react';
-import { Card } from '../Card';
+import { Card, CardPaddingHorizontal, CardPaddingVertical } from '../Card';
+import { CoinImages } from '../CoinImages';
 
-const Left = styled('div', {
+const End = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  columnGap: '$16',
-});
+  flex: 1,
+  flexDirection: 'column',
+  rowGap: '$8',
 
-const CoinImagesContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  alignItems: 'center',
-  padding: '$8',
-  backgroundColor: '$white',
-  borderRadius: '$xl',
-  columnGap: '$4',
-});
-
-const CoinImage = styled('div', {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '$64',
-  width: '$64',
+  '@sm': {
+    columnGap: '$16',
+    flexDirection: 'row',
+  },
 });
 
 const InfosContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
+  flex: 1,
 });
 
 const Name = styled('span', {
@@ -70,6 +59,8 @@ export type CoinProps = {
 
   year?: number | null;
   yearRange?: [number, number];
+  paddingHorizontal?: CardPaddingHorizontal;
+  paddingVertical?: CardPaddingVertical;
 };
 
 export const CoinCard: FC<CoinProps> = ({
@@ -84,41 +75,37 @@ export const CoinCard: FC<CoinProps> = ({
   type,
   price,
   link,
+  paddingHorizontal = {
+    default: 8,
+    lg: 16,
+  },
+  paddingVertical = {
+    default: 8,
+    lg: 16,
+  },
 }) => (
   <Link href={link}>
     <Card
-      paddingHorizontal={{
-        default: 16,
-      }}
-      paddingVertical={{
-        default: 16,
-      }}
+      paddingHorizontal={paddingHorizontal}
+      paddingVertical={paddingVertical}
       css={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        columnGap: '$16',
-      }}
-      borderRadius="xl"
-    >
-      <Left>
-        <CoinImagesContainer>
-          <CoinImage>
-            {observeImage ? (
-              <img src={observeImage} alt="Obverse" width={40} />
-            ) : (
-              <CameraOffIcon size={40} colorName="gray" />
-            )}
-          </CoinImage>
-          <CoinImage>
-            {reverseImage ? (
-              <img src={reverseImage} alt="Reverse" width={40} />
-            ) : (
-              <CameraOffIcon size={40} colorName="gray" />
-            )}
-          </CoinImage>
-        </CoinImagesContainer>
+        flexDirection: 'column',
+        rowGap: '$8',
 
+        '@sm': {
+          columnGap: '$16',
+          flexDirection: 'row',
+        },
+      }}
+      borderRadius={{
+        default: 'xl',
+      }}
+    >
+      <CoinImages observeImage={observeImage} reverseImage={reverseImage} />
+
+      <End>
         <InfosContainer>
           <Name>
             {denomination}, {year ?? yearRange?.join('-')}
@@ -131,9 +118,9 @@ export const CoinCard: FC<CoinProps> = ({
             <DetailsItem>{type}</DetailsItem>
           </Details>
         </InfosContainer>
-      </Left>
 
-      <Price>Prix ${price}</Price>
+        <Price>Prix ${price}</Price>
+      </End>
     </Card>
   </Link>
 );

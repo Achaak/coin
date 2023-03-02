@@ -48,12 +48,6 @@ const LoginPage: NextPageWithLayout = () => {
       <NextSeo description={LL.common.seo.description()} />
 
       <Card
-        paddingHorizontal={{
-          default: 32,
-        }}
-        paddingVertical={{
-          default: 24,
-        }}
         css={{
           rowGap: '$16',
           display: 'flex',

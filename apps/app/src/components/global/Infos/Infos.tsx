@@ -12,7 +12,7 @@ const Container = styled('div', {
 const Row = styled('div', {
   display: 'flex',
   flexDirection: 'row',
-  columnGap: '$32',
+  columnGap: '$16',
 });
 
 const RowLeft = styled('div', {
@@ -34,7 +34,9 @@ const Label = styled('span', {
   fontWeight: '$medium',
 });
 
-const Value = styled('span', {});
+const Value = styled('span', {
+  textAlign: 'right',
+});
 
 export type InfosData = {
   label: string;
