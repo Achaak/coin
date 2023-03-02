@@ -5,16 +5,17 @@ import { router, publicProcedure, protectedProcedure } from './trpc';
 export const coinWishlistRouter = router({
   byUserId: publicProcedure
     .input(
-      z.object({
-        userId: z.string().optional(),
-      })
+      z
+        .object({
+          userId: z.string().optional(),
+        })
+        .optional()
     )
     .query(async ({ ctx, input }) => {
-      const { userId } = input;
       const { session } = ctx;
 
       const wishlist = await ctx.prisma.coinWishlist.findMany({
-        where: { userId: userId ?? session?.user?.id },
+        where: { userId: input?.userId ?? session?.user?.id },
         select: selectCoinWishlist,
       });
 

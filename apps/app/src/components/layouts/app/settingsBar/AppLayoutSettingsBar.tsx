@@ -31,10 +31,16 @@ const Container = styled('div', {
   background: 'linear-gradient($white 40%, $transparent)',
   paddingRight: '$16',
   alignItems: 'start',
+  paddingLeft: '$0',
 
   '@lg': {
-    paddingRight: '$40',
+    paddingRight: '$32',
     height: '$80',
+    paddingLeft: '$24',
+  },
+  '@xl': {
+    paddingRight: '$40',
+    paddingLeft: '$32',
   },
 });
 

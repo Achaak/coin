@@ -36,8 +36,10 @@ export const AddCoinInCollectionDialogContent: FC<
     initialValues: defaultValues,
     validationSchema: Yup.object({
       condition: Yup.string().required('Required'),
-      comment: Yup.string().max(255, 'Must be 255 characters or less'),
-      price: Yup.number().positive('Must be positive'),
+      comment: Yup.string()
+        .max(255, 'Must be 255 characters or less')
+        .nullable(),
+      price: Yup.number().positive('Must be positive').nullable(),
       exchangeable: Yup.boolean(),
     }),
     onSubmit: (values) => {

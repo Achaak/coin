@@ -18,7 +18,6 @@ export const selectCoinRefWishlist = createCoinRefWishlistSelect({
   },
   userId: true,
   created_at: true,
-  updated_at: true,
 });
 
 export type CoinRefWishlist = Prisma.CoinRefWishlistGetPayload<{

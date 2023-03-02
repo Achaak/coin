@@ -55,6 +55,8 @@ model User {
   messagesTo       Message[]         @relation("messagesTo")
   coinsWishlist    CoinWishlist[]
   coinsRefWishlist CoinRefWishlist[]
+  contacts         Contact[]
+  userContacts     Contact[]         @relation("userContact")
 }
 
 model VerificationToken {
@@ -72,7 +74,7 @@ model Country {
 }
 
 model CoinRef {
-  id              String   @id @default(cuid())
+  id              String         @id @default(cuid())
   coins           Coin[]
   type            CoinType
   denomination    String
@@ -184,8 +186,9 @@ model CoinWishlist {
   coin   Coin   @relation(fields: [coinId], references: [id], onDelete: Cascade)
   coinId String
 
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  created_at DateTime @default(now())
+
+  @@unique([userId, coinId])
 
   @@index([userId])
   @@index([coinId])
@@ -198,11 +201,27 @@ model CoinRefWishlist {
   coinRef   CoinRef @relation(fields: [coinRefId], references: [id], onDelete: Cascade)
   coinRefId String
 
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  created_at DateTime @default(now())
+
+  @@unique([userId, coinRefId])
 
   @@index([userId])
   @@index([coinRefId])
+}
+
+model Contact {
+  id            String @id @default(cuid())
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  userContact   User   @relation("userContact", fields: [userContactId], references: [id], onDelete: Cascade)
+  userContactId String
+
+  created_at DateTime @default(now())
+
+  @@unique([userId, userContactId])
+
+  @@index([userId])
+  @@index([userContactId])
 }
 
 enum CoinCondition {

@@ -1,10 +1,8 @@
-import { getLink } from '@my-coin/router/dist/app';
 import { styled } from '@my-coin/ui';
-import { Avatar } from '@my-coin/ui/dist/components/avatar/index';
 import { Title } from '@my-coin/ui/dist/components/title/index';
-import Link from 'next/link';
 import { FC } from 'react';
-import { User } from '../../../../selector/user';
+import { User as UserType } from '../../../../selector/user';
+import { User } from '../../../global/User';
 
 const Container = styled('div', {
   display: 'flex',
@@ -18,7 +16,7 @@ const UsersContainer = styled('ul', {
 });
 
 type SearchUsersContainerProps = {
-  users: User[];
+  users: UserType[];
 };
 
 export const SearchUsersContainer: FC<SearchUsersContainerProps> = ({
@@ -29,42 +27,14 @@ export const SearchUsersContainer: FC<SearchUsersContainerProps> = ({
 
     <UsersContainer>
       {users?.map((user) => (
-        <UserItem key={user.id} user={user} />
+        <User
+          key={user.id}
+          id={user.id}
+          name={user.name}
+          image={user.image}
+          as="li"
+        />
       ))}
     </UsersContainer>
   </Container>
-);
-
-const UserItemStyled = styled('li', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  rowGap: '$12',
-});
-
-const UserItemName = styled('span', {
-  fontWeight: '$medium',
-  color: '$black',
-});
-
-const UserItem: FC<{ user: User }> = ({ user }) => (
-  <Link
-    href={getLink('user', {
-      queries: {
-        userId: user.id,
-      },
-    })}
-  >
-    <UserItemStyled>
-      <Avatar
-        alt={user.name ?? 'User'}
-        fallback={user.name?.[0] ?? 'U'}
-        size={80}
-        borderRadius="3xl"
-        src={user.image ?? undefined}
-      />
-      <UserItemName>{user.name}</UserItemName>
-    </UserItemStyled>
-  </Link>
 );

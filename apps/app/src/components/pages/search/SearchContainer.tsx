@@ -9,17 +9,32 @@ export const SearchContainer: FC = () => {
   const router = useRouter();
   const { q } = router.query;
 
-  const { data: usersData } = trpc.user.search.useQuery({
-    query: q as string,
-  });
+  const { data: usersData, isLoading: usersLoading } =
+    trpc.user.search.useQuery({
+      query: q as string,
+    });
 
-  const { data: coinsRefsData } = trpc.coinRef.search.useQuery({
-    query: q as string,
-  });
+  const { data: coinsRefsData, isLoading: coinsRefsLoading } =
+    trpc.coinRef.search.useQuery({
+      query: q as string,
+    });
 
-  const { data: catalogsData } = trpc.catalog.search.useQuery({
-    query: q as string,
-  });
+  const { data: catalogsData, isLoading: catalogsLoading } =
+    trpc.catalog.search.useQuery({
+      query: q as string,
+    });
+
+  if (
+    usersData?.length === 0 &&
+    catalogsData?.length === 0 &&
+    coinsRefsData?.length === 0
+  ) {
+    return <div>Nothing found</div>;
+  }
+
+  if (usersLoading || catalogsLoading || coinsRefsLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

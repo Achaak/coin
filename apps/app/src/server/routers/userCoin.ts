@@ -213,4 +213,38 @@ export const userCoinRouter = router({
 
     return count;
   }),
+  getByCatalogIdAndUserId: publicProcedure
+    .input(
+      z.object({
+        catalogId: z.string(),
+        userId: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { catalogId, userId } = input;
+      const { session } = ctx;
+
+      const userIdRes = userId ?? session?.user?.id;
+
+      if (userIdRes === undefined) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'User is not authenticated or userId is not provided',
+        });
+      }
+
+      const userCoins = await ctx.prisma.userCoin.findMany({
+        where: {
+          userId: userIdRes,
+          coin: {
+            ref: {
+              catalogId,
+            },
+          },
+        },
+        select: selectUserCoin,
+      });
+
+      return userCoins;
+    }),
 });

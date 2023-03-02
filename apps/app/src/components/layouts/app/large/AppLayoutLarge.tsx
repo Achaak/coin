@@ -16,6 +16,11 @@ const Container = styled('div', {
 
   '@lg': {
     display: 'flex',
+    padding: '$32',
+    margin: '$24 0 $24 $24',
+  },
+
+  '@xl': {
     padding: '$40',
     margin: '$32 0 $32 $32',
   },

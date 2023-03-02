@@ -6,6 +6,7 @@ import { AppLayoutSettingsBar } from './settingsBar';
 import { userStore } from '../../../store/user';
 import { useStore } from 'zustand';
 import { wishlistStore } from '../../../store/wishlist';
+import { contactStore } from '../../../store/contact';
 
 const Container = styled('div', {
   backgroundColor: '$background',
@@ -17,10 +18,6 @@ const Container = styled('div', {
   display: 'flex',
   flexDirection: 'row',
   transition: 'all 0.3s ease',
-
-  '@xl': {
-    columnGap: '$32',
-  },
 });
 
 const Right = styled('div', {
@@ -36,11 +33,14 @@ const Right = styled('div', {
     marginTop: '$16',
     marginLeft: '$16',
   },
-
+  '@lg': {
+    rowGap: '$24',
+    marginTop: '$24',
+    marginLeft: '$0',
+  },
   '@xl': {
     rowGap: '$32',
     marginTop: '$32',
-    marginLeft: '$0',
   },
 });
 
@@ -69,12 +69,17 @@ const Content = styled('div', {
     paddingRight: '$16',
     paddingBottom: '$16',
   },
-
+  '@lg': {
+    rowGap: '$24',
+    paddingRight: '$24',
+    paddingBottom: '$24',
+    paddingLeft: '$24',
+  },
   '@xl': {
     rowGap: '$32',
     paddingRight: '$32',
-    paddingTop: '$64',
     paddingBottom: '$32',
+    paddingLeft: '$32',
   },
 });
 
@@ -83,7 +88,7 @@ type AppLayoutProps = {
 };
 
 export const AppLayout: FC<AppLayoutProps> = ({ children }) => {
-  const { data } = useSession();
+  const { data, status } = useSession();
 
   const { setMe } = useStore(userStore, (state) => ({
     setMe: state.setMe,
@@ -91,13 +96,18 @@ export const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   const { init: initWishlist } = useStore(wishlistStore, (state) => ({
     init: state.init,
   }));
+  const { init: initContact } = useStore(contactStore, (state) => ({
+    init: state.init,
+  }));
 
   useEffect(() => {
     if (data?.user) {
       setMe(data.user);
       initWishlist();
+      initContact();
     }
-  }, [data?.user, setMe, initWishlist]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   return (
     <Container>

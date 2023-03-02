@@ -4,12 +4,12 @@ import { CoinRefWishlist } from '../selector/coinRefWishlist';
 import { trpcProxy } from '../utils/trpc';
 
 const getCoinsWishlist = async () => {
-  const res = await trpcProxy.coinWishlist.byUserId.query({});
+  const res = await trpcProxy.coinWishlist.byUserId.query();
   return res;
 };
 
 const getCoinsRefWishlist = async () => {
-  const res = await trpcProxy.coinRefWishlist.byUserId.query({});
+  const res = await trpcProxy.coinRefWishlist.byUserId.query();
   return res;
 };
 

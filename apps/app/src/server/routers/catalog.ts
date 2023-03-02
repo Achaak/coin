@@ -127,4 +127,42 @@ export const catalogRouter = router({
 
       return catalogs;
     }),
+  getByUserId: publicProcedure
+    .input(
+      z
+        .object({
+          userId: z.string().optional(),
+        })
+        .optional()
+    )
+    .query(async ({ ctx, input }) => {
+      const { session } = ctx;
+      const userId = input?.userId ?? session?.user?.id;
+
+      if (userId === undefined) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'User is not authenticated or userId is not provided',
+        });
+      }
+
+      const catalog = await ctx.prisma.userCoin.findMany({
+        where: { userId },
+        select: {
+          coin: {
+            select: {
+              ref: {
+                select: {
+                  catalog: {
+                    select: selectCatalog,
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return catalog.map((c) => c.coin.ref.catalog);
+    }),
 });
