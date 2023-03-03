@@ -79,7 +79,7 @@ const saveUserCoinsPriceHistory = async () => {
     count: userCoinPriceAvg._count.id,
   }));
 
-  const r = await prisma.coinPriceHistory.findMany({
+  const coinPriceHistory = await prisma.coinPriceHistory.findMany({
     where: {
       coinId: {
         in: userCoinsPriceHistory.map(
@@ -95,9 +95,8 @@ const saveUserCoinsPriceHistory = async () => {
 
   const userCoinsPriceHistoryWithPrice = userCoinsPriceHistory.map(
     (userCoinPriceHistory) => {
-      const price = r.find(
-        (coinPriceHistory) =>
-          coinPriceHistory.coinId === userCoinPriceHistory.coinId
+      const price = coinPriceHistory.find(
+        (cph) => cph.coinId === userCoinPriceHistory.coinId
       )?.price;
 
       return {
