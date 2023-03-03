@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { selectCoinWishlist } from '../../selector/coinWishlist';
-import { router, publicProcedure, protectedProcedure } from './trpc';
+import { router, publicProcedure, authProcedure } from './trpc';
 
 export const coinWishlistRouter = router({
   byUserId: publicProcedure
@@ -50,7 +50,7 @@ export const coinWishlistRouter = router({
 
       return count > 0;
     }),
-  addOrRemove: protectedProcedure
+  addOrRemove: authProcedure
     .input(
       z.object({
         coinId: z.string(),

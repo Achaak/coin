@@ -1,8 +1,8 @@
-import { protectedProcedure, router } from '../routers/trpc';
+import { authProcedure, router } from '../routers/trpc';
 
 export const protectedExampleRouter = router({
-  getSession: protectedProcedure.query(({ ctx }) => ctx.session),
-  getSecretMessage: protectedProcedure.query(
+  getSession: authProcedure.query(({ ctx }) => ctx.session),
+  getSecretMessage: authProcedure.query(
     () =>
       'He who asks a question is a fool for five minutes; he who does not ask a question remains a fool forever.'
   ),

@@ -34,6 +34,6 @@ const isAuth = t.middleware(async ({ ctx, next }) => {
 });
 
 /**
- * Protected procedure
+ * Auth procedure
  **/
-export const protectedProcedure = t.procedure.use(isAuth);
+export const authProcedure = t.procedure.use(isAuth);

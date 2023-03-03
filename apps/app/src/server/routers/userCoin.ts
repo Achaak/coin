@@ -2,7 +2,7 @@ import { CoinCondition } from '@my-coin/database';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { selectUserCoin } from '../../selector/userCoin';
-import { router, publicProcedure, protectedProcedure } from './trpc';
+import { router, publicProcedure, authProcedure } from './trpc';
 
 export const userCoinRouter = router({
   byId: publicProcedure
@@ -73,7 +73,7 @@ export const userCoinRouter = router({
 
       return userCoin;
     }),
-  remove: protectedProcedure
+  remove: authProcedure
     .input(
       z.object({
         id: z.string(),
@@ -101,7 +101,7 @@ export const userCoinRouter = router({
         ...userCoin,
       };
     }),
-  add: protectedProcedure
+  add: authProcedure
     .input(
       z.object({
         comment: z.string().optional().nullable(),
@@ -138,7 +138,7 @@ export const userCoinRouter = router({
         ...userCoin,
       };
     }),
-  update: protectedProcedure
+  update: authProcedure
     .input(
       z.object({
         id: z.string(),

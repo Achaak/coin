@@ -57,7 +57,7 @@ model User {
   coinsRefWishlist      CoinRefWishlist[]
   contacts              Contact[]
   userContacts          Contact[]               @relation("userContact")
-  historyUserCoinsPrice HistoryUserCoinsPrice[]
+  userCoinsPriceHistory UserCoinsPriceHistory[]
 }
 
 model VerificationToken {
@@ -102,7 +102,7 @@ model CoinRef {
   created_at          DateTime              @default(now())
   updated_at          DateTime?             @updatedAt
   wishlist            CoinRefWishlist[]
-  historyCoinRefPrice HistoryCoinRefPrice[]
+  coinRefPriceHistory CoinRefPriceHistory[]
 
   @@index([catalogId])
 }
@@ -125,7 +125,7 @@ model Coin {
   created_at       DateTime           @default(now())
   updated_at       DateTime?          @updatedAt
   wishlist         CoinWishlist[]
-  historyCoinPrice HistoryCoinPrice[]
+  coinPriceHistory CoinPriceHistory[]
 
   @@index([refId])
 }
@@ -224,34 +224,31 @@ model Contact {
   @@index([userContactId])
 }
 
-model HistoryCoinPrice {
+model CoinPriceHistory {
   id         String   @id @default(cuid())
   coin       Coin     @relation(fields: [coinId], references: [id], onDelete: Cascade)
   coinId     String
   price      Float
-  date       DateTime
   created_at DateTime @default(now())
 
   @@index([coinId])
 }
 
-model HistoryCoinRefPrice {
+model CoinRefPriceHistory {
   id         String   @id @default(cuid())
   coinRef    CoinRef  @relation(fields: [coinRefId], references: [id], onDelete: Cascade)
   coinRefId  String
   price      Float
-  date       DateTime
   created_at DateTime @default(now())
 
   @@index([coinRefId])
 }
 
-model HistoryUserCoinsPrice {
+model UserCoinsPriceHistory {
   id         String   @id @default(cuid())
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   price      Float
-  date       DateTime
   created_at DateTime @default(now())
 
   @@index([userId])

@@ -8,6 +8,9 @@ import { coinRefRouter } from './coinRef';
 import { coinRefWishlistRouter } from './coinRefWishlist';
 import { coinWishlistRouter } from './coinWishlist';
 import { contactRouter } from './contact';
+import { coinPriceHistoryRouter } from './coinPriceHistory';
+import { coinRefPriceHistoryRouter } from './coinRefPriceHistory';
+import { userCoinsPriceHistoryRouter } from './userCoinsPriceHistory';
 
 export const appRouter = router({
   user: userRouter,
@@ -19,6 +22,9 @@ export const appRouter = router({
   coinRefWishlist: coinRefWishlistRouter,
   coinWishlist: coinWishlistRouter,
   contact: contactRouter,
+  coinPriceHistory: coinPriceHistoryRouter,
+  coinRefPriceHistory: coinRefPriceHistoryRouter,
+  userCoinsPriceHistory: userCoinsPriceHistoryRouter,
 });
 
 export type AppRouter = typeof appRouter;

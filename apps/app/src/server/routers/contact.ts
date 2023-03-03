@@ -1,10 +1,10 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { selectContact } from '../../selector/contact';
-import { router, protectedProcedure } from './trpc';
+import { router, authProcedure } from './trpc';
 
 export const contactRouter = router({
-  get: protectedProcedure.query(async ({ ctx }) => {
+  get: authProcedure.query(async ({ ctx }) => {
     const { session } = ctx;
 
     const contact = await ctx.prisma.contact.findMany({
@@ -16,7 +16,7 @@ export const contactRouter = router({
 
     return contact;
   }),
-  add: protectedProcedure
+  add: authProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -43,7 +43,7 @@ export const contactRouter = router({
 
       return contact;
     }),
-  remove: protectedProcedure
+  remove: authProcedure
     .input(
       z.object({
         userId: z.string(),
