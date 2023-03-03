@@ -11,7 +11,6 @@ const createUserCoinsPriceHistorySelect = <
 export const selectUserCoinsPriceHistory = createUserCoinsPriceHistorySelect({
   id: true,
   created_at: true,
-  date: true,
   price: true,
   userId: true,
 });

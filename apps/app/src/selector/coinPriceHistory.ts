@@ -9,7 +9,6 @@ const createCoinPriceHistorySelect = <T extends Prisma.CoinPriceHistorySelect>(
 export const selectCoinPriceHistory = createCoinPriceHistorySelect({
   coinId: true,
   created_at: true,
-  date: true,
   id: true,
   price: true,
 });

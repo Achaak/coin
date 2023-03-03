@@ -12,7 +12,6 @@ export const selectCoinRefPriceHistory = createCoinRefPriceHistorySelect({
   id: true,
   coinRefId: true,
   created_at: true,
-  date: true,
   price: true,
 });
 
