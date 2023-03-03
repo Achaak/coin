@@ -42,7 +42,7 @@ const saveCoinRefPriceHistory = async () => {
 
   const coinRefsPriceHistory = coinRefsPriceAvg.map((coinRefPriceAvg) => ({
     coinRefId: coinRefPriceAvg.id,
-    price: coinRefPriceAvg.coins.reduce(
+    sum: coinRefPriceAvg.coins.reduce(
       (acc, coin) =>
         acc +
         coin.usersCoin.reduce(
@@ -51,15 +51,17 @@ const saveCoinRefPriceHistory = async () => {
         ),
       0
     ),
+    count: coinRefPriceAvg.coins.reduce(
+      (acc, coin) => acc + coin.usersCoin.length,
+      0
+    ),
   }));
 
   await prisma.coinRefPriceHistory.createMany({
-    data: coinRefsPriceHistory
-      .filter((coinRefPriceHistory) => coinRefPriceHistory.price !== 0)
-      .map((coinRefPriceHistory) => ({
-        coinRefId: coinRefPriceHistory.coinRefId,
-        price: coinRefPriceHistory.price,
-      })),
+    data: coinRefsPriceHistory.map((coinRefPriceHistory) => ({
+      coinRefId: coinRefPriceHistory.coinRefId,
+      price: coinRefPriceHistory.sum / coinRefPriceHistory.count,
+    })),
   });
 };
 
@@ -111,8 +113,7 @@ const saveUserCoinsPriceHistory = async () => {
       .filter((userCoinPriceHistory) => userCoinPriceHistory.total !== 0)
       .map((userCoinPriceHistory) => ({
         userId: userCoinPriceHistory.userId,
-        coinId: userCoinPriceHistory.coinId,
-        price: userCoinPriceHistory.price,
+        price: userCoinPriceHistory.total,
       })),
   });
 };
