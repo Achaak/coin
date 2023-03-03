@@ -66,25 +66,50 @@ const saveCoinRefPriceHistory = async () => {
 };
 
 const saveUserCoinsPriceHistory = async () => {
-  const userCoinsPriceAvg = await prisma.userCoin.groupBy({
+  const userCoinsCount = await prisma.userCoin.groupBy({
     by: ['userId', 'coinId'],
     _count: {
       id: true,
     },
   });
 
-  const userCoinsPriceHistory = userCoinsPriceAvg.map((userCoinPriceAvg) => ({
-    userId: userCoinPriceAvg.userId,
-    coinId: userCoinPriceAvg.coinId,
-    count: userCoinPriceAvg._count.id,
-  }));
+  const users = userCoinsCount.reduce<
+    Array<{
+      userId: string;
+      coins: Array<{
+        coinId: string;
+        count: number;
+      }>;
+    }>
+  >((acc, userCoinPriceAvg) => {
+    const user = acc.find((u) => u.userId === userCoinPriceAvg.userId);
+    if (user) {
+      user.coins.push({
+        coinId: userCoinPriceAvg.coinId,
+        count: userCoinPriceAvg._count.id,
+      });
+    } else {
+      acc.push({
+        userId: userCoinPriceAvg.userId,
+        coins: [
+          {
+            coinId: userCoinPriceAvg.coinId,
+            count: userCoinPriceAvg._count.id,
+          },
+        ],
+      });
+    }
+    return acc;
+  }, []);
+
+  const coinIds = userCoinsCount
+    .map((userCoinPriceAvg) => userCoinPriceAvg.coinId)
+    .filter((coinId, index, self) => self.indexOf(coinId) === index);
 
   const coinPriceHistory = await prisma.coinPriceHistory.findMany({
     where: {
       coinId: {
-        in: userCoinsPriceHistory.map(
-          (userCoinPriceHistory) => userCoinPriceHistory.coinId
-        ),
+        in: coinIds,
       },
     },
     select: {
@@ -93,27 +118,23 @@ const saveUserCoinsPriceHistory = async () => {
     },
   });
 
-  const userCoinsPriceHistoryWithPrice = userCoinsPriceHistory.map(
-    (userCoinPriceHistory) => {
-      const price = coinPriceHistory.find(
-        (cph) => cph.coinId === userCoinPriceHistory.coinId
-      )?.price;
-
-      return {
-        ...userCoinPriceHistory,
-        price: price ?? 0,
-        total: price ? price * userCoinPriceHistory.count : 0,
-      };
-    }
-  );
+  const userCoinsPriceHistory = users.map((user) => ({
+    userId: user.userId,
+    total: user.coins.reduce(
+      (acc, coin) =>
+        acc +
+        coinPriceHistory
+          .filter((cph) => cph.coinId === coin.coinId)
+          .reduce((acc2, cph) => acc2 + cph.price * coin.count, 0),
+      0
+    ),
+  }));
 
   await prisma.userCoinsPriceHistory.createMany({
-    data: userCoinsPriceHistoryWithPrice
-      .filter((userCoinPriceHistory) => userCoinPriceHistory.total !== 0)
-      .map((userCoinPriceHistory) => ({
-        userId: userCoinPriceHistory.userId,
-        price: userCoinPriceHistory.total,
-      })),
+    data: userCoinsPriceHistory.map((ucph) => ({
+      userId: ucph.userId,
+      price: ucph.total,
+    })),
   });
 };
 
