@@ -5,9 +5,8 @@ import { Breadcrumb } from '../../../global/Breadcrumb';
 import { Card } from '../../../global/Card';
 import { Table } from '@my-coin/ui/dist/components/table/index';
 import { CoinHeaderContainer } from '../header';
-import { Coin } from '../../../../selector/coin';
+import { CoinFull } from '../../../../selector/coinFull';
 import { getLink } from '@my-coin/router/dist/app';
-import { CoinRefFull } from '../../../../selector/coinRef';
 import { trpc } from '../../../../utils/trpc';
 import { wishlistStore } from '../../../../store/wishlist';
 import { useStore } from 'zustand';
@@ -17,16 +16,13 @@ import { formatYears, getMinAndMaxYear } from '../../../../utils/date';
 import { CoinExchangeContainer } from '../exchange';
 import { CoinItemMyCollectionContainer } from './my-collection';
 import { useSession } from 'next-auth/react';
+import { CoinStatisticsContainer } from '../statistics';
 
 type CoinItemContainerProps = {
-  coin: Coin;
-  coinRef: CoinRefFull;
+  coin: CoinFull;
 };
 
-export const CoinItemContainer: FC<CoinItemContainerProps> = ({
-  coin,
-  coinRef,
-}) => {
+export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
   const { status } = useSession();
   const { coinsWishlist, refreshCoinsWishlist } = useStore(
     wishlistStore,
@@ -45,10 +41,36 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
     },
   });
 
+  const { data: priceData, isLoading: priceIsLoading } =
+    trpc.coin.priceById.useQuery({
+      id: coin.id,
+    });
+
+  const { data: coinRarityData, isLoading: coinRarityIsLoading } =
+    trpc.coin.rarityById.useQuery({
+      id: coin.id,
+    });
+
+  const {
+    data: coinWishlistCountByCoinIdData,
+    isLoading: coinWishlistCountByCoinIdIsLoading,
+  } = trpc.coinWishlist.countByCoinId.useQuery({
+    coinId: coin.id,
+  });
+
+  const {
+    data: userCoinCountByCoinIdData,
+    isLoading: userCoinCountByCoinIdIsLoading,
+  } = trpc.userCoin.countUsersHasCoins.useQuery({
+    coinId: coin.id,
+  });
+
   const years = useMemo(
     () =>
-      getMinAndMaxYear(coinRef.coins.filter((c) => c.year).map((c) => c.year!)),
-    [coinRef]
+      getMinAndMaxYear(
+        coin.ref.coins.filter((c) => c.year).map((c) => c.year!)
+      ),
+    [coin.ref]
   );
 
   const periodYears = useMemo(() => {
@@ -68,22 +90,22 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
             url: '/france',
           },
           {
-            label: coinRef.denomination,
+            label: coin.ref.denomination,
             url: getLink('coinRef', {
               queries: {
-                coinRefId: coinRef.id,
+                coinRefId: coin.ref.id,
               },
             }),
           },
           {
-            label: `${coinRef.catalog.country.name} ${coinRef.denomination},  ${coin.year}`,
+            label: `${coin.ref.catalog.country.name} ${coin.ref.denomination},  ${coin.year}`,
             current: true,
           },
         ]}
       />
       <CoinHeaderContainer
-        id={coinRef.id}
-        title={`${coinRef.catalog.country.name} ${coinRef.denomination},  ${coin.year}`}
+        id={coin.ref.id}
+        title={`${coin.ref.catalog.country.name} ${coin.ref.denomination},  ${coin.year}`}
         onAddOrRemoveToFavorites={(id) =>
           addOrRemoveCoinWishlistMutation({ coinId: id })
         }
@@ -93,8 +115,9 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
             (coinWishlist) => coinWishlist.coinId === coin.id
           ) ?? false
         }
-        price={1}
-        countryCode={coinRef.catalog.country.code}
+        price={priceData ?? null}
+        priceLoading={priceIsLoading}
+        countryCode={coin.ref.catalog.country.code}
       />
       <Grid
         type="container"
@@ -119,26 +142,26 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
           }}
         >
           <CoinImagesContainer
-            observeImage={coinRef.observeImage}
-            obverseCreator={coinRef.obverseCreator}
-            obverseDescription={coinRef.obverseDescription}
-            reverseCreator={coinRef.reverseCreator}
-            reverseDescription={coinRef.reverseDescription}
-            reverseImage={coinRef.reverseImage}
+            observeImage={coin.ref.observeImage}
+            obverseCreator={coin.ref.obverseCreator}
+            obverseDescription={coin.ref.obverseDescription}
+            reverseCreator={coin.ref.reverseCreator}
+            reverseDescription={coin.ref.reverseDescription}
+            reverseImage={coin.ref.reverseImage}
           />
           <CoinInformationContainer
-            alignment={coinRef.alignment}
-            composition={coinRef.composition}
-            edgeDescription={coinRef.edgeDescription}
-            edgeType={coinRef.edgeType}
-            country={coinRef.catalog.country.name}
-            diameter={coinRef.diameter}
-            denomination={coinRef.denomination}
-            weight={coinRef.weight}
-            period={`${coinRef.catalog.name} (${periodYears})`}
-            shape={coinRef.shape}
-            thickness={coinRef.thickness}
-            type={coinRef.type}
+            alignment={coin.ref.alignment}
+            composition={coin.ref.composition}
+            edgeDescription={coin.ref.edgeDescription}
+            edgeType={coin.ref.edgeType}
+            country={coin.ref.catalog.country.name}
+            diameter={coin.ref.diameter}
+            denomination={coin.ref.denomination}
+            weight={coin.ref.weight}
+            period={`${coin.ref.catalog.name} (${periodYears})`}
+            shape={coin.ref.shape}
+            thickness={coin.ref.thickness}
+            type={coin.ref.type}
           />
           <Card
             css={{
@@ -197,6 +220,15 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
               }}
             />
           </Card>
+          <Card
+            css={{
+              rowGap: '$16',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Title as="h2">Evolution de prix</Title>
+          </Card>
         </Grid>
 
         <Grid
@@ -212,6 +244,19 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({
           {status === 'authenticated' && (
             <CoinItemMyCollectionContainer coin={coin} />
           )}
+          <CoinStatisticsContainer
+            rarity={coinRarityData ?? 0}
+            rarityLoading={coinRarityIsLoading}
+            usersHasIt={userCoinCountByCoinIdData ?? 0}
+            usersHasItLoading={userCoinCountByCoinIdIsLoading}
+            usersWishingIt={coinWishlistCountByCoinIdData ?? 0}
+            usersWishingItLoading={coinWishlistCountByCoinIdIsLoading}
+            mintage={
+              (coin.mintageQtyBU ?? 0) +
+              (coin.mintageQtyUNC ?? 0) +
+              (coin.mintageQtyPRF ?? 0)
+            }
+          />
           <CoinExchangeContainer />
         </Grid>
       </Grid>

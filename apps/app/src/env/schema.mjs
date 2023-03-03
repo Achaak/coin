@@ -16,6 +16,7 @@ export const serverSchema = z.object({
   EMAIL_SERVER_HOST: z.string(),
   EMAIL_SERVER_PORT: z.string(),
   EMAIL_FROM: z.string().email(),
+  CRON_JOB_KEY: z.string(),
 });
 
 /**

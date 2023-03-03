@@ -79,4 +79,18 @@ export const coinWishlistRouter = router({
         });
       }
     }),
+  countByCoinId: publicProcedure
+    .input(
+      z.object({
+        coinId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { coinId } = input;
+      const count = await ctx.prisma.coinWishlist.count({
+        where: { coinId },
+      });
+
+      return count;
+    }),
 });

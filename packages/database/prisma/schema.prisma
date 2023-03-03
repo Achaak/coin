@@ -42,21 +42,22 @@ model Session {
 }
 
 model User {
-  id               String            @id @default(cuid())
-  name             String?
-  email            String            @unique
-  emailVerified    DateTime?
-  image            String?
-  accounts         Account[]
-  sessions         Session[]
-  coins            UserCoin[]
-  role             UserRole          @default(USER)
-  messagesFrom     Message[]         @relation("messagesFrom")
-  messagesTo       Message[]         @relation("messagesTo")
-  coinsWishlist    CoinWishlist[]
-  coinsRefWishlist CoinRefWishlist[]
-  contacts         Contact[]
-  userContacts     Contact[]         @relation("userContact")
+  id                    String                  @id @default(cuid())
+  name                  String?
+  email                 String                  @unique
+  emailVerified         DateTime?
+  image                 String?
+  accounts              Account[]
+  sessions              Session[]
+  coins                 UserCoin[]
+  role                  UserRole                @default(USER)
+  messagesFrom          Message[]               @relation("messagesFrom")
+  messagesTo            Message[]               @relation("messagesTo")
+  coinsWishlist         CoinWishlist[]
+  coinsRefWishlist      CoinRefWishlist[]
+  contacts              Contact[]
+  userContacts          Contact[]               @relation("userContact")
+  historyUserCoinsPrice HistoryUserCoinsPrice[]
 }
 
 model VerificationToken {
@@ -98,9 +99,10 @@ model CoinRef {
   reverseDescription String?
   reverseImage       String?
 
-  created_at DateTime          @default(now())
-  updated_at DateTime?         @updatedAt
-  wishlist   CoinRefWishlist[]
+  created_at          DateTime              @default(now())
+  updated_at          DateTime?             @updatedAt
+  wishlist            CoinRefWishlist[]
+  historyCoinRefPrice HistoryCoinRefPrice[]
 
   @@index([catalogId])
 }
@@ -120,9 +122,10 @@ model Coin {
 
   usersCoin UserCoin[]
 
-  created_at DateTime       @default(now())
-  updated_at DateTime?      @updatedAt
-  wishlist   CoinWishlist[]
+  created_at       DateTime           @default(now())
+  updated_at       DateTime?          @updatedAt
+  wishlist         CoinWishlist[]
+  historyCoinPrice HistoryCoinPrice[]
 
   @@index([refId])
 }
@@ -189,7 +192,6 @@ model CoinWishlist {
   created_at DateTime @default(now())
 
   @@unique([userId, coinId])
-
   @@index([userId])
   @@index([coinId])
 }
@@ -204,7 +206,6 @@ model CoinRefWishlist {
   created_at DateTime @default(now())
 
   @@unique([userId, coinRefId])
-
   @@index([userId])
   @@index([coinRefId])
 }
@@ -219,9 +220,41 @@ model Contact {
   created_at DateTime @default(now())
 
   @@unique([userId, userContactId])
-
   @@index([userId])
   @@index([userContactId])
+}
+
+model HistoryCoinPrice {
+  id         String   @id @default(cuid())
+  coin       Coin     @relation(fields: [coinId], references: [id], onDelete: Cascade)
+  coinId     String
+  price      Float
+  date       DateTime
+  created_at DateTime @default(now())
+
+  @@index([coinId])
+}
+
+model HistoryCoinRefPrice {
+  id         String   @id @default(cuid())
+  coinRef    CoinRef  @relation(fields: [coinRefId], references: [id], onDelete: Cascade)
+  coinRefId  String
+  price      Float
+  date       DateTime
+  created_at DateTime @default(now())
+
+  @@index([coinRefId])
+}
+
+model HistoryUserCoinsPrice {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  price      Float
+  date       DateTime
+  created_at DateTime @default(now())
+
+  @@index([userId])
 }
 
 enum CoinCondition {

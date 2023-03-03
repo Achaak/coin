@@ -95,4 +95,94 @@ export const coinRefRouter = router({
 
       return coinRefs;
     }),
+  rarityById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+
+      const coinRef = await ctx.prisma.coinRef.findUnique({
+        where: { id },
+        select: {
+          catalogId: true,
+        },
+      });
+
+      const countByUserCoinOfCatalog = await ctx.prisma.userCoin.groupBy({
+        where: {
+          coin: {
+            ref: {
+              catalogId: coinRef?.catalogId,
+            },
+          },
+        },
+        _count: {
+          coinId: true,
+        },
+        by: ['userId'],
+      });
+
+      const countCoinOfCatalog = countByUserCoinOfCatalog.reduce(
+        (acc, cur) => acc + cur._count.coinId,
+        0
+      );
+
+      if (countCoinOfCatalog === 0) {
+        return 0;
+      }
+
+      const countByUserCoin = await ctx.prisma.userCoin.groupBy({
+        where: {
+          coin: {
+            ref: {
+              id,
+            },
+          },
+        },
+        _count: {
+          coinId: true,
+        },
+        by: ['userId'],
+      });
+
+      const countCoin = countByUserCoin.reduce(
+        (acc, cur) => acc + cur._count.coinId,
+        0
+      );
+
+      const rarity = countCoin / countCoinOfCatalog;
+
+      return Math.round(rarity * 10) / 10;
+    }),
+  priceById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+
+      const price = await ctx.prisma.userCoin.aggregate({
+        where: {
+          coin: {
+            ref: {
+              id,
+            },
+          },
+        },
+        _avg: {
+          price: true,
+        },
+      });
+
+      if (!price._avg.price) {
+        return null;
+      }
+
+      return Math.round(price._avg.price * 100) / 100;
+    }),
 });

@@ -19,6 +19,7 @@ const List = styled('ul', {
   display: 'flex',
   flexDirection: 'column',
   paddingTop: '$8',
+  width: '100%',
 });
 
 type CoinItemContainerProps = {

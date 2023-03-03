@@ -247,4 +247,52 @@ export const userCoinRouter = router({
 
       return userCoins;
     }),
+  countByCoinIdAndUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        coinId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId, coinId } = input;
+
+      const count = await ctx.prisma.userCoin.count({
+        where: { userId, coinId },
+      });
+
+      return count;
+    }),
+  countUsersHasCoins: publicProcedure
+    .input(
+      z.object({
+        coinId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { coinId } = input;
+
+      const usersHasCoins = await ctx.prisma.userCoin.groupBy({
+        by: ['userId'],
+        where: { coinId },
+      });
+
+      return usersHasCoins.length;
+    }),
+  countUsersHasCoinsRef: publicProcedure
+    .input(
+      z.object({
+        coinRefId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { coinRefId } = input;
+
+      const usersHasCoins = await ctx.prisma.userCoin.groupBy({
+        by: ['userId'],
+        where: { coin: { refId: coinRefId } },
+      });
+
+      return usersHasCoins.length;
+    }),
 });

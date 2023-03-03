@@ -1,5 +1,6 @@
 import { PikasCSS, styled } from '@my-coin/ui';
-import type { FC } from 'react';
+import { PulseLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
+import type { FC, ReactNode } from 'react';
 
 const Container = styled('div', {
   backgroundColor: '$gray',
@@ -40,7 +41,8 @@ const Value = styled('span', {
 
 export type InfosData = {
   label: string;
-  value: string;
+  value: ReactNode;
+  loading?: boolean;
 };
 
 export type InfosProps = {
@@ -60,7 +62,13 @@ export const Infos: FC<InfosProps> = ({ css, data }) => (
           <Label>{item.label}</Label>
         </RowLeft>
         <RowRight>
-          <Value>{item.value}</Value>
+          <Value>
+            {item.loading ? (
+              <PulseLoader size={6} colorName="primary" />
+            ) : (
+              item.value
+            )}
+          </Value>
         </RowRight>
       </Row>
     ))}

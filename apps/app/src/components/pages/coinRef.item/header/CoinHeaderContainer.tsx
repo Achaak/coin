@@ -4,7 +4,7 @@ import { HeartIcon } from '@my-coin/ui/dist/icons/Heart';
 import { Title } from '@my-coin/ui/dist/components/title/index';
 import { HeartSolidIcon } from '@my-coin/ui/dist/icons/HeartSolid';
 import { useSession } from 'next-auth/react';
-import { ClipLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
+import { ClipLoader, PulseLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
 import Image from 'next/image';
 
 const Header = styled('div', {
@@ -49,7 +49,8 @@ const ImageContainer = styled('div', {
 
 type CoinHeaderContainerProps = {
   title: string;
-  price: number;
+  price: number | null;
+  priceLoading: boolean;
   isFavorite: boolean;
   id: string;
   onAddOrRemoveToFavorites: (id: string) => void;
@@ -61,6 +62,7 @@ export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
   id,
   title,
   price,
+  priceLoading,
   isFavorite,
   onAddOrRemoveToFavorites,
   isLoadingAddOrRemoveToFavorites,
@@ -119,6 +121,14 @@ export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
     handleAddOrRemoveToFavorites,
   ]);
 
+  const priceContent = useMemo(() => {
+    if (priceLoading) {
+      return <PulseLoader size={6} colorName="primary" />;
+    }
+
+    return price ?? '--';
+  }, [priceLoading, price]);
+
   return (
     <Header>
       <HeaderLeft>
@@ -135,7 +145,7 @@ export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
       </HeaderLeft>
 
       <Price>
-        Prix <span>{price}</span>
+        Prix <span>{priceContent}€</span>
       </Price>
     </Header>
   );

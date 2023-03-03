@@ -13,21 +13,26 @@ const CoinItemPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { coinRefId, coinId } = router.query;
 
-  const { data: coinRefData, isLoading: coinRefIsLoading } =
-    trpc.coinRef.byIdFull.useQuery({
-      id: coinRefId as string,
-    });
-
-  const { data: coinData, isLoading: coinIsLoading } = trpc.coin.byId.useQuery({
+  const {
+    data: coinData,
+    isLoading: coinIsLoading,
+    error: coinError,
+  } = trpc.coin.byIdFull.useQuery({
     id: coinId as string,
   });
+
+  if (coinData?.refId !== coinRefId && !coinIsLoading) {
+    void router.push('/404');
+  }
+
+  if (coinError) {
+    void router.push('/404');
+  }
 
   return (
     <>
       <NextSeo description={LL.common.seo.description()} />
-      {!coinRefIsLoading && !coinIsLoading && coinData && coinRefData && (
-        <CoinItemContainer coin={coinData} coinRef={coinRefData} />
-      )}
+      {!coinIsLoading && coinData && <CoinItemContainer coin={coinData} />}
     </>
   );
 };

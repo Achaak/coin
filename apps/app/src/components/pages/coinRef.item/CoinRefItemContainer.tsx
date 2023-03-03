@@ -13,6 +13,7 @@ import { CoinExchangeContainer } from './exchange';
 import { CoinHeaderContainer } from './header';
 import { CoinImagesContainer } from './images';
 import { CoinInformationContainer } from './information';
+import { CoinStatisticsContainer } from './statistics';
 
 type CoinRefItemContainerProps = {
   coinRef: CoinRefFull;
@@ -36,6 +37,30 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
     onSuccess: async () => {
       await refreshCoinsRefWishlist();
     },
+  });
+
+  const { data: priceData, isLoading: priceIsLoading } =
+    trpc.coinRef.priceById.useQuery({
+      id: coinRef.id,
+    });
+
+  const { data: coinRefRarityData, isLoading: coinRefRarityIsLoading } =
+    trpc.coinRef.rarityById.useQuery({
+      id: coinRef.id,
+    });
+
+  const {
+    data: coinRefWishlistCountByCoinIdData,
+    isLoading: coinRefWishlistCountByCoinIdIsLoading,
+  } = trpc.coinRefWishlist.countByCoinRefId.useQuery({
+    coinRefId: coinRef.id,
+  });
+
+  const {
+    data: userCoinRefCountByCoinIdData,
+    isLoading: userCoinRefCountByCoinIdIsLoading,
+  } = trpc.userCoin.countUsersHasCoinsRef.useQuery({
+    coinRefId: coinRef.id,
   });
 
   const years = useMemo(
@@ -78,7 +103,8 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             (coinRefWishlist) => coinRefWishlist.coinRefId === coinRef.id
           ) ?? false
         }
-        price={1}
+        price={priceData ?? null}
+        priceLoading={priceIsLoading}
         countryCode={coinRef.catalog.country.code}
       />
 
@@ -138,6 +164,24 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
           <Card>
             <Title as="h2">Variété</Title>
           </Card>
+          <CoinStatisticsContainer
+            rarity={coinRefRarityData ?? 0}
+            rarityLoading={coinRefRarityIsLoading}
+            usersHasIt={userCoinRefCountByCoinIdData ?? 0}
+            usersHasItLoading={userCoinRefCountByCoinIdIsLoading}
+            usersWishingIt={coinRefWishlistCountByCoinIdData ?? 0}
+            usersWishingItLoading={coinRefWishlistCountByCoinIdIsLoading}
+            mintage={
+              coinRef.coins.reduce(
+                (acc, coin) =>
+                  acc +
+                  (coin.mintageQtyBU ?? 0) +
+                  (coin.mintageQtyUNC ?? 0) +
+                  (coin.mintageQtyPRF ?? 0),
+                0
+              ) ?? 0
+            }
+          />
           <CoinExchangeContainer />
         </Grid>
       </Grid>

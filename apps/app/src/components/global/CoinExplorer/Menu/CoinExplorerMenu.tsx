@@ -93,7 +93,11 @@ export const CoinExplorerMenu: FC = () => {
   }
 
   return (
-    <RootStyled type="single" defaultValue="item-1" collapsible>
+    <RootStyled
+      type="single"
+      defaultValue={orderByCountry?.[0].code}
+      collapsible
+    >
       {orderByCountry?.map((country) => (
         <Item value={country.code}>
           <Header>
