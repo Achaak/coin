@@ -9,5 +9,5 @@ jobs:
       - name: Hourly cron job
         run: |
           curl --request POST \
-          --url 'https://my-coin-app.vercel.app/api/cronJob/history' \
+          --url 'https://my-coin-app.vercel.app/api/cronJob/' \
           --header 'Authorization: Bearer ${{ secrets.CRON_JOB_KEY }}'

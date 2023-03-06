@@ -33,10 +33,12 @@ export const SearchCatalogsContainer: FC<SearchCatalogsContainerProps> = ({
         '2xl': 4,
       }}
       columnGap={{
-        default: '$16',
+        default: 16,
+        xl: 24,
       }}
       rowGap={{
-        default: '$16',
+        default: 16,
+        xl: 24,
       }}
     >
       {catalogs?.map((catalog) => (

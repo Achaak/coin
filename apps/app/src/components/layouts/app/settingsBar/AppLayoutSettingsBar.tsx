@@ -193,6 +193,40 @@ export const AppLayoutSettingsBar: FC = () => {
             defaultValue={locale}
             width="auto"
             backgroundColorName="gray"
+            fontSize="em-small"
+            css={{
+              trigger: {
+                fontWeight: '$medium',
+                padding: '$4 $8',
+
+                '@lg': {
+                  padding: '$8 $16',
+                },
+              },
+            }}
+          />
+          <Select
+            data={[
+              {
+                items: [
+                  {
+                    label: '€',
+                    value: 'eur',
+                  },
+                  {
+                    label: '$',
+                    value: 'usd',
+                  },
+                ],
+              },
+            ]}
+            onChange={(value) => {
+              
+            }}
+            defaultValue={locale}
+            width="auto"
+            backgroundColorName="gray"
+            fontSize="em-small"
             css={{
               trigger: {
                 fontWeight: '$medium',

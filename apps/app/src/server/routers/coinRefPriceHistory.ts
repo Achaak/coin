@@ -1,4 +1,3 @@
-import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { selectCoinRefPriceHistory } from '../../selector/coinRefPriceHistory';
 import { router, publicProcedure } from './trpc';
@@ -8,22 +7,29 @@ export const coinRefPriceHistoryRouter = router({
     .input(
       z.object({
         id: z.string(),
+        startAt: z.date().optional(),
+        endAt: z.date().optional(),
+        take: z.number().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const { id } = input;
-      const coinRefPriceHistory =
-        await ctx.prisma.coinRefPriceHistory.findUnique({
-          where: { id },
+      const { id, endAt = new Date(), startAt, take = 365 } = input;
+      const coinRefPriceHistory = await ctx.prisma.coinRefPriceHistory.findMany(
+        {
+          where: {
+            coinRefId: id,
+            created_at: {
+              gte: startAt,
+              lte: endAt,
+            },
+          },
           select: selectCoinRefPriceHistory,
-        });
-
-      if (!coinRefPriceHistory) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `No coinRefPriceHistory with id '${id}'`,
-        });
-      }
+          take: take >= 365 ? 365 : take,
+          orderBy: {
+            created_at: 'asc',
+          },
+        }
+      );
 
       return coinRefPriceHistory;
     }),

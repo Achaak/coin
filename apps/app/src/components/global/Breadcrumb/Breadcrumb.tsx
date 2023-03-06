@@ -63,21 +63,36 @@ export const Breadcrumb: FC<InfosProps> = ({ css, data }) => (
       ...css,
     }}
   >
-    {data.map((item) => {
+    {data.map((item, index) => {
       const isLast = data.indexOf(item) === data.length - 1;
 
-      return (
-        <>
-          {item.url ? (
-            <Link href={item.url}>
-              <Element current={item.current ?? false}>{item.label}</Element>
-            </Link>
-          ) : (
+      const res = [];
+
+      if (item.url) {
+        res.push(
+          <Link href={item.url} key={index}>
             <Element current={item.current ?? false}>{item.label}</Element>
-          )}
-          {!isLast && <ChevronRightIcon size={24} colorName="gray-darker" />}
-        </>
-      );
+          </Link>
+        );
+      } else {
+        res.push(
+          <Element current={item.current ?? false} key={index}>
+            {item.label}
+          </Element>
+        );
+      }
+
+      if (!isLast) {
+        res.push(
+          <ChevronRightIcon
+            size={24}
+            colorName="gray-darker"
+            key={`chevron-${index}`}
+          />
+        );
+      }
+
+      return res;
     })}
   </Container>
 );

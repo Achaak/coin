@@ -23,8 +23,14 @@ export const Title: FC<TitleProps> = (props) => (
       ...props.css,
       h1: {
         fontWeight: '$bold',
-        fontSize: '$em-2x-large',
+        fontSize: '$em-x-large',
         ...props.css?.h1,
+
+        '@md': {
+          fontWeight: '$bold',
+          fontSize: '$em-2x-large',
+          ...props.css?.h1?.['@md'],
+        },
       },
       h2: {
         fontWeight: '$bold',

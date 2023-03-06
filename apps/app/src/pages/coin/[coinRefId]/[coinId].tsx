@@ -17,9 +17,14 @@ const CoinItemPage: NextPageWithLayout = () => {
     data: coinData,
     isLoading: coinIsLoading,
     error: coinError,
-  } = trpc.coin.byIdFull.useQuery({
-    id: coinId as string,
-  });
+  } = trpc.coin.byIdFull.useQuery(
+    {
+      id: coinId as string,
+    },
+    {
+      enabled: !!coinId,
+    }
+  );
 
   if (coinData?.refId !== coinRefId && !coinIsLoading) {
     void router.push('/404');

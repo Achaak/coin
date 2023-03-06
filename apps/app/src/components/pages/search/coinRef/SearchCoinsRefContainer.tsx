@@ -31,10 +31,12 @@ export const SearchCoinsRefsContainer: FC<SearchCoinsRefsContainerProps> = ({
         xl: 3,
       }}
       columnGap={{
-        default: '$16',
+        default: 16,
+        xl: 24,
       }}
       rowGap={{
-        default: '$16',
+        default: 16,
+        xl: 24,
       }}
     >
       {coinsRefs?.map((coinRef) => (

@@ -65,10 +65,12 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
           '2xl': 4,
         }}
         columnGap={{
-          default: 24,
+          default: 16,
+          xl: 24,
         }}
         rowGap={{
-          default: 24,
+          default: 16,
+          xl: 24,
         }}
       >
         <CardStat

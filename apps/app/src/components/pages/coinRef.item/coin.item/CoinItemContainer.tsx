@@ -1,22 +1,23 @@
 import { Grid } from '@my-coin/ui/dist/components/grid/index';
 import { Title } from '@my-coin/ui/dist/components/title/index';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { Breadcrumb } from '../../../global/Breadcrumb';
 import { Card } from '../../../global/Card';
 import { Table } from '@my-coin/ui/dist/components/table/index';
-import { CoinHeaderContainer } from '../header';
+import { CoinHeader } from '../header';
 import { CoinFull } from '../../../../selector/coinFull';
 import { getLink } from '@my-coin/router/dist/app';
 import { trpc } from '../../../../utils/trpc';
 import { wishlistStore } from '../../../../store/wishlist';
 import { useStore } from 'zustand';
-import { CoinImagesContainer } from '../images';
-import { CoinInformationContainer } from '../information';
+import { CoinImages } from '../images';
+import { CoinInformation } from '../information';
 import { formatYears, getMinAndMaxYear } from '../../../../utils/date';
-import { CoinExchangeContainer } from '../exchange';
+import { CoinExchange } from '../exchange';
 import { CoinItemMyCollectionContainer } from './my-collection';
 import { useSession } from 'next-auth/react';
-import { CoinStatisticsContainer } from '../statistics';
+import { CoinStatistics } from '../statistics';
+import { CoinPriceEvolution } from '../priceEvolution';
 
 type CoinItemContainerProps = {
   coin: CoinFull;
@@ -24,6 +25,9 @@ type CoinItemContainerProps = {
 
 export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
   const { status } = useSession();
+  const [historyStartAt, setHistoryStartAt] = useState<Date>(
+    new Date(new Date().setDate(new Date().getDate() - 7))
+  );
   const { coinsWishlist, refreshCoinsWishlist } = useStore(
     wishlistStore,
     (state) => ({
@@ -65,6 +69,12 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
     coinId: coin.id,
   });
 
+  const { data: coinPriceHistoryData, isLoading: coinPriceHistoryIsLoading } =
+    trpc.coinPriceHistory.byId.useQuery({
+      id: coin.id,
+      startAt: historyStartAt,
+    });
+
   const years = useMemo(
     () =>
       getMinAndMaxYear(
@@ -103,7 +113,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
           },
         ]}
       />
-      <CoinHeaderContainer
+      <CoinHeader
         id={coin.ref.id}
         title={`${coin.ref.catalog.country.name} ${coin.ref.denomination},  ${coin.year}`}
         onAddOrRemoveToFavorites={(id) =>
@@ -125,7 +135,8 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
           default: 12,
         }}
         columnGap={{
-          default: 32,
+          default: 16,
+          xl: 24,
         }}
         rowGap={{
           default: 32,
@@ -141,7 +152,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
             rowGap: '$32',
           }}
         >
-          <CoinImagesContainer
+          <CoinImages
             observeImage={coin.ref.observeImage}
             obverseCreator={coin.ref.obverseCreator}
             obverseDescription={coin.ref.obverseDescription}
@@ -149,7 +160,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
             reverseDescription={coin.ref.reverseDescription}
             reverseImage={coin.ref.reverseImage}
           />
-          <CoinInformationContainer
+          <CoinInformation
             alignment={coin.ref.alignment}
             composition={coin.ref.composition}
             edgeDescription={coin.ref.edgeDescription}
@@ -220,15 +231,21 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
               }}
             />
           </Card>
-          <Card
-            css={{
-              rowGap: '$16',
-              display: 'flex',
-              flexDirection: 'column',
+          <CoinPriceEvolution
+            data={
+              coinPriceHistoryData?.map((coinPriceHistory) => ({
+                date: coinPriceHistory.created_at,
+                price: coinPriceHistory.price,
+              })) ?? []
+            }
+            defaultPeriod={7}
+            onPeriodChange={(period) => {
+              setHistoryStartAt(
+                new Date(new Date().setDate(new Date().getDate() - period))
+              );
             }}
-          >
-            <Title as="h2">Evolution de prix</Title>
-          </Card>
+            loading={coinPriceHistoryIsLoading}
+          />
         </Grid>
 
         <Grid
@@ -244,7 +261,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
           {status === 'authenticated' && (
             <CoinItemMyCollectionContainer coin={coin} />
           )}
-          <CoinStatisticsContainer
+          <CoinStatistics
             rarity={coinRarityData ?? 0}
             rarityLoading={coinRarityIsLoading}
             usersHasIt={userCoinCountByCoinIdData ?? 0}
@@ -257,7 +274,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
               (coin.mintageQtyPRF ?? 0)
             }
           />
-          <CoinExchangeContainer />
+          <CoinExchange />
         </Grid>
       </Grid>
     </>

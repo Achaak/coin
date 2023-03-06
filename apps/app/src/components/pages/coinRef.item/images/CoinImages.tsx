@@ -21,7 +21,7 @@ const CoinImageContainer = styled('div', {
   },
 });
 
-type CoinImagesContainerProps = {
+type CoinImagesProps = {
   observeImage: string | null;
   obverseCreator: string | null;
   obverseDescription: string | null;
@@ -30,7 +30,7 @@ type CoinImagesContainerProps = {
   reverseDescription: string | null;
 };
 
-export const CoinImagesContainer: FC<CoinImagesContainerProps> = ({
+export const CoinImages: FC<CoinImagesProps> = ({
   observeImage,
   obverseCreator,
   obverseDescription,

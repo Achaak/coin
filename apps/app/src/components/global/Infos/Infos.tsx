@@ -56,8 +56,8 @@ export const Infos: FC<InfosProps> = ({ css, data }) => (
       ...css,
     }}
   >
-    {data.map((item) => (
-      <Row>
+    {data.map((item, index) => (
+      <Row key={index}>
         <RowLeft>
           <Label>{item.label}</Label>
         </RowLeft>
