@@ -7,20 +7,20 @@ export const currencyRouter = router({
   byId: publicProcedure
     .input(
       z.object({
-        symbol: z.string(),
+        code: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const { symbol } = input;
+      const { code } = input;
       const currency = await ctx.prisma.currency.findUnique({
-        where: { symbol },
+        where: { code },
         select: selectCurrency,
       });
 
       if (!currency) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `Currency with symbol ${symbol} not found`,
+          message: `Currency with code ${code} not found`,
         });
       }
 

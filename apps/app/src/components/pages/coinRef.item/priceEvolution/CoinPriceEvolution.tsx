@@ -9,10 +9,20 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  TooltipProps,
 } from 'recharts';
+import {
+  ValueType,
+  NameType,
+} from 'recharts/types/component/DefaultTooltipContent';
 import { styled, useTheme } from '@my-coin/ui';
 import { Select } from '@my-coin/ui/dist/components/inputs/select/index';
 import { ClipLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
+import {
+  convertUSDToCurrency,
+  formatCurrency,
+  useCurrencyCode,
+} from '../../../../utils/useCurrency';
 
 const Header = styled('div', {
   display: 'flex',
@@ -125,12 +135,16 @@ export const CoinPriceEvolution: FC<CoinPriceEvolutionProps> = ({
   loading = true,
 }) => {
   const theme = useTheme();
+  const currencyCode = useCurrencyCode();
 
   const dataFormatted = useMemo(() => {
     const allData = addEmptyData(data);
 
     return allData.map((item) => ({
-      price: item.price,
+      price: convertUSDToCurrency({
+        amount: item.price,
+        currency: currencyCode,
+      }),
       date: dateFormat.format(item.date),
     }));
   }, [data]);
@@ -199,20 +213,7 @@ export const CoinPriceEvolution: FC<CoinPriceEvolutionProps> = ({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
             <YAxis dataKey="price" />
-            <Tooltip
-              content={({ active, payload, label }) => {
-                if (active && payload && payload.length) {
-                  return (
-                    <TooltipStyled>
-                      <TooltipLabel>{`${label}`}</TooltipLabel>
-                      <TooltipValue>{payload[0].value}€</TooltipValue>
-                    </TooltipStyled>
-                  );
-                }
-
-                return null;
-              }}
-            />
+            <Tooltip content={TooltipContent} />
             <Tooltip />
             <Area
               type="monotone"
@@ -228,4 +229,28 @@ export const CoinPriceEvolution: FC<CoinPriceEvolutionProps> = ({
       </Content>
     </Card>
   );
+};
+
+const TooltipContent: FC<TooltipProps<ValueType, NameType>> = ({
+  active,
+  payload,
+  label,
+}) => {
+  const currencyCode = useCurrencyCode();
+
+  if (active && payload && payload.length) {
+    return (
+      <TooltipStyled>
+        <TooltipLabel>{label}</TooltipLabel>
+        <TooltipValue>
+          {formatCurrency({
+            amount: typeof payload[0].value === 'number' ? payload[0].value : 0,
+            currency: currencyCode,
+          })}
+        </TooltipValue>
+      </TooltipStyled>
+    );
+  }
+
+  return null;
 };

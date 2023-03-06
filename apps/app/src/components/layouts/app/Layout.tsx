@@ -7,6 +7,7 @@ import { userStore } from '../../../store/user';
 import { useStore } from 'zustand';
 import { wishlistStore } from '../../../store/wishlist';
 import { contactStore } from '../../../store/contact';
+import { currencyStore } from '../../../store/currency';
 
 const Container = styled('div', {
   backgroundColor: '$background',
@@ -99,12 +100,16 @@ export const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   const { init: initContact } = useStore(contactStore, (state) => ({
     init: state.init,
   }));
+  const { init: initCurrency } = useStore(currencyStore, (state) => ({
+    init: state.init,
+  }));
 
   useEffect(() => {
     if (data?.user) {
       setMe(data.user);
       initWishlist();
       initContact();
+      initCurrency();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);

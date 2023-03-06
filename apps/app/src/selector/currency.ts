@@ -9,7 +9,7 @@ const createCurrencySelect = <T extends Prisma.CurrencySelect>(
 export const selectCurrency = createCurrencySelect({
   rate: true,
   updated_at: true,
-  symbol: true,
+  code: true,
 });
 
 export type Currency = Prisma.CurrencyGetPayload<{

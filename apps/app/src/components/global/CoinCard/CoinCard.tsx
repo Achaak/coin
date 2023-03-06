@@ -2,6 +2,7 @@ import { CoinType } from '@my-coin/database';
 import { styled } from '@my-coin/ui';
 import Link from 'next/link';
 import type { FC } from 'react';
+import { useCurrency } from '../../../utils/useCurrency';
 import { Card, CardPaddingHorizontal, CardPaddingVertical } from '../Card';
 import { CoinImages } from '../CoinImages';
 
@@ -83,44 +84,48 @@ export const CoinCard: FC<CoinProps> = ({
     default: 8,
     lg: 16,
   },
-}) => (
-  <Link href={link}>
-    <Card
-      paddingHorizontal={paddingHorizontal}
-      paddingVertical={paddingVertical}
-      css={{
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        rowGap: '$8',
+}) => {
+  const priceFormatted = useCurrency(price);
 
-        '@sm': {
-          columnGap: '$16',
-          flexDirection: 'row',
-        },
-      }}
-      borderRadius={{
-        default: 'xl',
-      }}
-    >
-      <CoinImages observeImage={observeImage} reverseImage={reverseImage} />
+  return (
+    <Link href={link}>
+      <Card
+        paddingHorizontal={paddingHorizontal}
+        paddingVertical={paddingVertical}
+        css={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          rowGap: '$8',
 
-      <End>
-        <InfosContainer>
-          <Name>
-            {denomination}, {year ?? yearRange?.join('-')}
-          </Name>
-          <Details>
-            <DetailsItem>{composition}</DetailsItem>
-            <DetailsItem>
-              {weight} {diameter}
-            </DetailsItem>
-            <DetailsItem>{type}</DetailsItem>
-          </Details>
-        </InfosContainer>
+          '@sm': {
+            columnGap: '$16',
+            flexDirection: 'row',
+          },
+        }}
+        borderRadius={{
+          default: 'xl',
+        }}
+      >
+        <CoinImages observeImage={observeImage} reverseImage={reverseImage} />
 
-        <Price>Prix ${price}</Price>
-      </End>
-    </Card>
-  </Link>
-);
+        <End>
+          <InfosContainer>
+            <Name>
+              {denomination}, {year ?? yearRange?.join('-')}
+            </Name>
+            <Details>
+              <DetailsItem>{composition}</DetailsItem>
+              <DetailsItem>
+                {weight} {diameter}
+              </DetailsItem>
+              <DetailsItem>{type}</DetailsItem>
+            </Details>
+          </InfosContainer>
+
+          <Price>Prix {priceFormatted}</Price>
+        </End>
+      </Card>
+    </Link>
+  );
+};

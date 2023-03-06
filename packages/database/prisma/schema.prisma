@@ -255,7 +255,7 @@ model UserCoinsPriceHistory {
 }
 
 model Currency {
-  symbol     String    @id
+  code       String    @id
   rate       Float
   updated_at DateTime? @default(now()) @updatedAt
 }

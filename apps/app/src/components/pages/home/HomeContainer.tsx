@@ -5,10 +5,13 @@ import { CardStat } from '../../global/CardStat';
 import { CoinSolidIcon } from '@my-coin/ui/dist/icons/CoinSolid';
 import { LayerSolidIcon } from '@my-coin/ui/dist/icons/LayerSolid';
 import { trpc } from '../../../utils/trpc';
+import { useCurrency } from '../../../utils/useCurrency';
 
 const formatNumber = new Intl.NumberFormat();
 
 export const HomeContainer: FC = () => {
+  const totalCoinsValue = useCurrency(123456789);
+
   const { data: userCoinsCountData, isLoading: userCoinsCountIsLoading } =
     trpc.userCoin.count.useQuery();
 
@@ -78,7 +81,7 @@ export const HomeContainer: FC = () => {
         />
         <CardStat
           Icon={CoinSolidIcon}
-          value={`$${formatNumber.format(123946465)}`}
+          value={totalCoinsValue}
           label="Total of coins valued"
         />
       </Grid>

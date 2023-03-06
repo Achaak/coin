@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@my-coin/database';
 import { env } from '../../../env/server.mjs';
+import { currencies } from '../../../configs/currency';
 
 // const saveCoinPriceHistory = async () => {
 //   const coinsPriceAvg = await prisma.userCoin.groupBy({
@@ -151,7 +152,9 @@ const getCurrenciesRate = async () => {
   myHeaders.append('apikey', env.FIXER_API_KEY);
 
   const currenciesRateRes = await fetch(
-    'https://api.apilayer.com/fixer/latest?base=USD&symbols=EUR,JPY,GBP,AUD,CAD,CHF,CNH,SEK,NZD',
+    `https://api.apilayer.com/fixer/latest?base=USD&symbols=${currencies.join(
+      ','
+    )}`,
     {
       method: 'GET',
       redirect: 'follow',
@@ -170,13 +173,13 @@ const getCurrenciesRate = async () => {
       Object.keys(data.rates).map((currency) =>
         prisma.currency.upsert({
           where: {
-            symbol: currency,
+            code: currency,
           },
           update: {
             rate: data.rates[currency],
           },
           create: {
-            symbol: currency,
+            code: currency,
             rate: data.rates[currency],
           },
         })
@@ -190,7 +193,7 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const CRON_JOB_KEY_REQ = req.headers.authorization?.split(' ')[1];
 
   try {
-    if (true) {
+    if (CRON_JOB_KEY === CRON_JOB_KEY_REQ) {
       await Promise.all([
         // Save coin price history
         // saveCoinPriceHistory(),

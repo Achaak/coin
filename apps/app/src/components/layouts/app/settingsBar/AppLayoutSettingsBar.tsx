@@ -16,6 +16,8 @@ import { SearchIcon } from '@my-coin/ui/dist/icons/Search';
 import { LogOutIcon } from '@my-coin/ui/dist/icons/LogOut';
 import { Textfield } from '@my-coin/ui/dist/components/inputs/textfield/index';
 import { UserIcon } from '@my-coin/ui/dist/icons/User';
+import { currencies } from '../../../../configs/currency';
+import { useLocalStorage } from 'usehooks-ts';
 
 const Container = styled('div', {
   width: '100%',
@@ -98,6 +100,7 @@ export const AppLayoutSettingsBar: FC = () => {
   const router = useRouter();
   const { locale } = useI18nContext();
   const [search, setSearch] = useState('');
+  const [currency, setCurrency] = useLocalStorage('currency', 'USD');
 
   const handleSearch = (): void => {
     void router.push(getLink('search', { queries: { q: search } }));
@@ -208,22 +211,16 @@ export const AppLayoutSettingsBar: FC = () => {
           <Select
             data={[
               {
-                items: [
-                  {
-                    label: '€',
-                    value: 'eur',
-                  },
-                  {
-                    label: '$',
-                    value: 'usd',
-                  },
-                ],
+                items: currencies.map((c) => ({
+                  label: c,
+                  value: c,
+                })),
               },
             ]}
             onChange={(value) => {
-              
+              setCurrency(value as string);
             }}
-            defaultValue={locale}
+            defaultValue={currency}
             width="auto"
             backgroundColorName="gray"
             fontSize="em-small"

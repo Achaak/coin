@@ -6,6 +6,7 @@ import { HeartSolidIcon } from '@my-coin/ui/dist/icons/HeartSolid';
 import { useSession } from 'next-auth/react';
 import { ClipLoader, PulseLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
 import Image from 'next/image';
+import { useCurrency } from '../../../../utils/useCurrency';
 
 const Header = styled('div', {
   display: 'flex',
@@ -92,6 +93,7 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
   countryCode,
 }) => {
   const { status } = useSession();
+  const priceFormatted = useCurrency(price);
 
   const handleAddOrRemoveToFavorites = useCallback(async () => {
     await onAddOrRemoveToFavorites(id);
@@ -149,8 +151,8 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
       return <PulseLoader size={6} colorName="primary" />;
     }
 
-    return price ?? '--';
-  }, [priceLoading, price]);
+    return priceFormatted;
+  }, [priceLoading, priceFormatted]);
 
   return (
     <Header>
@@ -201,7 +203,7 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
         </HeaderLeft>
 
         <Price>
-          Prix <span>{priceContent}€</span>
+          Prix <span>{priceContent}</span>
         </Price>
       </Bottom>
     </Header>
