@@ -6,14 +6,17 @@ import { HeartSolidIcon } from '@my-coin/ui/dist/icons/HeartSolid';
 import { useSession } from 'next-auth/react';
 import { ClipLoader, PulseLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
 import Image from 'next/image';
+import { useCurrency } from '../../../../utils/useCurrency';
 
 const Header = styled('div', {
   display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  columnGap: '$16',
+  flexDirection: 'column',
   width: '100%',
+  rowGap: '$8',
+
+  '@md': {
+    rowGap: '$0',
+  },
 });
 
 const HeaderLeft = styled('div', {
@@ -45,9 +48,30 @@ const ImageContainer = styled('div', {
   borderRadius: '$lg',
   overflow: 'hidden',
   display: 'flex',
+  minWidth: '$32',
 });
 
-type CoinHeaderContainerProps = {
+const Top = styled('div', {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  columnGap: '$16',
+
+  '@md': {
+    display: 'none',
+  },
+});
+
+const Bottom = styled('div', {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  columnGap: '$16',
+  width: '100%',
+});
+
+type CoinHeaderProps = {
   title: string;
   price: number | null;
   priceLoading: boolean;
@@ -58,7 +82,7 @@ type CoinHeaderContainerProps = {
   countryCode: string;
 };
 
-export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
+export const CoinHeader: FC<CoinHeaderProps> = ({
   id,
   title,
   price,
@@ -69,6 +93,7 @@ export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
   countryCode,
 }) => {
   const { status } = useSession();
+  const priceFormatted = useCurrency(price);
 
   const handleAddOrRemoveToFavorites = useCallback(async () => {
     await onAddOrRemoveToFavorites(id);
@@ -126,13 +151,12 @@ export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
       return <PulseLoader size={6} colorName="primary" />;
     }
 
-    return price ?? '--';
-  }, [priceLoading, price]);
+    return priceFormatted;
+  }, [priceLoading, priceFormatted]);
 
   return (
     <Header>
-      <HeaderLeft>
-        {favoriteContent}
+      <Top>
         <ImageContainer>
           <Image
             src={`/flags/${countryCode}.svg`}
@@ -142,11 +166,46 @@ export const CoinHeaderContainer: FC<CoinHeaderContainerProps> = ({
           />
         </ImageContainer>
         <Title as="h1">{title}</Title>
-      </HeaderLeft>
+      </Top>
+      <Bottom>
+        <HeaderLeft>
+          {favoriteContent}
+          <ImageContainer
+            css={{
+              display: 'none',
 
-      <Price>
-        Prix <span>{priceContent}€</span>
-      </Price>
+              '@md': {
+                display: 'flex',
+              },
+            }}
+          >
+            <Image
+              src={`/flags/${countryCode}.svg`}
+              height={32}
+              width={32}
+              alt="Logo My Coin"
+            />
+          </ImageContainer>
+          <Title
+            as="h1"
+            css={{
+              h1: {
+                display: 'none',
+
+                '@md': {
+                  display: 'flex',
+                },
+              },
+            }}
+          >
+            {title}
+          </Title>
+        </HeaderLeft>
+
+        <Price>
+          Prix <span>{priceContent}</span>
+        </Price>
+      </Bottom>
     </Header>
   );
 };

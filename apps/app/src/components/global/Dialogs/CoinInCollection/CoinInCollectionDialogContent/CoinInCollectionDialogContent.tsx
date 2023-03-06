@@ -8,6 +8,11 @@ import { coinCondition } from '../../../../../utils/PrismaEnum';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { AddCoinInCollectionDialogContentFormValues } from '../CoinInCollectionDialog';
+import {
+  convertCurrencyToUSD,
+  useCurrencyCode,
+  useCurrencySymbol,
+} from '../../../../../utils/useCurrency';
 
 const Form = styled('form', {
   display: 'flex',
@@ -25,6 +30,9 @@ export type AddCoinInCollectionDialogContentProps = {
 export const AddCoinInCollectionDialogContent: FC<
   AddCoinInCollectionDialogContentProps
 > = ({ defaultValues, onSubmit }) => {
+  const currencySymbol = useCurrencySymbol();
+  const currencyCode = useCurrencyCode();
+
   const {
     errors,
     initialValues,
@@ -86,10 +94,16 @@ export const AddCoinInCollectionDialogContent: FC<
         backgroundColorName="gray"
         type="number"
         placeholder="-.--"
-        rightChildren="$"
+        rightChildren={currencySymbol}
         defaultValue={initialValues.price ?? undefined}
         onChange={(e) => {
-          void setFieldValue('price', parseInt(e.target.value) ?? undefined);
+          void setFieldValue(
+            'price',
+            convertCurrencyToUSD({
+              amount: parseInt(e.target.value),
+              currency: currencyCode,
+            }) ?? undefined
+          );
         }}
         textError={submitCount > 0 ? errors.price : undefined}
       />

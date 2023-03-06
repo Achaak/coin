@@ -1,1 +1,1 @@
-export * from './CoinInformationContainer';
+export * from './CoinInformation';

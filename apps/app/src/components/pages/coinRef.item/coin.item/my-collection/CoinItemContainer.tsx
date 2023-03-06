@@ -13,6 +13,7 @@ import { Infos } from '../../../../global/Infos';
 import { DropdownMenu } from '@my-coin/ui/dist/components/dropdownMenu/index';
 import { ValidateDialog } from '@my-coin/ui/dist/components/dialog/validate/index';
 import { CoinImages } from '../../../../global/CoinImages';
+import { useCurrency } from '../../../../../utils/useCurrency';
 
 const List = styled('ul', {
   rowGap: '$32',
@@ -154,6 +155,7 @@ const CoinItemMyCollectionItem: FC<CoinItemMyCollectionItemProps> = ({
   const [validateDialogIsOpen, setValidateDialogIsOpen] = useState(false);
   const [editUserCoinDialogIsOpen, setEditUserCoinDialogIsOpen] =
     useState(false);
+  const price = useCurrency(userCoin.price);
 
   const { mutate: deleteUserCoinMutation, isLoading: deleteUserCoinIsLoading } =
     trpc.userCoin.remove.useMutation({
@@ -226,7 +228,7 @@ const CoinItemMyCollectionItem: FC<CoinItemMyCollectionItemProps> = ({
                 },
                 {
                   label: 'Prix',
-                  value: `${userCoin.price ?? '--'} €`,
+                  value: price,
                 },
                 {
                   label: 'Échangeable',

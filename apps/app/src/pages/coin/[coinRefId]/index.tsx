@@ -14,9 +14,14 @@ const CoinRefItemPage: NextPageWithLayout = () => {
   const { coinRefId } = router.query;
 
   const { data: coinRefData, isLoading: coinRefIsLoading } =
-    trpc.coinRef.byIdFull.useQuery({
-      id: coinRefId as string,
-    });
+    trpc.coinRef.byIdFull.useQuery(
+      {
+        id: coinRefId as string,
+      },
+      {
+        enabled: !!coinRefId,
+      }
+    );
 
   return (
     <>

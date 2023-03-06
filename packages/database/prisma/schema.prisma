@@ -254,6 +254,12 @@ model UserCoinsPriceHistory {
   @@index([userId])
 }
 
+model Currency {
+  code       String    @id
+  rate       Float
+  updated_at DateTime? @default(now()) @updatedAt
+}
+
 enum CoinCondition {
   G
   VG

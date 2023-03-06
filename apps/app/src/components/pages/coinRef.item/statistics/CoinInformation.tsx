@@ -15,7 +15,7 @@ type CoinStatisticsContainerProps = {
   rarityUrsLoading?: boolean;
 };
 
-export const CoinStatisticsContainer: FC<CoinStatisticsContainerProps> = ({
+export const CoinStatistics: FC<CoinStatisticsContainerProps> = ({
   usersHasIt,
   usersHasItLoading,
   usersWishingIt,

@@ -1,8 +1,124 @@
-import { CoinCondition } from '@my-coin/database';
+import { CoinCondition, PrismaClient } from '@my-coin/database';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { selectUserCoin } from '../../selector/userCoin';
 import { router, publicProcedure, authProcedure } from './trpc';
+
+const updateCoinPriceHistory = async (
+  ctx: {
+    prisma: PrismaClient;
+  },
+  coinId: string
+) => {
+  const coinsPriceAvg = await ctx.prisma.userCoin.groupBy({
+    by: ['coinId'],
+    where: { coinId },
+    _avg: {
+      price: true,
+    },
+  });
+
+  const avgPrice = coinsPriceAvg[0]._avg.price;
+
+  if (avgPrice !== null) {
+    const coinPriceHistory = await ctx.prisma.coinPriceHistory.findMany({
+      where: {
+        coinId,
+        created_at: {
+          gte: new Date(new Date().setHours(0, 0, 0, 0)),
+          lte: new Date(new Date().setHours(23, 59, 59, 999)),
+        },
+      },
+    });
+
+    if (coinPriceHistory.length === 0) {
+      await ctx.prisma.coinPriceHistory.create({
+        data: {
+          coinId,
+          price: avgPrice,
+        },
+      });
+    } else {
+      await ctx.prisma.coinPriceHistory.update({
+        where: { id: coinPriceHistory[0].id },
+        data: {
+          price: avgPrice,
+        },
+      });
+    }
+  }
+};
+
+const updateCoinRefPriceHistory = async (
+  ctx: {
+    prisma: PrismaClient;
+  },
+  coinRefId: string
+) => {
+  const coinRefPriceAvg = await ctx.prisma.coinRef.findUnique({
+    where: { id: coinRefId },
+    select: {
+      id: true,
+      coins: {
+        select: {
+          usersCoin: {
+            select: {
+              price: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!coinRefPriceAvg) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: `No coinRef with id '${coinRefId}'`,
+    });
+  }
+
+  const sum = coinRefPriceAvg.coins.reduce(
+    (acc, coin) =>
+      acc +
+      coin.usersCoin.reduce(
+        (acc2, userCoin) => acc2 + (userCoin.price ?? 0),
+        0
+      ),
+    0
+  );
+  const count = coinRefPriceAvg.coins.reduce(
+    (acc, coin) => acc + coin.usersCoin.length,
+    0
+  );
+  const avgPrice = sum / count;
+
+  const coinRefPriceHistory = await ctx.prisma.coinRefPriceHistory.findMany({
+    where: {
+      coinRefId,
+      created_at: {
+        gte: new Date(new Date().setHours(0, 0, 0, 0)),
+        lte: new Date(new Date().setHours(23, 59, 59, 999)),
+      },
+    },
+  });
+
+  if (coinRefPriceHistory.length === 0) {
+    await ctx.prisma.coinRefPriceHistory.create({
+      data: {
+        coinRefId,
+        price: avgPrice,
+      },
+    });
+  } else {
+    await ctx.prisma.coinRefPriceHistory.update({
+      where: { id: coinRefPriceHistory[0].id },
+      data: {
+        price: avgPrice,
+      },
+    });
+  }
+};
 
 export const userCoinRouter = router({
   byId: publicProcedure
@@ -134,6 +250,12 @@ export const userCoinRouter = router({
         select: selectUserCoin,
       });
 
+      // Update coin price history
+      if (userCoin.price !== null) {
+        void updateCoinPriceHistory(ctx, coinId);
+        void updateCoinRefPriceHistory(ctx, userCoin.coin.ref.id);
+      }
+
       return {
         ...userCoin,
       };
@@ -169,6 +291,12 @@ export const userCoinRouter = router({
         },
         select: selectUserCoin,
       });
+
+      // Update coin price history
+      if (userCoin.price !== null) {
+        void updateCoinPriceHistory(ctx, userCoin.coinId);
+        void updateCoinRefPriceHistory(ctx, userCoin.coin.ref.id);
+      }
 
       return {
         ...userCoin,

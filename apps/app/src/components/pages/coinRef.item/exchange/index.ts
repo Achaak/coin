@@ -1,1 +1,1 @@
-export * from './CoinExchangeContainer';
+export * from './CoinExchange';

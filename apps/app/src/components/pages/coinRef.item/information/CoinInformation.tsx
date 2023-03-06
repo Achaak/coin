@@ -19,7 +19,7 @@ type CoinInformationContainerProps = {
   alignment: CoinAlignment | null;
 };
 
-export const CoinInformationContainer: FC<CoinInformationContainerProps> = ({
+export const CoinInformation: FC<CoinInformationContainerProps> = ({
   composition,
   denomination,
   diameter,

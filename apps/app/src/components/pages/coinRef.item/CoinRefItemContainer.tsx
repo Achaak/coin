@@ -1,7 +1,7 @@
 import { getLink } from '@my-coin/router/dist/app';
 import { Grid } from '@my-coin/ui/dist/components/grid/index';
 import { Title } from '@my-coin/ui/dist/components/title/index';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useStore } from 'zustand';
 import { CoinRefFull } from '../../../selector/coinRef';
 import { wishlistStore } from '../../../store/wishlist';
@@ -9,11 +9,12 @@ import { formatYears, getMinAndMaxYear } from '../../../utils/date';
 import { trpc } from '../../../utils/trpc';
 import { Breadcrumb } from '../../global/Breadcrumb';
 import { Card } from '../../global/Card';
-import { CoinExchangeContainer } from './exchange';
-import { CoinHeaderContainer } from './header';
-import { CoinImagesContainer } from './images';
-import { CoinInformationContainer } from './information';
-import { CoinStatisticsContainer } from './statistics';
+import { CoinExchange } from './exchange';
+import { CoinHeader } from './header';
+import { CoinImages } from './images';
+import { CoinInformation } from './information';
+import { CoinPriceEvolution } from './priceEvolution';
+import { CoinStatistics } from './statistics';
 
 type CoinRefItemContainerProps = {
   coinRef: CoinRefFull;
@@ -22,6 +23,9 @@ type CoinRefItemContainerProps = {
 export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
   coinRef,
 }) => {
+  const [historyStartAt, setHistoryStartAt] = useState<Date>(
+    new Date(new Date().setDate(new Date().getDate() - 7))
+  );
   const { coinsRefWishlist, refreshCoinsRefWishlist } = useStore(
     wishlistStore,
     (state) => ({
@@ -63,6 +67,14 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
     coinRefId: coinRef.id,
   });
 
+  const {
+    data: coinRefPriceHistoryData,
+    isLoading: coinRefPriceHistoryIsLoading,
+  } = trpc.coinRefPriceHistory.byId.useQuery({
+    id: coinRef.id,
+    startAt: historyStartAt,
+  });
+
   const years = useMemo(
     () =>
       getMinAndMaxYear(coinRef.coins.filter((c) => c.year).map((c) => c.year!)),
@@ -91,7 +103,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
           },
         ]}
       />
-      <CoinHeaderContainer
+      <CoinHeader
         id={coinRef.id}
         title={`${coinRef.catalog.country.name} ${coinRef.denomination}, ${years.minYear}-${years.maxYear}`}
         onAddOrRemoveToFavorites={(id) =>
@@ -114,7 +126,9 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
           default: 12,
         }}
         columnGap={{
-          default: 32,
+          default: 16,
+          md: 24,
+          xl: 32,
         }}
       >
         <Grid
@@ -127,7 +141,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             rowGap: '$32',
           }}
         >
-          <CoinImagesContainer
+          <CoinImages
             observeImage={coinRef.observeImage}
             obverseCreator={coinRef.obverseCreator}
             obverseDescription={coinRef.obverseDescription}
@@ -135,7 +149,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             reverseDescription={coinRef.reverseDescription}
             reverseImage={coinRef.reverseImage}
           />
-          <CoinInformationContainer
+          <CoinInformation
             alignment={coinRef.alignment}
             composition={coinRef.composition}
             edgeDescription={coinRef.edgeDescription}
@@ -148,6 +162,21 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             shape={coinRef.shape}
             thickness={coinRef.thickness}
             type={coinRef.type}
+          />
+          <CoinPriceEvolution
+            data={
+              coinRefPriceHistoryData?.map((coinRefPriceHistory) => ({
+                date: coinRefPriceHistory.created_at,
+                price: coinRefPriceHistory.price,
+              })) ?? []
+            }
+            defaultPeriod={7}
+            onPeriodChange={(period) => {
+              setHistoryStartAt(
+                new Date(new Date().setDate(new Date().getDate() - period))
+              );
+            }}
+            loading={coinRefPriceHistoryIsLoading}
           />
         </Grid>
 
@@ -164,7 +193,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
           <Card>
             <Title as="h2">Variété</Title>
           </Card>
-          <CoinStatisticsContainer
+          <CoinStatistics
             rarity={coinRefRarityData ?? 0}
             rarityLoading={coinRefRarityIsLoading}
             usersHasIt={userCoinRefCountByCoinIdData ?? 0}
@@ -182,7 +211,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
               ) ?? 0
             }
           />
-          <CoinExchangeContainer />
+          <CoinExchange />
         </Grid>
       </Grid>
     </>

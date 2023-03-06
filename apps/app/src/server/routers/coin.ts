@@ -126,17 +126,22 @@ export const coinRouter = router({
     .query(async ({ ctx, input }) => {
       const { id } = input;
 
-      const price = await ctx.prisma.userCoin.aggregate({
-        where: { coinId: id },
-        _avg: {
+      const price = await ctx.prisma.coinPriceHistory.findMany({
+        where: {
+          coinId: id,
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+        select: {
           price: true,
         },
       });
 
-      if (!price._avg.price) {
+      if (price.length === 0) {
         return null;
       }
 
-      return Math.round(price._avg.price * 100) / 100;
+      return Math.round(price[0].price * 100) / 100;
     }),
 });
