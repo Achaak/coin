@@ -1,38 +1,37 @@
-import { useRouter } from 'next/router';
+import { Title } from '@my-coin/ui/dist/components/title/index';
+import { useSession } from 'next-auth/react';
 import { FC, useState } from 'react';
-import { User } from '../../../selector/user';
 import { trpc } from '../../../utils/trpc';
 import { CoinExplorer } from '../../global/CoinExplorer';
-import { UserHeader } from '../../global/UserHeader';
 
-type UserItemContainerProps = {
-  user: User;
-};
-
-export const UserCoinsContainer: FC<UserItemContainerProps> = ({ user }) => {
-  const router = useRouter();
-  const { userId } = router.query;
+export const MyCollectionContainer: FC = () => {
+  const { data } = useSession();
   const [catalogIdSelected, setCatalogIdSelected] = useState<string>();
 
   const { data: catalogs, isLoading: catalogsIsLoading } =
-    trpc.catalog.getByUserId.useQuery({
-      userId: userId as string,
-    });
+    trpc.catalog.getByUserId.useQuery(
+      {
+        userId: data?.user?.id ?? '',
+      },
+      {
+        enabled: !!data?.user?.id,
+      }
+    );
 
   const { data: userCoins, isLoading: isLoadingUserCoins } =
     trpc.userCoin.getByCatalogIdAndUserId.useQuery(
       {
-        userId: userId as string,
+        userId: data?.user?.id ?? '',
         catalogId: catalogIdSelected ?? '',
       },
       {
-        enabled: !!catalogIdSelected,
+        enabled: !!catalogIdSelected && !!data?.user?.id,
       }
     );
 
   return (
     <>
-      <UserHeader image={user.image} name={user.name} id={user.id} />
+      <Title as="h1">My collection</Title>
       <CoinExplorer
         catalogs={catalogs}
         catalogsIsLoading={catalogsIsLoading}

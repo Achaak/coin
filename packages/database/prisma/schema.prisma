@@ -149,6 +149,8 @@ model UserCoin {
   condition    CoinCondition
   comment      String?
   price        Float?
+  currency     Currency      @relation(fields: [currencyCode], references: [code])
+  currencyCode String        @default("USD")
   exchangeable Boolean       @default(false)
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
@@ -163,6 +165,7 @@ model UserCoin {
 
   @@index([userId])
   @@index([coinId])
+  @@index([currencyCode])
 }
 
 model Message {
@@ -255,9 +258,10 @@ model UserCoinsPriceHistory {
 }
 
 model Currency {
-  code       String    @id
+  code       String     @id
   rate       Float
-  updated_at DateTime? @default(now()) @updatedAt
+  updated_at DateTime?  @default(now()) @updatedAt
+  userCoins  UserCoin[]
 }
 
 enum CoinCondition {

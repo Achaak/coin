@@ -17,7 +17,7 @@ const CoinItemPage: NextPageWithLayout = () => {
     data: coinData,
     isLoading: coinIsLoading,
     error: coinError,
-  } = trpc.coin.byIdFull.useQuery(
+  } = trpc.coin.getByIdFull.useQuery(
     {
       id: coinId as string,
     },

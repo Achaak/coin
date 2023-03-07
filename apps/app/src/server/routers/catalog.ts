@@ -4,7 +4,17 @@ import { selectCatalog } from '../../selector/catalog';
 import { router, publicProcedure } from './trpc';
 
 export const catalogRouter = router({
-  byId: publicProcedure
+  /* Get all catalogs */
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const catalogs = await ctx.prisma.catalog.findMany({
+      select: selectCatalog,
+    });
+
+    return catalogs;
+  }),
+
+  /* Get category by id */
+  getById: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -28,105 +38,8 @@ export const catalogRouter = router({
         ...catalog,
       };
     }),
-  countByUserId: publicProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { userId } = input;
 
-      const count = await ctx.prisma.catalog.count({
-        where: {
-          coinsRef: {
-            some: {
-              coins: {
-                some: {
-                  usersCoin: {
-                    some: {
-                      userId,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
-
-      return count;
-    }),
-  countCountryByUserId: publicProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { userId } = input;
-
-      const catalogs = await ctx.prisma.catalog.findMany({
-        where: {
-          coinsRef: {
-            some: {
-              coins: {
-                some: {
-                  usersCoin: {
-                    some: {
-                      userId,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
-
-      const count = catalogs
-        .map((catalog) => catalog.countryCode)
-        .filter(
-          (countryCode, index, self) => self.indexOf(countryCode) === index
-        );
-      return count.length;
-    }),
-  count: publicProcedure.query(async ({ ctx }) => {
-    const count = await ctx.prisma.catalog.count();
-    return count;
-  }),
-  search: publicProcedure
-    .input(
-      z.object({
-        query: z.string(),
-        take: z.number().optional(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { query, take = 10 } = input;
-      const catalogs = await ctx.prisma.catalog.findMany({
-        where: {
-          OR: [
-            {
-              name: {
-                contains: query,
-                mode: 'insensitive',
-              },
-            },
-            {
-              countryCode: {
-                contains: query,
-                mode: 'insensitive',
-              },
-            },
-          ],
-        },
-        select: selectCatalog,
-        take: take > 100 ? 100 : take,
-      });
-
-      return catalogs;
-    }),
+  /* Get catalogs by user id */
   getByUserId: publicProcedure
     .input(
       z
@@ -164,5 +77,159 @@ export const catalogRouter = router({
       });
 
       return catalog.map((c) => c.coin.ref.catalog);
+    }),
+
+  /* Get catalogs in wishlist of coins and coins ref by user id */
+  getWishlistByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = input;
+
+      const catalog = await ctx.prisma.catalog.findMany({
+        where: {
+          OR: [
+            {
+              coinsRef: {
+                some: {
+                  wishlist: {
+                    some: {
+                      userId,
+                    },
+                  },
+                },
+              },
+            },
+            {
+              coinsRef: {
+                some: {
+                  coins: {
+                    some: {
+                      wishlist: {
+                        some: {
+                          userId,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
+        select: selectCatalog,
+      });
+
+      return catalog;
+    }),
+
+  /* Count catalogs */
+  count: publicProcedure.query(async ({ ctx }) => {
+    const count = await ctx.prisma.catalog.count();
+    return count;
+  }),
+
+  /* Count catalogs by user id */
+  countByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = input;
+
+      const count = await ctx.prisma.catalog.count({
+        where: {
+          coinsRef: {
+            some: {
+              coins: {
+                some: {
+                  usersCoin: {
+                    some: {
+                      userId,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return count;
+    }),
+
+  /* Count countries by user id */
+  countCountryByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = input;
+
+      const catalogs = await ctx.prisma.catalog.findMany({
+        where: {
+          coinsRef: {
+            some: {
+              coins: {
+                some: {
+                  usersCoin: {
+                    some: {
+                      userId,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      const count = catalogs
+        .map((catalog) => catalog.countryCode)
+        .filter(
+          (countryCode, index, self) => self.indexOf(countryCode) === index
+        );
+      return count.length;
+    }),
+
+  /* Search catalogs */
+  search: publicProcedure
+    .input(
+      z.object({
+        query: z.string(),
+        take: z.number().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { query, take = 10 } = input;
+      const catalogs = await ctx.prisma.catalog.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+            {
+              countryCode: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+        select: selectCatalog,
+        take: take > 100 ? 100 : take,
+      });
+
+      return catalogs;
     }),
 });

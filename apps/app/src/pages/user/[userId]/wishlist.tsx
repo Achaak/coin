@@ -14,9 +14,10 @@ const WishlistPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { userId } = router.query;
 
-  const { data: userData, isLoading: userIsLoading } = trpc.user.byId.useQuery({
-    id: userId as string,
-  });
+  const { data: userData, isLoading: userIsLoading } =
+    trpc.user.getById.useQuery({
+      id: userId as string,
+    });
 
   return (
     <>

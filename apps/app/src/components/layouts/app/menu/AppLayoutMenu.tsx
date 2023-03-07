@@ -7,6 +7,8 @@ import logo from '../../../../../public/images/500x500.png';
 import Link from 'next/link';
 import { getLink } from '@my-coin/router/dist/app';
 import { useRouter } from 'next/router';
+import { HomeIcon } from '@my-coin/ui/dist/icons/Home';
+import { HomeSolidIcon } from '@my-coin/ui/dist/icons/HomeSolid';
 import { CogIcon } from '@my-coin/ui/dist/icons/Cog';
 import { LogInIcon } from '@my-coin/ui/dist/icons/LogIn';
 import { TransferIcon } from '@my-coin/ui/dist/icons/Transfer';
@@ -125,22 +127,30 @@ export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
     () => [
       {
         type: 'link',
+        icon: HomeIcon,
+        iconActive: HomeSolidIcon,
+        label: 'Home',
+        link: getLink('home'),
+        linkAs: [getLink('home')],
+      },
+      {
+        type: 'link',
         icon: LayerIcon,
         iconActive: LayerSolidIcon,
         label: 'Catalog',
         link: getLink('catalog'),
         linkAs: [getLink('catalog')],
       },
-      {
-        type: 'link',
-        icon: CoinIcon,
-        iconActive: CoinSolidIcon,
-        label: 'My Collection',
-        link: getLink('my-collection'),
-        linkAs: [getLink('my-collection')],
-      },
       ...(status === 'authenticated'
         ? ([
+            {
+              type: 'link',
+              icon: CoinIcon,
+              iconActive: CoinSolidIcon,
+              label: 'My Collection',
+              link: getLink('my-collection'),
+              linkAs: [getLink('my-collection')],
+            },
             {
               type: 'link',
               icon: HeartIcon,
@@ -168,14 +178,18 @@ export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
         link: getLink('exchange'),
         linkAs: [getLink('exchange')],
       },
-      {
-        type: 'link',
-        icon: UserIcon,
-        iconActive: UserSolidIcon,
-        label: 'Contacts',
-        link: getLink('contacts'),
-        linkAs: [getLink('contacts')],
-      },
+      ...(status === 'authenticated'
+        ? ([
+            {
+              type: 'link',
+              icon: UserIcon,
+              iconActive: UserSolidIcon,
+              label: 'Contacts',
+              link: getLink('contacts'),
+              linkAs: [getLink('contacts')],
+            },
+          ] as MenuConfig[])
+        : []),
     ],
     [status, dataSession]
   );

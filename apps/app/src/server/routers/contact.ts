@@ -4,6 +4,7 @@ import { selectContact } from '../../selector/contact';
 import { router, authProcedure } from './trpc';
 
 export const contactRouter = router({
+  /* Get contacts of current user */
   get: authProcedure.query(async ({ ctx }) => {
     const { session } = ctx;
 
@@ -16,6 +17,8 @@ export const contactRouter = router({
 
     return contact;
   }),
+
+  /* Add contact */
   add: authProcedure
     .input(
       z.object({
@@ -43,6 +46,8 @@ export const contactRouter = router({
 
       return contact;
     }),
+
+  /* Remove contact */
   remove: authProcedure
     .input(
       z.object({

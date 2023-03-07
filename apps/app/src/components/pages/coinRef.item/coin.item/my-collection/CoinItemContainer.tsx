@@ -45,7 +45,7 @@ export const CoinItemMyCollectionContainer: FC<CoinItemContainerProps> = ({
     data: userCoins,
     isLoading: userCoinsIsLoading,
     refetch: refetchUserCoins,
-  } = trpc.userCoin.byCoinId.useQuery({
+  } = trpc.userCoin.getByCoinId.useQuery({
     coinId: coin.id,
   });
 
@@ -155,7 +155,10 @@ const CoinItemMyCollectionItem: FC<CoinItemMyCollectionItemProps> = ({
   const [validateDialogIsOpen, setValidateDialogIsOpen] = useState(false);
   const [editUserCoinDialogIsOpen, setEditUserCoinDialogIsOpen] =
     useState(false);
-  const price = useCurrency(userCoin.price);
+  const price = useCurrency({
+    amount: userCoin.price,
+    currencyFrom: userCoin.currencyCode,
+  });
 
   const { mutate: deleteUserCoinMutation, isLoading: deleteUserCoinIsLoading } =
     trpc.userCoin.remove.useMutation({

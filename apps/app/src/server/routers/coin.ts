@@ -5,7 +5,8 @@ import { selectCoinFull } from '../../selector/coinFull';
 import { router, publicProcedure } from './trpc';
 
 export const coinRouter = router({
-  byId: publicProcedure
+  /* Get coins by ids */
+  getById: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -29,7 +30,9 @@ export const coinRouter = router({
         ...coin,
       };
     }),
-  byIdFull: publicProcedure
+
+  /* Get coins with full data by ids */
+  getByIdFull: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -53,11 +56,65 @@ export const coinRouter = router({
         ...coin,
       };
     }),
+
+  /* Get coins by catalog id */
+  getByCatalogId: publicProcedure
+    .input(
+      z.object({
+        catalogId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { catalogId } = input;
+
+      const coins = await ctx.prisma.coin.findMany({
+        where: {
+          ref: {
+            catalogId,
+          },
+        },
+        select: selectCoinFull,
+      });
+
+      return coins;
+    }),
+
+  /* Get coins in wishlist by user id and catalog id */
+  getWishlistByUserIdAndCatalogId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        catalogId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId, catalogId } = input;
+
+      const coins = await ctx.prisma.coin.findMany({
+        where: {
+          wishlist: {
+            some: {
+              userId,
+            },
+          },
+          ref: {
+            catalogId,
+          },
+        },
+        select: selectCoinFull,
+      });
+
+      return coins;
+    }),
+
+  /* Count all coins */
   count: publicProcedure.query(async ({ ctx }) => {
     const count = await ctx.prisma.coin.count();
     return count;
   }),
-  rarityById: publicProcedure
+
+  /* Get rarity of coin by id */
+  getRarityById: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -117,7 +174,9 @@ export const coinRouter = router({
 
       return Math.round(rarity * 10) / 10;
     }),
-  priceById: publicProcedure
+
+  /* Get price of coin by id */
+  getPriceById: publicProcedure
     .input(
       z.object({
         id: z.string(),

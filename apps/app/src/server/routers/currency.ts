@@ -4,7 +4,8 @@ import { selectCurrency } from '../../selector/currency';
 import { router, publicProcedure } from './trpc';
 
 export const currencyRouter = router({
-  byId: publicProcedure
+  /* Get currencies by code */
+  getById: publicProcedure
     .input(
       z.object({
         code: z.string(),
@@ -28,6 +29,8 @@ export const currencyRouter = router({
         ...currency,
       };
     }),
+
+  /* Get all currencies */
   getAll: publicProcedure.query(async ({ ctx }) => {
     const currencies = await ctx.prisma.currency.findMany({
       select: selectCurrency,

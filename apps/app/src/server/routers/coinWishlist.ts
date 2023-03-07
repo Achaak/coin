@@ -3,7 +3,8 @@ import { selectCoinWishlist } from '../../selector/coinWishlist';
 import { router, publicProcedure, authProcedure } from './trpc';
 
 export const coinWishlistRouter = router({
-  byUserId: publicProcedure
+  /* Get coin wishlist by user id */
+  getByUserId: publicProcedure
     .input(
       z
         .object({
@@ -21,6 +22,8 @@ export const coinWishlistRouter = router({
 
       return wishlist;
     }),
+
+  /* Count coin wishlist by user id */
   countByUserId: publicProcedure
     .input(
       z.object({
@@ -35,7 +38,25 @@ export const coinWishlistRouter = router({
 
       return count;
     }),
-  isFavorite: publicProcedure
+
+  /* Count coin wishlist by coin id */
+  countByCoinId: publicProcedure
+    .input(
+      z.object({
+        coinId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { coinId } = input;
+      const count = await ctx.prisma.coinWishlist.count({
+        where: { coinId },
+      });
+
+      return count;
+    }),
+
+  /* Check if coin is in wishlist by user id */
+  getIsInWishlist: publicProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -50,6 +71,8 @@ export const coinWishlistRouter = router({
 
       return count > 0;
     }),
+
+  /* Add or remove coin from wishlist */
   addOrRemove: authProcedure
     .input(
       z.object({
@@ -78,19 +101,5 @@ export const coinWishlistRouter = router({
           },
         });
       }
-    }),
-  countByCoinId: publicProcedure
-    .input(
-      z.object({
-        coinId: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { coinId } = input;
-      const count = await ctx.prisma.coinWishlist.count({
-        where: { coinId },
-      });
-
-      return count;
     }),
 });

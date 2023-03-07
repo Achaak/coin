@@ -2,23 +2,42 @@ import { CoinCondition, PrismaClient } from '@my-coin/database';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { selectUserCoin } from '../../selector/userCoin';
+import { convertCurrencyToUSD } from '../../utils/useCurrency';
 import { router, publicProcedure, authProcedure } from './trpc';
 
+/* Update coin price history */
 const updateCoinPriceHistory = async (
   ctx: {
     prisma: PrismaClient;
   },
   coinId: string
 ) => {
-  const coinsPriceAvg = await ctx.prisma.userCoin.groupBy({
-    by: ['coinId'],
+  const currencies = await ctx.prisma.currency.findMany();
+
+  const coinsPriceAvg = await ctx.prisma.userCoin.findMany({
     where: { coinId },
-    _avg: {
+    select: {
       price: true,
+      currencyCode: true,
     },
   });
 
-  const avgPrice = coinsPriceAvg[0]._avg.price;
+  const avgPrice =
+    coinsPriceAvg
+      .filter((c) => c.price !== null)
+      .reduce((acc, curr) => {
+        const currency = currencies.find((c) => c.code === curr.currencyCode);
+
+        if (!currency) {
+          return acc;
+        }
+
+        const priceInUSD = convertCurrencyToUSD({
+          amount: curr.price!,
+          currency: currency.code,
+        });
+        return acc + priceInUSD;
+      }, 0) / coinsPriceAvg.length;
 
   if (avgPrice !== null) {
     const coinPriceHistory = await ctx.prisma.coinPriceHistory.findMany({
@@ -49,12 +68,15 @@ const updateCoinPriceHistory = async (
   }
 };
 
+/* Update coin ref price history */
 const updateCoinRefPriceHistory = async (
   ctx: {
     prisma: PrismaClient;
   },
   coinRefId: string
 ) => {
+  const currencies = await ctx.prisma.currency.findMany();
+
   const coinRefPriceAvg = await ctx.prisma.coinRef.findUnique({
     where: { id: coinRefId },
     select: {
@@ -64,6 +86,7 @@ const updateCoinRefPriceHistory = async (
           usersCoin: {
             select: {
               price: true,
+              currencyCode: true,
             },
           },
         },
@@ -82,7 +105,15 @@ const updateCoinRefPriceHistory = async (
     (acc, coin) =>
       acc +
       coin.usersCoin.reduce(
-        (acc2, userCoin) => acc2 + (userCoin.price ?? 0),
+        (acc2, userCoin) =>
+          acc2 +
+          (convertCurrencyToUSD({
+            currency:
+              currencies.find(
+                (currency) => currency.code === userCoin.currencyCode
+              )?.code ?? 'USD',
+            amount: userCoin.price ?? 0,
+          }) ?? 0),
         0
       ),
     0
@@ -121,7 +152,8 @@ const updateCoinRefPriceHistory = async (
 };
 
 export const userCoinRouter = router({
-  byId: publicProcedure
+  /* Get user coin by id */
+  getById: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -155,7 +187,9 @@ export const userCoinRouter = router({
 
       return userCoin[0];
     }),
-  byCoinId: publicProcedure
+
+  /* Get user coin by coinId */
+  getByCoinId: publicProcedure
     .input(
       z.object({
         coinId: z.string(),
@@ -189,6 +223,65 @@ export const userCoinRouter = router({
 
       return userCoin;
     }),
+
+  /* Get user coins by catalog id and user id */
+  getByCatalogIdAndUserId: publicProcedure
+    .input(
+      z.object({
+        catalogId: z.string(),
+        userId: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { catalogId, userId } = input;
+      const { session } = ctx;
+
+      const userIdRes = userId ?? session?.user?.id;
+
+      if (userIdRes === undefined) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'User is not authenticated or userId is not provided',
+        });
+      }
+
+      const userCoins = await ctx.prisma.userCoin.findMany({
+        where: {
+          userId: userIdRes,
+          coin: {
+            ref: {
+              catalogId,
+            },
+          },
+        },
+        select: selectUserCoin,
+      });
+
+      return userCoins;
+    }),
+
+  /* Get Last user coins by user id */
+  getLastByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        take: z.number().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId, take = 10 } = input;
+
+      const userCoin = await ctx.prisma.userCoin.findMany({
+        where: { userId },
+        orderBy: { created_at: 'desc' },
+        select: selectUserCoin,
+        take: take && take > 100 ? 100 : take,
+      });
+
+      return userCoin;
+    }),
+
+  /* Remove user coin */
   remove: authProcedure
     .input(
       z.object({
@@ -217,6 +310,8 @@ export const userCoinRouter = router({
         ...userCoin,
       };
     }),
+
+  /* Add user coin */
   add: authProcedure
     .input(
       z.object({
@@ -260,6 +355,8 @@ export const userCoinRouter = router({
         ...userCoin,
       };
     }),
+
+  /* Update user coin */
   update: authProcedure
     .input(
       z.object({
@@ -302,6 +399,15 @@ export const userCoinRouter = router({
         ...userCoin,
       };
     }),
+
+  /* Count all user coins */
+  count: publicProcedure.query(async ({ ctx }) => {
+    const count = await ctx.prisma.userCoin.count();
+
+    return count;
+  }),
+
+  /* Count user coins by user id */
   countByUserId: publicProcedure
     .input(
       z.object({
@@ -317,64 +423,8 @@ export const userCoinRouter = router({
 
       return count;
     }),
-  lastByUserId: publicProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-        take: z.number().optional(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { userId, take = 10 } = input;
 
-      const userCoin = await ctx.prisma.userCoin.findMany({
-        where: { userId },
-        orderBy: { created_at: 'desc' },
-        select: selectUserCoin,
-        take: take && take > 100 ? 100 : take,
-      });
-
-      return userCoin;
-    }),
-  count: publicProcedure.query(async ({ ctx }) => {
-    const count = await ctx.prisma.userCoin.count();
-
-    return count;
-  }),
-  getByCatalogIdAndUserId: publicProcedure
-    .input(
-      z.object({
-        catalogId: z.string(),
-        userId: z.string().optional(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { catalogId, userId } = input;
-      const { session } = ctx;
-
-      const userIdRes = userId ?? session?.user?.id;
-
-      if (userIdRes === undefined) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'User is not authenticated or userId is not provided',
-        });
-      }
-
-      const userCoins = await ctx.prisma.userCoin.findMany({
-        where: {
-          userId: userIdRes,
-          coin: {
-            ref: {
-              catalogId,
-            },
-          },
-        },
-        select: selectUserCoin,
-      });
-
-      return userCoins;
-    }),
+  /* Count user coins by coin id and user id */
   countByCoinIdAndUserId: publicProcedure
     .input(
       z.object({
@@ -391,6 +441,8 @@ export const userCoinRouter = router({
 
       return count;
     }),
+
+  /* Count users has coin */
   countUsersHasCoins: publicProcedure
     .input(
       z.object({
@@ -407,6 +459,8 @@ export const userCoinRouter = router({
 
       return usersHasCoins.length;
     }),
+
+  /* Count users has coin ref */
   countUsersHasCoinsRef: publicProcedure
     .input(
       z.object({

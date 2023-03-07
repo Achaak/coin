@@ -4,9 +4,3 @@ export const formatYears = (minYear: number, maxYear: number) => {
   }
   return `${minYear} - ${maxYear}`;
 };
-
-export const getMinAndMaxYear = (years: number[]) => {
-  const minYear = Math.min(...years);
-  const maxYear = Math.max(...years);
-  return { minYear, maxYear };
-};

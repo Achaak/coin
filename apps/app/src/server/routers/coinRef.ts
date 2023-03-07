@@ -4,7 +4,8 @@ import { selectCoinRef, selectCoinRefFull } from '../../selector/coinRef';
 import { router, publicProcedure } from './trpc';
 
 export const coinRefRouter = router({
-  byId: publicProcedure
+  /* Get coin refs by ids */
+  getById: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -28,7 +29,9 @@ export const coinRefRouter = router({
         ...coinRef,
       };
     }),
-  byIdFull: publicProcedure
+
+  /* Get coin refs with full data by ids */
+  getByIdFull: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -52,6 +55,54 @@ export const coinRefRouter = router({
         ...coinRef,
       };
     }),
+
+  /* Get coin refs by catalog id */
+  getByCatalogId: publicProcedure
+    .input(
+      z.object({
+        catalogId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { catalogId } = input;
+
+      const coinRefs = await ctx.prisma.coinRef.findMany({
+        where: {
+          catalogId,
+        },
+        select: selectCoinRef,
+      });
+
+      return coinRefs;
+    }),
+
+  /* Get coins ref in wishlist by user id and catalog id */
+  getWishlistByUserIdAndCatalogId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        catalogId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId, catalogId } = input;
+
+      const coinRefs = await ctx.prisma.coinRef.findMany({
+        where: {
+          wishlist: {
+            some: {
+              userId,
+            },
+          },
+          catalogId,
+        },
+        select: selectCoinRefFull,
+      });
+
+      return coinRefs;
+    }),
+
+  /* Search coin refs */
   search: publicProcedure
     .input(
       z.object({
@@ -90,12 +141,14 @@ export const coinRefRouter = router({
           ],
         },
         take: take > 100 ? 100 : take,
-        select: selectCoinRef,
+        select: selectCoinRefFull,
       });
 
       return coinRefs;
     }),
-  rarityById: publicProcedure
+
+  /* Get rarity of coin ref by id */
+  getRarityById: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -157,7 +210,9 @@ export const coinRefRouter = router({
 
       return Math.round(rarity * 10) / 10;
     }),
-  priceById: publicProcedure
+
+  /* Get price of coin ref by id */
+  getPriceById: publicProcedure
     .input(
       z.object({
         id: z.string(),

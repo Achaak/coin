@@ -1,5 +1,4 @@
 import { FC, useContext, useEffect, useMemo } from 'react';
-import { trpc } from '../../../../utils/trpc';
 import {
   Item,
   Root,
@@ -54,11 +53,8 @@ const ContentItem = styled('div', {
 });
 
 export const CoinExplorerMenu: FC = () => {
-  const { userId, setCatalogIdSelected } = useContext(CoinExplorerContext);
-  const { data: catalogs, isLoading: catalogsIsLoading } =
-    trpc.catalog.getByUserId.useQuery({
-      userId,
-    });
+  const { catalogsIsLoading, catalogs, setCatalogIdSelected } =
+    useContext(CoinExplorerContext);
 
   const orderByCountry = useMemo(
     () =>

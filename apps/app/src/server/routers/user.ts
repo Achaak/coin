@@ -4,7 +4,8 @@ import { selectUser } from '../../selector/user';
 import { router, publicProcedure } from '../routers/trpc';
 
 export const userRouter = router({
-  byId: publicProcedure
+  /* Get user by id */
+  getById: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -28,20 +29,24 @@ export const userRouter = router({
         ...user,
       };
     }),
-  coinRankById: publicProcedure
+
+  /* Get coin rank by user id */
+  getCoinRankByUserId: publicProcedure
     .input(
       z.object({
-        id: z.string(),
+        userId: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const { id } = input;
+      const { userId } = input;
 
-      console.log('id', id, ctx);
+      console.log('userId', userId, ctx);
       // TODO
 
       return 1;
     }),
+
+  /* Search users */
   search: publicProcedure
     .input(
       z.object({

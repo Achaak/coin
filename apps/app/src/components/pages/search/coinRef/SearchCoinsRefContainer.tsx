@@ -3,7 +3,8 @@ import { styled } from '@my-coin/ui';
 import { Grid } from '@my-coin/ui/dist/components/grid/index';
 import { Title } from '@my-coin/ui/dist/components/title/index';
 import { FC } from 'react';
-import { CoinRef } from '../../../../selector/coinRef';
+import { CoinRefFull } from '../../../../selector/coinRef';
+import { getYearRange } from '../../../../utils/coin';
 import { CoinCard } from '../../../global/CoinCard';
 
 const Container = styled('div', {
@@ -14,7 +15,7 @@ const Container = styled('div', {
 });
 
 type SearchCoinsRefsContainerProps = {
-  coinsRefs: CoinRef[];
+  coinsRefs: CoinRefFull[];
 };
 
 export const SearchCoinsRefsContainer: FC<SearchCoinsRefsContainerProps> = ({
@@ -55,7 +56,7 @@ export const SearchCoinsRefsContainer: FC<SearchCoinsRefsContainerProps> = ({
               coinRefId: coinRef.id,
             },
           })}
-          yearRange={[2000, 2042]}
+          yearRange={getYearRange(coinRef.coins)}
         />
       ))}
     </Grid>

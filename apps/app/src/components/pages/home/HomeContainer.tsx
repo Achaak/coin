@@ -10,7 +10,9 @@ import { useCurrency } from '../../../utils/useCurrency';
 const formatNumber = new Intl.NumberFormat();
 
 export const HomeContainer: FC = () => {
-  const totalCoinsValue = useCurrency(123456789);
+  const totalCoinsValue = useCurrency({
+    amount: 123456789,
+  });
 
   const { data: userCoinsCountData, isLoading: userCoinsCountIsLoading } =
     trpc.userCoin.count.useQuery();

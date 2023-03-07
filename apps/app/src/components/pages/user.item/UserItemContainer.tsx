@@ -6,6 +6,7 @@ import { CoinIcon } from '@my-coin/ui/dist/icons/Coin';
 import Link from 'next/link';
 import { FC } from 'react';
 import { User } from '../../../selector/user';
+import { getYearRange } from '../../../utils/coin';
 import { trpc } from '../../../utils/trpc';
 import { Card } from '../../global/Card';
 import { CardStat } from '../../global/CardStat';
@@ -50,7 +51,7 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
   const {
     data: lastCoinsByUserIdData,
     // isLoading: lastCoinsByUserIdIsLoading, TODO
-  } = trpc.userCoin.lastByUserId.useQuery({
+  } = trpc.userCoin.getLastByUserId.useQuery({
     userId: user.id,
   });
 
@@ -124,7 +125,7 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
         }}
       >
         <Title as="h2">Last coin</Title>
-        {lastCoinsByUserIdData?.map((coin) => (
+        {lastCoinsByUserIdData?.map((userCoin) => (
           <CoinCard
             paddingHorizontal={{
               default: 0,
@@ -132,21 +133,25 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
             paddingVertical={{
               default: 0,
             }}
-            key={coin.id}
-            composition={coin.coin.ref.composition}
-            year={coin.coin.year}
-            denomination={coin.coin.ref.denomination}
-            diameter={coin.coin.ref.diameter}
-            weight={coin.coin.ref.weight}
-            observeImage={coin.observeImage ?? coin.coin.ref.observeImage}
-            reverseImage={coin.reverseImage ?? coin.coin.ref.reverseImage}
-            price={coin.price}
-            type={coin.coin.ref.type}
-            yearRange={[1996, 1997]}
+            key={userCoin.id}
+            composition={userCoin.coin.ref.composition}
+            year={userCoin.coin.year}
+            denomination={userCoin.coin.ref.denomination}
+            diameter={userCoin.coin.ref.diameter}
+            weight={userCoin.coin.ref.weight}
+            observeImage={
+              userCoin.observeImage ?? userCoin.coin.ref.observeImage
+            }
+            reverseImage={
+              userCoin.reverseImage ?? userCoin.coin.ref.reverseImage
+            }
+            price={userCoin.price}
+            type={userCoin.coin.ref.type}
+            yearRange={getYearRange(userCoin.coin.ref.coins)}
             link={getLink('coin.item', {
               queries: {
-                coinId: coin.coin.id,
-                coinRefId: coin.coin.ref.id,
+                coinId: userCoin.coin.id,
+                coinRefId: userCoin.coin.ref.id,
               },
             })}
           />

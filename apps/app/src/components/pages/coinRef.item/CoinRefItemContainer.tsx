@@ -5,7 +5,8 @@ import { FC, useMemo, useState } from 'react';
 import { useStore } from 'zustand';
 import { CoinRefFull } from '../../../selector/coinRef';
 import { wishlistStore } from '../../../store/wishlist';
-import { formatYears, getMinAndMaxYear } from '../../../utils/date';
+import { getYearRange } from '../../../utils/coin';
+import { formatYears } from '../../../utils/date';
 import { trpc } from '../../../utils/trpc';
 import { Breadcrumb } from '../../global/Breadcrumb';
 import { Card } from '../../global/Card';
@@ -44,12 +45,12 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
   });
 
   const { data: priceData, isLoading: priceIsLoading } =
-    trpc.coinRef.priceById.useQuery({
+    trpc.coinRef.getPriceById.useQuery({
       id: coinRef.id,
     });
 
   const { data: coinRefRarityData, isLoading: coinRefRarityIsLoading } =
-    trpc.coinRef.rarityById.useQuery({
+    trpc.coinRef.getRarityById.useQuery({
       id: coinRef.id,
     });
 
@@ -70,20 +71,15 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
   const {
     data: coinRefPriceHistoryData,
     isLoading: coinRefPriceHistoryIsLoading,
-  } = trpc.coinRefPriceHistory.byId.useQuery({
+  } = trpc.coinRefPriceHistory.getById.useQuery({
     id: coinRef.id,
     startAt: historyStartAt,
   });
 
-  const years = useMemo(
-    () =>
-      getMinAndMaxYear(coinRef.coins.filter((c) => c.year).map((c) => c.year!)),
-    [coinRef]
-  );
-
   const periodYears = useMemo(() => {
-    formatYears(years.minYear, years.maxYear);
-  }, [years]);
+    const yearsRange = getYearRange(coinRef.coins);
+    return formatYears(yearsRange[0], yearsRange[1]);
+  }, [coinRef.coins]);
 
   return (
     <>
@@ -98,14 +94,14 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             url: '/france',
           },
           {
-            label: `${coinRef.catalog.country.name} ${coinRef.denomination}, ${years.minYear}-${years.maxYear}`,
+            label: `${coinRef.catalog.country.name} ${coinRef.denomination}, ${periodYears}`,
             current: true,
           },
         ]}
       />
       <CoinHeader
         id={coinRef.id}
-        title={`${coinRef.catalog.country.name} ${coinRef.denomination}, ${years.minYear}-${years.maxYear}`}
+        title={`${coinRef.catalog.country.name} ${coinRef.denomination}, ${periodYears}`}
         onAddOrRemoveToFavorites={(id) =>
           addOrRemoveCoinRefWishlistMutation({ coinRefId: id })
         }

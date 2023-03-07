@@ -8,6 +8,7 @@ const Container = styled('div', {
   display: 'flex',
   width: '100%',
   columnGap: '$24',
+  alignItems: 'flex-start',
 });
 
 export const CoinExplorerLarge: FC = () => (

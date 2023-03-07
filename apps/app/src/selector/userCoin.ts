@@ -25,6 +25,7 @@ export const selectUserCoin = createUserCoinSelect({
   reverseImage: true,
   created_at: true,
   updated_at: true,
+  currencyCode: true,
 });
 
 export type UserCoin = Prisma.UserCoinGetPayload<{

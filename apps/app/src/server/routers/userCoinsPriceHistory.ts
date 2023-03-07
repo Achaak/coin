@@ -4,7 +4,8 @@ import { selectUserCoinsPriceHistory } from '../../selector/userCoinsPriceHistor
 import { router, publicProcedure } from './trpc';
 
 export const userCoinsPriceHistoryRouter = router({
-  byId: publicProcedure
+  /* Get userCoinsPriceHistory by id */
+  getById: publicProcedure
     .input(
       z.object({
         id: z.string(),

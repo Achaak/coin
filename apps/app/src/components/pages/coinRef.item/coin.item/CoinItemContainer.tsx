@@ -12,12 +12,13 @@ import { wishlistStore } from '../../../../store/wishlist';
 import { useStore } from 'zustand';
 import { CoinImages } from '../images';
 import { CoinInformation } from '../information';
-import { formatYears, getMinAndMaxYear } from '../../../../utils/date';
+import { formatYears } from '../../../../utils/date';
 import { CoinExchange } from '../exchange';
 import { CoinItemMyCollectionContainer } from './my-collection';
 import { useSession } from 'next-auth/react';
 import { CoinStatistics } from '../statistics';
 import { CoinPriceEvolution } from '../priceEvolution';
+import { getYearRange } from '../../../../utils/coin';
 
 type CoinItemContainerProps = {
   coin: CoinFull;
@@ -46,12 +47,12 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
   });
 
   const { data: priceData, isLoading: priceIsLoading } =
-    trpc.coin.priceById.useQuery({
+    trpc.coin.getPriceById.useQuery({
       id: coin.id,
     });
 
   const { data: coinRarityData, isLoading: coinRarityIsLoading } =
-    trpc.coin.rarityById.useQuery({
+    trpc.coin.getRarityById.useQuery({
       id: coin.id,
     });
 
@@ -70,22 +71,15 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
   });
 
   const { data: coinPriceHistoryData, isLoading: coinPriceHistoryIsLoading } =
-    trpc.coinPriceHistory.byId.useQuery({
+    trpc.coinPriceHistory.getById.useQuery({
       id: coin.id,
       startAt: historyStartAt,
     });
 
-  const years = useMemo(
-    () =>
-      getMinAndMaxYear(
-        coin.ref.coins.filter((c) => c.year).map((c) => c.year!)
-      ),
-    [coin.ref]
-  );
-
   const periodYears = useMemo(() => {
-    formatYears(years.minYear, years.maxYear);
-  }, [years]);
+    const yearsRange = getYearRange(coin.ref.coins);
+    return formatYears(yearsRange[0], yearsRange[1]);
+  }, [coin.ref.coins]);
 
   return (
     <>

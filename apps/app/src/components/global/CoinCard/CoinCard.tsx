@@ -57,6 +57,7 @@ export type CoinProps = {
   type: CoinType;
   price: number | null;
   link: string;
+  currencyCode?: string;
 
   year?: number | null;
   yearRange?: [number, number];
@@ -84,8 +85,12 @@ export const CoinCard: FC<CoinProps> = ({
     default: 8,
     lg: 16,
   },
+  currencyCode = 'USD',
 }) => {
-  const priceFormatted = useCurrency(price);
+  const priceFormatted = useCurrency({
+    amount: price,
+    currencyFrom: currencyCode,
+  });
 
   return (
     <Link href={link}>

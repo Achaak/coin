@@ -80,6 +80,7 @@ type CoinHeaderProps = {
   onAddOrRemoveToFavorites: (id: string) => void;
   isLoadingAddOrRemoveToFavorites: boolean;
   countryCode: string;
+  currencyCode?: string;
 };
 
 export const CoinHeader: FC<CoinHeaderProps> = ({
@@ -91,9 +92,13 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
   onAddOrRemoveToFavorites,
   isLoadingAddOrRemoveToFavorites,
   countryCode,
+  currencyCode,
 }) => {
   const { status } = useSession();
-  const priceFormatted = useCurrency(price);
+  const priceFormatted = useCurrency({
+    amount: price,
+    currencyFrom: currencyCode,
+  });
 
   const handleAddOrRemoveToFavorites = useCallback(async () => {
     await onAddOrRemoveToFavorites(id);
