@@ -143,7 +143,7 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
             price={coin.price}
             type={coin.coin.ref.type}
             yearRange={[1996, 1997]}
-            link={getLink('coin', {
+            link={getLink('coin.item', {
               queries: {
                 coinId: coin.coin.id,
                 coinRefId: coin.coin.ref.id,

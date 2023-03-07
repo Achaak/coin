@@ -307,6 +307,7 @@ importers:
       '@pikas-ui/textfield': ^4.0.7
       '@pikas-ui/title': ^2.0.3
       '@pikas-ui/toast': ^2.0.4
+      '@pikas-ui/toggle-group': ^1.0.1
       '@pikas-ui/tooltip': ^4.0.3
       '@stitches/react': ^1.2.8
       '@types/react': ^18.0.28
@@ -344,6 +345,7 @@ importers:
       '@pikas-ui/textfield': 4.0.7_zula6vjvt3wdocc4mwcxqa6nzi
       '@pikas-ui/title': 2.0.3_biqbaboplfbrettd7655fr4n2y
       '@pikas-ui/toast': 2.0.4_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/toggle-group': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@pikas-ui/tooltip': 4.0.3_zula6vjvt3wdocc4mwcxqa6nzi
       '@stitches/react': 1.2.8_react@18.2.0
       react: 18.2.0
@@ -2604,6 +2606,18 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
+  /@pikas-ui/icons/4.0.4_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-CQMWSP4cM0d73eObnyIcGD8zhbgno99onkQIqlGj43PYkVpoS4WLpHETtV7sYoWYwvK9VonCr+zQGsxieyTSZQ==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      '@iconify/react': 4.1.0_react@18.2.0
+      '@pikas-ui/styles': 4.0.4_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /@pikas-ui/loader/4.0.3_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-3+A1o+hM+nHUfIL1n72c7l14c4kL2josK7yKZx5sNrTueD745XxXfvYILJHxLbmSc2PR9Cuf4Lbbuj8/WLWfUw==}
     peerDependencies:
@@ -2718,6 +2732,20 @@ packages:
 
   /@pikas-ui/styles/4.0.3_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-hi3K7gekVrn8M37sE6cdZvqMbf1BPYIm17e5bkBXPJbn6ADNeXZhl7CT4+kP8cHt2EQmNEP2HlnxQzOnJJjDIg==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      '@stitches/react': 1.2.8_react@18.2.0
+      lodash.clonedeep: 4.5.0
+      lodash.merge: 4.6.2
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
+    dev: false
+
+  /@pikas-ui/styles/4.0.4_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-pDMzdbaRm96wkMSEWOFqJTMj1kAdb6d93glapwuyMUzCCsfypm02LV8AMyE+ikGUjAenau5uDQY4gNR/JW/Sxg==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -2859,6 +2887,20 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
+  /@pikas-ui/toggle-group/1.0.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-fLb8PWGe/gWuu4Z0YTly1UPo7GOGlCcblBgjFnSVId0+SZkUDy3z2446BRLWnJ7eaxocDa2aWz7QfuYY+jX05Q==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      '@pikas-ui/icons': 4.0.4_biqbaboplfbrettd7655fr4n2y
+      '@pikas-ui/styles': 4.0.4_biqbaboplfbrettd7655fr4n2y
+      '@pikas-utils/color': 2.0.3_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-toggle-group': 1.0.2_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /@pikas-ui/tooltip/4.0.3_zula6vjvt3wdocc4mwcxqa6nzi:
     resolution: {integrity: sha512-qziOaSlOyPQS0io+lGwGxn5sAyzE35UOY+UDEK6r7ID36bFF8+GKpH+ho4O0rrFaRJzSkKH1MFztbBq56z0wyA==}
     peerDependencies:
@@ -2876,6 +2918,17 @@ packages:
 
   /@pikas-utils/color/2.0.2_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-3tjN5BPEIgdliK0xttA8AhU9dJLYEI1g3fia+5wIIz+vqsxU1P5LaC9g3rawi74Kil7Acq0r3WpvzORrI/1I1w==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
+    dev: false
+
+  /@pikas-utils/color/2.0.3_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-8sxiMGZCF7qZVsyHZR8KaXRUvOnzwFZ4xtzsjE4Rk7kCTDmKwCNpJJE6c9UADXGBEajj0Z2ncf1mr31mLixvxg==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -3467,6 +3520,38 @@ packages:
       '@radix-ui/react-use-controllable-state': 1.0.0_react@18.2.0
       '@radix-ui/react-use-layout-effect': 1.0.0_react@18.2.0
       '@radix-ui/react-visually-hidden': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@radix-ui/react-toggle-group/1.0.2_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-Tm5Rn5pdgnr6uexI0cM3X3EZKqYfxlt4iTYx4tBbhSJHtgasgSyXezlHm3tJ5OfSK+1ZIQYD9xV4izifkLuuug==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.21.0
+      '@radix-ui/primitive': 1.0.0
+      '@radix-ui/react-context': 1.0.0_react@18.2.0
+      '@radix-ui/react-direction': 1.0.0_react@18.2.0
+      '@radix-ui/react-primitive': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-roving-focus': 1.0.2_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-toggle': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-use-controllable-state': 1.0.0_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@radix-ui/react-toggle/1.0.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-hZIp9ZKnw4NwVqeB4evWBLa91ryaSJhAO0Ed82wkzRPgg/I29ypcY6SuBb3AMZW+GsuBZpIVujpCq+33TdEcyg==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.21.0
+      '@radix-ui/primitive': 1.0.0
+      '@radix-ui/react-primitive': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-use-controllable-state': 1.0.0_react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: false

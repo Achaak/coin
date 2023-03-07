@@ -84,10 +84,15 @@ const UserName = styled('span', {
 const Login = styled('span', {
   fontWeight: '$medium',
   backgroundColor: '$primary',
-  fontSize: '$em-base',
+  fontSize: '$em-small',
   color: '$white',
   borderRadius: '$full',
-  padding: '$8 $24',
+  padding: '$4 $16',
+
+  '@lg': {
+    fontSize: '$em-base',
+    padding: '$8 $16',
+  },
 });
 
 export const AppLayoutSettingsBar: FC = () => {
@@ -239,7 +244,7 @@ export const AppLayoutSettingsBar: FC = () => {
             <>
               {largeScreenValid && (
                 <Link
-                  href={getLink('user', {
+                  href={getLink('user.item', {
                     queries: {
                       userId: dataSession.user.id,
                     },
@@ -267,7 +272,7 @@ export const AppLayoutSettingsBar: FC = () => {
                         Icon: UserIcon,
                         onClick: () => {
                           void router.push(
-                            getLink('user', {
+                            getLink('user.item', {
                               queries: {
                                 userId: dataSession.user?.id ?? '',
                               },

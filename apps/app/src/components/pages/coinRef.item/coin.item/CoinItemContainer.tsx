@@ -101,7 +101,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
           },
           {
             label: coin.ref.denomination,
-            url: getLink('coinRef', {
+            url: getLink('coinRef.item', {
               queries: {
                 coinRefId: coin.ref.id,
               },

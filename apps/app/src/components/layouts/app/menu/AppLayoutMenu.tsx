@@ -128,8 +128,8 @@ export const AppLayoutMenu: FC<CustomProps> = ({ onClosed }) => {
         icon: LayerIcon,
         iconActive: LayerSolidIcon,
         label: 'Catalog',
-        link: getLink('home'),
-        linkAs: [getLink('home')],
+        link: getLink('catalog'),
+        linkAs: [getLink('catalog')],
       },
       {
         type: 'link',

@@ -116,7 +116,7 @@ export const UserHeader: FC<UserHeaderProps> = ({ image, name, id }) => {
           src={image ?? ''}
         />
         <Link
-          href={getLink('user', {
+          href={getLink('user.item', {
             queries: {
               userId: id,
             },

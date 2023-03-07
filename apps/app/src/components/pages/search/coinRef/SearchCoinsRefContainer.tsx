@@ -50,7 +50,7 @@ export const SearchCoinsRefsContainer: FC<SearchCoinsRefsContainerProps> = ({
           price={1}
           weight={coinRef.weight}
           type={coinRef.type}
-          link={getLink('coinRef', {
+          link={getLink('coinRef.item', {
             queries: {
               coinRefId: coinRef.id,
             },

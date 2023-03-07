@@ -67,7 +67,7 @@ export const CoinExplorerCoin: FC = () => {
           reverseImage={userCoin.coin.reverseImage}
           price={0}
           type={userCoin.coin.ref.type}
-          link={getLink('coin', {
+          link={getLink('coin.item', {
             queries: {
               coinId: userCoin.id,
               coinRefId: userCoin.coin.ref.id,

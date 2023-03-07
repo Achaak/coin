@@ -62,7 +62,7 @@ const Content = styled('div', {
   flexDirection: 'column',
   overflowY: 'auto',
   rowGap: '$16',
-  paddingTop: '$64',
+  paddingTop: '$48',
   paddingRight: '$8',
   paddingBottom: '$8',
 
@@ -71,6 +71,7 @@ const Content = styled('div', {
     paddingBottom: '$16',
   },
   '@lg': {
+    paddingTop: '$64',
     rowGap: '$24',
     paddingRight: '$24',
     paddingBottom: '$24',

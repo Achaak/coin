@@ -53,7 +53,7 @@ export const User: FC<UserProps> = ({
 }) => (
   <Container as={as}>
     <Link
-      href={getLink('user', {
+      href={getLink('user.item', {
         queries: {
           userId: id,
         },
