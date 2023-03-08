@@ -14,12 +14,12 @@ const Container = styled('div', {
   width: '100%',
 });
 
-type SearchCoinsRefsContainerProps = {
-  coinsRefs: CoinRefFull[];
+type SearchCoinRefsContainerProps = {
+  coinRefs: CoinRefFull[];
 };
 
-export const SearchCoinsRefsContainer: FC<SearchCoinsRefsContainerProps> = ({
-  coinsRefs,
+export const SearchCoinRefsContainer: FC<SearchCoinRefsContainerProps> = ({
+  coinRefs,
 }) => (
   <Container>
     <Title as="h2">Coins</Title>
@@ -40,10 +40,10 @@ export const SearchCoinsRefsContainer: FC<SearchCoinsRefsContainerProps> = ({
         xl: 24,
       }}
     >
-      {coinsRefs?.map((coinRef) => (
+      {coinRefs?.map((coinRef) => (
         <CoinCard
           key={coinRef.id}
-          denomination={coinRef.denomination}
+          name={coinRef.name}
           observeImage={coinRef.observeImage}
           reverseImage={coinRef.reverseImage}
           composition={coinRef.composition}

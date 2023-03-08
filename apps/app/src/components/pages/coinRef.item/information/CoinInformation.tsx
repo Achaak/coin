@@ -6,7 +6,7 @@ import { CoinAlignment } from '@my-coin/database';
 
 type CoinInformationContainerProps = {
   composition: string | null;
-  denomination: string;
+  value: string;
   diameter: number | null;
   edgeType: string | null;
   edgeDescription: string | null;
@@ -14,14 +14,13 @@ type CoinInformationContainerProps = {
   thickness: number | null;
   type: string;
   shape: string | null;
-  country: string;
-  period: string | null;
+  period: string;
   alignment: CoinAlignment | null;
 };
 
 export const CoinInformation: FC<CoinInformationContainerProps> = ({
   composition,
-  denomination,
+  value,
   diameter,
   edgeType,
   edgeDescription,
@@ -29,7 +28,6 @@ export const CoinInformation: FC<CoinInformationContainerProps> = ({
   thickness,
   type,
   shape,
-  country,
   period,
   alignment,
 }) => (
@@ -48,22 +46,14 @@ export const CoinInformation: FC<CoinInformationContainerProps> = ({
           value: 'KM#123',
         },
         {
-          label: 'Country',
-          value: country,
+          label: 'Period',
+          value: period,
         },
-        ...(denomination
+        ...(value
           ? [
               {
-                label: 'Denomination',
-                value: denomination,
-              },
-            ]
-          : []),
-        ...(period
-          ? [
-              {
-                label: 'Period',
-                value: period,
+                label: 'Value',
+                value: value,
               },
             ]
           : []),

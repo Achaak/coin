@@ -92,8 +92,8 @@ const CatalogItem: FC<{ catalog: Catalog }> = ({ catalog }) => (
     <CatalogItemStyled>
       <CatalogItemFlag>
         <Image
-          src={`/flags/${catalog.countryCode}.svg`}
-          alt={catalog.countryCode}
+          src={`/flags/${catalog.periodCode}.svg`}
+          alt={catalog.periodCode}
           width={24}
           height={24}
         />

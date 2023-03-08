@@ -7,7 +7,7 @@ import { CoinExplorerContext } from '../../CoinExplorer';
 
 type CoinMergedBase = {
   variant: 'coin' | 'ref';
-  denomination: string;
+  name: string;
   id: string;
   composition: string;
   diameter: number;
@@ -31,15 +31,15 @@ type CoinMergedRef = CoinMergedBase & {
 type CoinMerged = CoinMergedCoin | CoinMergedRef;
 
 export const CoinExplorerCoinList: FC = () => {
-  const { coinsRef, coins } = useContext(CoinExplorerContext);
+  const { coinRefs, coins } = useContext(CoinExplorerContext);
 
   const orderCoins = useMemo(() => {
     const coinsFormatted: CoinMerged[] = [
-      ...(coinsRef
-        ? coinsRef.map(
+      ...(coinRefs
+        ? coinRefs.map(
             (coinRef) =>
               ({
-                denomination: coinRef.denomination,
+                name: coinRef.value,
                 variant: 'ref',
                 id: coinRef.id,
                 composition: coinRef.composition,
@@ -56,7 +56,7 @@ export const CoinExplorerCoinList: FC = () => {
         ? coins.map(
             (coin) =>
               ({
-                denomination: coin.ref.denomination,
+                name: coin.ref.value,
                 variant: 'coin',
                 id: coin.id,
                 composition: coin.ref.composition,
@@ -73,15 +73,15 @@ export const CoinExplorerCoinList: FC = () => {
     ];
 
     return coinsFormatted?.sort((a, b) => {
-      if (a.denomination > b.denomination) {
+      if (a.name > b.name) {
         return 1;
       }
-      if (a.denomination < b.denomination) {
+      if (a.name < b.name) {
         return -1;
       }
       return 0;
     });
-  }, [coins, coinsRef]);
+  }, [coins, coinRefs]);
 
   return (
     <>
@@ -89,7 +89,7 @@ export const CoinExplorerCoinList: FC = () => {
         <CoinCard
           key={`${orderCoin.id}-${index}`}
           composition={orderCoin.composition}
-          denomination={orderCoin.denomination}
+          name={orderCoin.name}
           year={orderCoin.variant === 'coin' ? orderCoin.year : undefined}
           yearRange={
             orderCoin.variant === 'ref' ? orderCoin.yearRange : undefined

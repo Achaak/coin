@@ -1,1 +1,1 @@
-export * from './SearchCoinsRefContainer';
+export * from './SearchCoinRefsContainer';

@@ -461,7 +461,7 @@ export const userCoinRouter = router({
     }),
 
   /* Count users has coin ref */
-  countUsersHasCoinsRef: publicProcedure
+  countUsersHasCoinRefs: publicProcedure
     .input(
       z.object({
         coinRefId: z.string(),

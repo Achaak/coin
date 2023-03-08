@@ -79,7 +79,7 @@ type CoinHeaderProps = {
   id: string;
   onAddOrRemoveToFavorites: (id: string) => void;
   isLoadingAddOrRemoveToFavorites: boolean;
-  countryCode: string;
+  flagUrl: string;
   currencyCode?: string;
 };
 
@@ -91,7 +91,7 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
   isFavorite,
   onAddOrRemoveToFavorites,
   isLoadingAddOrRemoveToFavorites,
-  countryCode,
+  flagUrl,
   currencyCode,
 }) => {
   const { status } = useSession();
@@ -163,12 +163,7 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
     <Header>
       <Top>
         <ImageContainer>
-          <Image
-            src={`/flags/${countryCode}.svg`}
-            height={32}
-            width={32}
-            alt="Logo My Coin"
-          />
+          <Image src={flagUrl} height={32} width={32} alt="Logo My Coin" />
         </ImageContainer>
         <Title as="h1">{title}</Title>
       </Top>
@@ -184,12 +179,7 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
               },
             }}
           >
-            <Image
-              src={`/flags/${countryCode}.svg`}
-              height={32}
-              width={32}
-              alt="Logo My Coin"
-            />
+            <Image src={flagUrl} height={32} width={32} alt="Logo My Coin" />
           </ImageContainer>
           <Title
             as="h1"

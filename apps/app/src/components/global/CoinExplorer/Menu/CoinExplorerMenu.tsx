@@ -56,19 +56,19 @@ export const CoinExplorerMenu: FC = () => {
   const { catalogsIsLoading, catalogs, setCatalogIdSelected } =
     useContext(CoinExplorerContext);
 
-  const orderByCountry = useMemo(
+  const orderByPeriod = useMemo(
     () =>
       catalogs?.reduce((acc, catalog) => {
-        const country = acc.find((c) => c.code === catalog.countryCode);
+        const period = acc.find((c) => c.periodId === catalog.periodId);
 
-        if (country) {
-          if (!country.catalogs.some((c) => c.id === catalog.id)) {
-            country.catalogs.push(catalog);
+        if (period) {
+          if (!period.catalogs.some((c) => c.id === catalog.id)) {
+            period.catalogs.push(catalog);
           }
         } else {
           acc.push({
-            code: catalog.countryCode,
-            name: catalog.country.name,
+            periodId: catalog.periodId,
+            name: catalog.period.name,
             catalogs: [catalog],
           });
         }
@@ -79,10 +79,10 @@ export const CoinExplorerMenu: FC = () => {
   );
 
   useEffect(() => {
-    if (orderByCountry?.length) {
-      setCatalogIdSelected(orderByCountry[0].catalogs[0].id);
+    if (orderByPeriod?.length) {
+      setCatalogIdSelected(orderByPeriod[0].catalogs[0].id);
     }
-  }, [orderByCountry, setCatalogIdSelected]);
+  }, [orderByPeriod, setCatalogIdSelected]);
 
   if (catalogsIsLoading) {
     return <>Loading...</>;
@@ -91,27 +91,27 @@ export const CoinExplorerMenu: FC = () => {
   return (
     <RootStyled
       type="single"
-      defaultValue={orderByCountry?.[0].code}
+      defaultValue={orderByPeriod?.[0].code}
       collapsible
     >
-      {orderByCountry?.map((country) => (
-        <Item value={country.code}>
+      {orderByPeriod?.map((period) => (
+        <Item value={period.code}>
           <Header>
             <TriggerStyled>
               <TriggerLeft>
                 <Image
-                  src={`/flags/${country.code}.svg`}
+                  src={`/flags/${period.code}.svg`}
                   height={24}
                   width={24}
                   alt="Logo My Coin"
                 />
-                {country.name}
+                {period.name}
               </TriggerLeft>
               <ChevronDownIcon aria-hidden />
             </TriggerStyled>
           </Header>
           <ContentStyled>
-            {country.catalogs.map((catalog) => (
+            {period.catalogs.map((catalog) => (
               <ContentItem onClick={() => setCatalogIdSelected(catalog.id)}>
                 {catalog.name}
               </ContentItem>

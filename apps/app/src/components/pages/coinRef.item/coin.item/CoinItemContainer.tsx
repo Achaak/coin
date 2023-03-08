@@ -94,7 +94,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
             url: '/france',
           },
           {
-            label: coin.ref.denomination,
+            label: coin.ref.name,
             url: getLink('coinRef.item', {
               queries: {
                 coinRefId: coin.ref.id,
@@ -102,14 +102,14 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
             }),
           },
           {
-            label: `${coin.ref.catalog.country.name} ${coin.ref.denomination},  ${coin.year}`,
+            label: `${coin.ref.catalog.period.name} ${coin.ref.name},  ${coin.year}`,
             current: true,
           },
         ]}
       />
       <CoinHeader
         id={coin.ref.id}
-        title={`${coin.ref.catalog.country.name} ${coin.ref.denomination},  ${coin.year}`}
+        title={`${coin.ref.catalog.period.name} ${coin.ref.name},  ${coin.year}`}
         onAddOrRemoveToFavorites={(id) =>
           addOrRemoveCoinWishlistMutation({ coinId: id })
         }
@@ -121,7 +121,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
         }
         price={priceData ?? null}
         priceLoading={priceIsLoading}
-        countryCode={coin.ref.catalog.country.code}
+        periodCode={coin.ref.catalog.period.code}
       />
       <Grid
         type="container"
@@ -159,9 +159,9 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
             composition={coin.ref.composition}
             edgeDescription={coin.ref.edgeDescription}
             edgeType={coin.ref.edgeType}
-            country={coin.ref.catalog.country.name}
+            period={coin.ref.catalog.period.name}
             diameter={coin.ref.diameter}
-            denomination={coin.ref.denomination}
+            name={coin.ref.name}
             weight={coin.ref.weight}
             period={`${coin.ref.catalog.name} (${periodYears})`}
             shape={coin.ref.shape}

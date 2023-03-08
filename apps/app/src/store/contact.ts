@@ -16,7 +16,7 @@ type WishlistState = {
 
 export const contactStore = createStore<WishlistState>()((set, get) => ({
   contacts: [],
-  coinsRefWishlist: [],
+  coinRefsWishlist: [],
   init: async () => {
     await get().refresh();
   },

@@ -3,10 +3,9 @@ import { trpc } from '../../../../../utils/trpc';
 import { CoinExplorerContext } from '../../CoinExplorer';
 
 export const CoinExplorerCoinTable: FC = () => {
-  const { coinsRef, coins, catalogIdSelected } =
-    useContext(CoinExplorerContext);
+  const { catalogIdSelected } = useContext(CoinExplorerContext);
 
-  const { data: coinsRefToPossess, isLoading: coinsRefToPossessIsLoading } =
+  const { data: coinRefsToPossess, isLoading: coinRefsToPossessIsLoading } =
     trpc.coinRef.getLowByCatalogId.useQuery(
       {
         catalogId: catalogIdSelected ?? '',
@@ -16,15 +15,13 @@ export const CoinExplorerCoinTable: FC = () => {
       }
     );
 
-
-
   // const coinRefPossesses = useMemo(() => {
 
-  if (coinsRefToPossessIsLoading) {
+  if (coinRefsToPossessIsLoading) {
     return <>Loading...</>;
   }
 
-  console.log(coinsRefToPossess);
+  console.log(coinRefsToPossess);
 
   return <></>;
 };

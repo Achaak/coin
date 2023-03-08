@@ -38,7 +38,9 @@
     "with-env": "dotenv -c -e ../../.env -- prisma"
   },
   "dependencies": {
-    "@prisma/client": "^4.11.0"
+    "@ngneat/falso": "^6.4.0",
+    "@prisma/client": "^4.11.0",
+    "p-queue": "^7.3.4"
   },
   "devDependencies": {
     "@my-coin/prettier": "workspace:*",

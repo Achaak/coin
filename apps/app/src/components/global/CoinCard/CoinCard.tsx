@@ -50,7 +50,7 @@ const Price = styled('span', {
 export type CoinProps = {
   observeImage: string | null;
   reverseImage: string | null;
-  denomination: string;
+  name: string;
   composition: string | null;
   weight: number | null;
   diameter: number | null;
@@ -68,7 +68,7 @@ export type CoinProps = {
 export const CoinCard: FC<CoinProps> = ({
   observeImage,
   reverseImage,
-  denomination,
+  name,
   year,
   yearRange,
   composition,
@@ -117,7 +117,7 @@ export const CoinCard: FC<CoinProps> = ({
         <End>
           <InfosContainer>
             <Name>
-              {denomination}, {year ?? yearRange?.join('-')}
+              {name}, {year ?? yearRange?.join('-')}
             </Name>
             <Details>
               <DetailsItem>{composition}</DetailsItem>

@@ -27,11 +27,11 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
   const [historyStartAt, setHistoryStartAt] = useState<Date>(
     new Date(new Date().setDate(new Date().getDate() - 7))
   );
-  const { coinsRefWishlist, refreshCoinsRefWishlist } = useStore(
+  const { coinRefsWishlist, refreshCoinRefsWishlist } = useStore(
     wishlistStore,
     (state) => ({
-      coinsRefWishlist: state.coinsRefWishlist,
-      refreshCoinsRefWishlist: state.refreshCoinsRefWishlist,
+      coinRefsWishlist: state.coinRefsWishlist,
+      refreshCoinRefsWishlist: state.refreshCoinRefsWishlist,
     })
   );
 
@@ -40,7 +40,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
     isLoading: addOrRemoveCoinRefWishlistIsLoading,
   } = trpc.coinRefWishlist.addOrRemove.useMutation({
     onSuccess: async () => {
-      await refreshCoinsRefWishlist();
+      await refreshCoinRefsWishlist();
     },
   });
 
@@ -64,7 +64,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
   const {
     data: userCoinRefCountByCoinIdData,
     isLoading: userCoinRefCountByCoinIdIsLoading,
-  } = trpc.userCoin.countUsersHasCoinsRef.useQuery({
+  } = trpc.userCoin.countUsersHasCoinRefs.useQuery({
     coinRefId: coinRef.id,
   });
 
@@ -94,26 +94,26 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             url: '/france',
           },
           {
-            label: `${coinRef.catalog.country.name} ${coinRef.denomination}, ${periodYears}`,
+            label: `${coinRef.catalog.period.name} ${coinRef.value}, ${periodYears}`,
             current: true,
           },
         ]}
       />
       <CoinHeader
         id={coinRef.id}
-        title={`${coinRef.catalog.country.name} ${coinRef.denomination}, ${periodYears}`}
+        title={`${coinRef.catalog.period.name} ${coinRef.value}, ${periodYears}`}
         onAddOrRemoveToFavorites={(id) =>
           addOrRemoveCoinRefWishlistMutation({ coinRefId: id })
         }
         isLoadingAddOrRemoveToFavorites={addOrRemoveCoinRefWishlistIsLoading}
         isFavorite={
-          coinsRefWishlist.some(
+          coinRefsWishlist.some(
             (coinRefWishlist) => coinRefWishlist.coinRefId === coinRef.id
           ) ?? false
         }
         price={priceData ?? null}
         priceLoading={priceIsLoading}
-        countryCode={coinRef.catalog.country.code}
+        flagUrl={coinRef.catalog.period.flag}
       />
 
       <Grid
@@ -150,11 +150,10 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             composition={coinRef.composition}
             edgeDescription={coinRef.edgeDescription}
             edgeType={coinRef.edgeType}
-            country={coinRef.catalog.country.name}
             diameter={coinRef.diameter}
-            denomination={coinRef.denomination}
+            value={coinRef.value}
             weight={coinRef.weight}
-            period={`${coinRef.catalog.name} (${periodYears})`}
+            period={`${coinRef.catalog.period.name} (${periodYears})`}
             shape={coinRef.shape}
             thickness={coinRef.thickness}
             type={coinRef.type}

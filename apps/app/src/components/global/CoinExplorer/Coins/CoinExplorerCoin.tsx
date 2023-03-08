@@ -40,7 +40,7 @@ export const CoinExplorerCoin: FC = () => {
     'table'
   );
   const {
-    coinsRefIsLoading,
+    coinRefsIsLoading,
     onCatalogSelected,
     catalogIdSelected,
     coinsIsLoading,
@@ -54,7 +54,7 @@ export const CoinExplorerCoin: FC = () => {
     onCatalogSelected(catalogIdSelected);
   }, [catalogIdSelected, onCatalogSelected]);
 
-  if (coinsRefIsLoading || coinsIsLoading) {
+  if (coinRefsIsLoading || coinsIsLoading) {
     return <div>Loading...</div>;
   }
 

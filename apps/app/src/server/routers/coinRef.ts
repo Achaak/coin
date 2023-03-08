@@ -142,7 +142,7 @@ export const coinRefRouter = router({
         where: {
           OR: [
             { composition: { contains: query, mode: 'insensitive' } },
-            { denomination: { contains: query, mode: 'insensitive' } },
+            { name: { contains: query, mode: 'insensitive' } },
             { obverseCreator: { contains: query, mode: 'insensitive' } },
             { reverseCreator: { contains: query, mode: 'insensitive' } },
             {

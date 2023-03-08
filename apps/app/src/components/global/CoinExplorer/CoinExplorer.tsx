@@ -14,8 +14,8 @@ export const CoinExplorerContext = createContext<{
   setCatalogIdSelected: (catalogId: string) => void;
   coins?: CoinFull[];
   coinsIsLoading?: boolean;
-  coinsRef?: CoinRefFull[];
-  coinsRefIsLoading?: boolean;
+  coinRefs?: CoinRefFull[];
+  coinRefsIsLoading?: boolean;
 }>({
   catalogs: [],
   onCatalogSelected: () => [],
@@ -28,8 +28,8 @@ export type CoinExplorerProps = {
   catalogs?: Catalog[];
   catalogsIsLoading?: boolean;
   onCatalogSelected: (catalogId: string) => void;
-  coinsRef?: CoinRefFull[];
-  coinsRefIsLoading?: boolean;
+  coinRefs?: CoinRefFull[];
+  coinRefsIsLoading?: boolean;
   coins?: CoinFull[];
   coinsIsLoading?: boolean;
 };
@@ -38,8 +38,8 @@ export const CoinExplorer: FC<CoinExplorerProps> = ({
   catalogs,
   onCatalogSelected,
   catalogsIsLoading,
-  coinsRef,
-  coinsRefIsLoading,
+  coinRefs,
+  coinRefsIsLoading,
   coins,
   coinsIsLoading,
 }) => {
@@ -57,8 +57,8 @@ export const CoinExplorer: FC<CoinExplorerProps> = ({
         onCatalogSelected,
         catalogIdSelected,
         setCatalogIdSelected,
-        coinsRef,
-        coinsRefIsLoading,
+        coinRefs,
+        coinRefsIsLoading,
         coins,
         coinsIsLoading,
       }}

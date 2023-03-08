@@ -43,9 +43,9 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
     userId: user.id,
   });
   const {
-    data: catalogCountCountryByUserIdData,
-    isLoading: catalogCountCountryByUserIdIsLoading,
-  } = trpc.catalog.countCountryByUserId.useQuery({
+    data: catalogCountPeriodByUserIdData,
+    isLoading: catalogCountPeriodByUserIdIsLoading,
+  } = trpc.catalog.countPeriodByUserId.useQuery({
     userId: user.id,
   });
   const {
@@ -100,11 +100,11 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
           Icon={CoinIcon}
           label="Pays"
           value={
-            catalogCountCountryByUserIdData !== undefined
-              ? numberFormat.format(catalogCountCountryByUserIdData)
+            catalogCountPeriodByUserIdData !== undefined
+              ? numberFormat.format(catalogCountPeriodByUserIdData)
               : undefined
           }
-          loading={catalogCountCountryByUserIdIsLoading}
+          loading={catalogCountPeriodByUserIdIsLoading}
         />
         <CardStat
           Icon={CoinIcon}
@@ -136,7 +136,7 @@ export const UserItemContainer: FC<UserItemContainerProps> = ({ user }) => {
             key={userCoin.id}
             composition={userCoin.coin.ref.composition}
             year={userCoin.coin.year}
-            denomination={userCoin.coin.ref.denomination}
+            name={userCoin.coin.ref.name}
             diameter={userCoin.coin.ref.diameter}
             weight={userCoin.coin.ref.weight}
             observeImage={
