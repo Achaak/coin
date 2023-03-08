@@ -1,6 +1,10 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { selectCoinRef, selectCoinRefFull } from '../../selector/coinRef';
+import {
+  selectCoinRef,
+  selectCoinRefFull,
+  selectCoinRefLowWithCoin,
+} from '../../selector/coinRef';
 import { router, publicProcedure } from './trpc';
 
 export const coinRefRouter = router({
@@ -97,6 +101,26 @@ export const coinRefRouter = router({
           catalogId,
         },
         select: selectCoinRefFull,
+      });
+
+      return coinRefs;
+    }),
+
+  /* Get coins ref low by catalog id */
+  getLowByCatalogId: publicProcedure
+    .input(
+      z.object({
+        catalogId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { catalogId } = input;
+
+      const coinRefs = await ctx.prisma.coinRef.findMany({
+        where: {
+          catalogId,
+        },
+        select: selectCoinRefLowWithCoin,
       });
 
       return coinRefs;

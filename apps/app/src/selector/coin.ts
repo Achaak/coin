@@ -22,3 +22,13 @@ export const selectCoin = createCoinSelect({
 export type Coin = Prisma.CoinGetPayload<{
   select: typeof selectCoin;
 }>;
+
+export const selectCoinLow = createCoinSelect({
+  id: true,
+  year: true,
+  refId: true,
+});
+
+export type CoinLow = Prisma.CoinGetPayload<{
+  select: typeof selectCoinLow;
+}>;

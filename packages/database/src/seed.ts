@@ -28,6 +28,7 @@ const DEFAULT_COUNTRIES = [
 const DEFAULT_CATALOGS = [
   {
     name: 'European Union (Euro)',
+    currency: 'Euro',
     countryCode: 'fr',
     id: '1',
   },
@@ -51,7 +52,9 @@ const DEFAULT_CATALOGS = [
 const DEFAULT_COINS_REF = [
   {
     id: '1',
-    denomination: '2 euro',
+    value: '2 euro',
+    valueShort: '2€',
+    demonetized: false,
     composition: 'Aluminium-bronze',
     alignment: 'COIN',
     edgeDescription: 'Reeded edge',
@@ -69,7 +72,9 @@ const DEFAULT_COINS_REF = [
   },
   {
     id: '2',
-    denomination: '1 euro',
+    value: '1 euro',
+    valueShort: '1€',
+    demonetized: false,
     composition: 'Aluminium-bronze',
     alignment: 'COIN',
     edgeDescription: 'Reeded edge',
@@ -164,6 +169,7 @@ const seed = async (): Promise<void> => {
               id: catalog.id!,
               name: catalog.name!,
               countryCode: catalog.countryCode!,
+              currency: catalog.currency!,
             },
           })
           .then((u) => {

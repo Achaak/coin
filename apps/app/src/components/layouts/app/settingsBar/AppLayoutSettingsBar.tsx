@@ -29,7 +29,7 @@ const Container = styled('div', {
   left: 0,
   right: 0,
   zIndex: '$x-high',
-  height: '$64',
+  height: '$48',
   background: 'linear-gradient($white 40%, $transparent)',
   paddingRight: '$16',
   alignItems: 'start',
@@ -37,7 +37,7 @@ const Container = styled('div', {
 
   '@lg': {
     paddingRight: '$32',
-    height: '$80',
+    height: '$64',
     paddingLeft: '$24',
   },
   '@xl': {
