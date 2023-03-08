@@ -69,11 +69,11 @@ model VerificationToken {
 }
 
 model Period {
-  code     String    @unique
-  name     String
-  dateFrom DateTime?
-  dateTo   DateTime?
-  catalogs Catalog[]
+  code      String    @unique
+  name      String
+  yearStart Int
+  yearEnd   Int?
+  catalogs  Catalog[]
 }
 
 model Catalog {

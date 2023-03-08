@@ -1,50 +1,58 @@
 import { prisma } from '.';
 
-import type { Catalog, Coin, CoinRef, Country } from '@prisma/client';
+import type { Catalog, Coin, CoinRef, Period } from '@prisma/client';
 
-const DEFAULT_COUNTRIES = [
+const DEFAULT_PERIODS = [
   {
     code: 'be',
     name: 'Belgium',
+    yearFrom: 1830,
   },
   {
     code: 'nl',
     name: 'Netherlands',
+    yearFrom: 1581,
   },
   {
     code: 'de',
     name: 'Germany',
+    yearFrom: 1871,
   },
   {
     code: 'fr',
     name: 'France',
+    yearFrom: 843,
   },
   {
     code: 'gb',
     name: 'United Kingdom',
+    yearFrom: 1707,
   },
-] as Array<Partial<Country>>;
+] as Array<Partial<Period>>;
 
 const DEFAULT_CATALOGS = [
   {
     name: 'European Union (Euro)',
     currency: 'Euro',
-    countryCode: 'fr',
+    periodCode: 'fr',
     id: '1',
   },
   {
     name: 'European Union (Euro)',
-    countryCode: 'de',
+    currency: 'Euro',
+    periodCode: 'de',
     id: '2',
   },
   {
     name: 'European Union (Euro)',
-    countryCode: 'nl',
+    currency: 'Euro',
+    periodCode: 'nl',
     id: '3',
   },
   {
     name: 'European Union (Euro)',
-    countryCode: 'be',
+    currency: 'Euro',
+    periodCode: 'be',
     id: '4',
   },
 ] as Array<Partial<Catalog>>;
@@ -100,6 +108,7 @@ const DEFAULT_COINS = [
     mintageQtyPRF: 100000,
     mintageQtyUNC: 1000000,
     refId: '1',
+    mintLocation: 'Brussels',
   },
   {
     id: '2',
@@ -116,6 +125,7 @@ const DEFAULT_COINS = [
     mintageQtyPRF: 100000,
     mintageQtyUNC: 1000000,
     refId: '2',
+    mintMark: 'B',
   },
   {
     id: '4',
@@ -130,23 +140,25 @@ const DEFAULT_COINS = [
 const seed = async (): Promise<void> => {
   try {
     await Promise.all(
-      DEFAULT_COUNTRIES.map(async (country) =>
-        prisma.country
+      DEFAULT_PERIODS.map(async (period) =>
+        prisma.period
           .upsert({
             where: {
-              code: country.code!,
+              code: period.code!,
             },
             update: {
-              ...country,
+              ...period,
             },
             create: {
-              code: country.code!,
-              name: country.name!,
+              code: period.code!,
+              name: period.name!,
+              yearFrom: period.yearFrom!,
+              yearTo: period.yearTo ?? null,
             },
           })
           .then((u) => {
             // eslint-disable-next-line no-console
-            console.log(`Created country: ${u.name ?? u.code}`);
+            console.log(`Created period: ${u.name ?? u.code}`);
           })
           .catch((error) => {
             // eslint-disable-next-line no-console
@@ -168,7 +180,7 @@ const seed = async (): Promise<void> => {
             create: {
               id: catalog.id!,
               name: catalog.name!,
-              countryCode: catalog.countryCode!,
+              periodCode: catalog.periodCode!,
               currency: catalog.currency!,
             },
           })
@@ -195,7 +207,9 @@ const seed = async (): Promise<void> => {
             },
             create: {
               id: coinRef.id!,
-              denomination: coinRef.denomination!,
+              value: coinRef.value!,
+              valueShort: coinRef.valueShort!,
+              demonetized: coinRef.demonetized!,
               composition: coinRef.composition!,
               alignment: coinRef.alignment!,
               edgeDescription: coinRef.edgeDescription!,
@@ -214,7 +228,7 @@ const seed = async (): Promise<void> => {
           })
           .then((u) => {
             // eslint-disable-next-line no-console
-            console.log(`Created coin ref: ${u.denomination}`);
+            console.log(`Created coin ref: ${u.value}`);
           })
           .catch((error) => {
             // eslint-disable-next-line no-console
@@ -240,6 +254,8 @@ const seed = async (): Promise<void> => {
               mintageQtyPRF: coin.mintageQtyPRF!,
               mintageQtyUNC: coin.mintageQtyUNC!,
               refId: coin.refId!,
+              mintLocation: coin.mintLocation ?? null,
+              mintMark: coin.mintMark ?? null,
             },
           })
           .then((u) => {
