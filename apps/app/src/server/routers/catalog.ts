@@ -148,7 +148,7 @@ export const catalogRouter = router({
             some: {
               coins: {
                 some: {
-                  usersCoin: {
+                  userCoins: {
                     some: {
                       userId,
                     },
@@ -161,42 +161,6 @@ export const catalogRouter = router({
       });
 
       return count;
-    }),
-
-  /* Count countries by user id */
-  countPeriodByUserId: publicProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { userId } = input;
-
-      const catalogs = await ctx.prisma.catalog.findMany({
-        where: {
-          coinRefs: {
-            some: {
-              coins: {
-                some: {
-                  usersCoin: {
-                    some: {
-                      userId,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
-
-      const count = catalogs
-        .map((catalog) => catalog.periodCode)
-        .filter(
-          (periodCode, index, self) => self.indexOf(periodCode) === index
-        );
-      return count.length;
     }),
 
   /* Search catalogs */
@@ -219,9 +183,11 @@ export const catalogRouter = router({
               },
             },
             {
-              periodCode: {
-                contains: query,
-                mode: 'insensitive',
+              period: {
+                name: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
               },
             },
           ],

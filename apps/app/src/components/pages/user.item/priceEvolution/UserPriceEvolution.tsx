@@ -147,14 +147,14 @@ const addEmptyData = (data: CoinPriceEvolutionData[]) => {
   return allData;
 };
 
-type CoinPriceEvolutionProps = {
+type UserPriceEvolutionProps = {
   data: CoinPriceEvolutionData[];
   onPeriodChange: (period: CoinPriceEvolutionPeriod) => void;
   defaultPeriod: CoinPriceEvolutionPeriod;
   loading?: boolean;
 };
 
-export const CoinPriceEvolution: FC<CoinPriceEvolutionProps> = ({
+export const UserPriceEvolution: FC<UserPriceEvolutionProps> = ({
   data,
   onPeriodChange,
   defaultPeriod,
@@ -188,7 +188,7 @@ export const CoinPriceEvolution: FC<CoinPriceEvolutionProps> = ({
       }}
     >
       <Header>
-        <Title as="h2">Evolution de prix</Title>
+        <Title as="h2">Evolution de prix des pièces</Title>
         <Select
           data={[
             {

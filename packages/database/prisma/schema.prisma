@@ -70,7 +70,7 @@ model VerificationToken {
 
 model Period {
   id        String    @id @default(cuid())
-  flag      String
+  flag      String?
   name      String
   yearStart Int
   yearEnd   Int?

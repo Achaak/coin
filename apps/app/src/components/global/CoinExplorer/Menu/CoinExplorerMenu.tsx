@@ -8,9 +8,10 @@ import {
 } from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from '@my-coin/ui/dist/icons/ChevronDown';
 import { styled } from '@my-coin/ui';
-import Image from 'next/image';
 import { Catalog } from '../../../../selector/catalog';
 import { CoinExplorerContext } from '../CoinExplorer';
+import { Period } from '../../../../selector/period';
+import { Flag } from '../../Flag';
 
 const RootStyled = styled(Root, {
   all: 'unset',
@@ -59,7 +60,7 @@ export const CoinExplorerMenu: FC = () => {
   const orderByPeriod = useMemo(
     () =>
       catalogs?.reduce((acc, catalog) => {
-        const period = acc.find((c) => c.periodId === catalog.periodId);
+        const period = acc.find((c) => c.period.id === catalog.periodId);
 
         if (period) {
           if (!period.catalogs.some((c) => c.id === catalog.id)) {
@@ -67,14 +68,14 @@ export const CoinExplorerMenu: FC = () => {
           }
         } else {
           acc.push({
-            periodId: catalog.periodId,
+            period: catalog.period,
             name: catalog.period.name,
             catalogs: [catalog],
           });
         }
 
         return acc;
-      }, [] as Array<{ code: string; name: string; catalogs: Catalog[] }>),
+      }, [] as Array<{ period: Period; name: string; catalogs: Catalog[] }>),
     [catalogs]
   );
 
@@ -91,27 +92,26 @@ export const CoinExplorerMenu: FC = () => {
   return (
     <RootStyled
       type="single"
-      defaultValue={orderByPeriod?.[0].code}
+      defaultValue={orderByPeriod?.[0].period.id}
       collapsible
     >
-      {orderByPeriod?.map((period) => (
-        <Item value={period.code}>
+      {orderByPeriod?.map((element) => (
+        <Item value={element.period.id}>
           <Header>
             <TriggerStyled>
               <TriggerLeft>
-                <Image
-                  src={`/flags/${period.code}.svg`}
-                  height={24}
-                  width={24}
-                  alt="Logo My Coin"
+                <Flag
+                  url={element.period.flag}
+                  alt={element.period.name}
+                  size={24}
                 />
-                {period.name}
+                {element.name}
               </TriggerLeft>
               <ChevronDownIcon aria-hidden />
             </TriggerStyled>
           </Header>
           <ContentStyled>
-            {period.catalogs.map((catalog) => (
+            {element.catalogs.map((catalog) => (
               <ContentItem onClick={() => setCatalogIdSelected(catalog.id)}>
                 {catalog.name}
               </ContentItem>

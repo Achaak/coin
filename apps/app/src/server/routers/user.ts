@@ -40,6 +40,7 @@ export const userRouter = router({
     .query(async ({ ctx, input }) => {
       const { userId } = input;
 
+      // eslint-disable-next-line no-console
       console.log('userId', userId, ctx);
       // TODO
 

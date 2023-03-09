@@ -43,7 +43,7 @@ export const SearchCoinRefsContainer: FC<SearchCoinRefsContainerProps> = ({
       {coinRefs?.map((coinRef) => (
         <CoinCard
           key={coinRef.id}
-          name={coinRef.name}
+          value={coinRef.value}
           observeImage={coinRef.observeImage}
           reverseImage={coinRef.reverseImage}
           composition={coinRef.composition}

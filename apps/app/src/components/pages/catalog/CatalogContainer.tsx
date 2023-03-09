@@ -8,8 +8,8 @@ export const CatalogContainer: FC = () => {
   const { data: catalogs, isLoading: catalogsIsLoading } =
     trpc.catalog.getAll.useQuery();
 
-  const { data: coins, isLoading: isLoadingCoins } =
-    trpc.coin.getByCatalogId.useQuery(
+  const { data: coinRefs, isLoading: isLoadingCoinRefs } =
+    trpc.coinRef.getByCatalogId.useQuery(
       {
         catalogId: catalogIdSelected ?? '',
       },
@@ -25,8 +25,8 @@ export const CatalogContainer: FC = () => {
       onCatalogSelected={(catalogId) => {
         setCatalogIdSelected(catalogId);
       }}
-      coins={coins}
-      coinsIsLoading={isLoadingCoins}
+      coinRefs={coinRefs}
+      coinRefsIsLoading={isLoadingCoinRefs}
     />
   );
 };

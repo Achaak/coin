@@ -7,7 +7,7 @@ import { CoinExplorerContext } from '../../CoinExplorer';
 
 type CoinMergedBase = {
   variant: 'coin' | 'ref';
-  name: string;
+  value: string;
   id: string;
   composition: string;
   diameter: number;
@@ -39,7 +39,7 @@ export const CoinExplorerCoinList: FC = () => {
         ? coinRefs.map(
             (coinRef) =>
               ({
-                name: coinRef.value,
+                value: coinRef.value,
                 variant: 'ref',
                 id: coinRef.id,
                 composition: coinRef.composition,
@@ -56,7 +56,7 @@ export const CoinExplorerCoinList: FC = () => {
         ? coins.map(
             (coin) =>
               ({
-                name: coin.ref.value,
+                value: coin.ref.value,
                 variant: 'coin',
                 id: coin.id,
                 composition: coin.ref.composition,
@@ -73,10 +73,10 @@ export const CoinExplorerCoinList: FC = () => {
     ];
 
     return coinsFormatted?.sort((a, b) => {
-      if (a.name > b.name) {
+      if (a.value > b.value) {
         return 1;
       }
-      if (a.name < b.name) {
+      if (a.value < b.value) {
         return -1;
       }
       return 0;
@@ -89,7 +89,7 @@ export const CoinExplorerCoinList: FC = () => {
         <CoinCard
           key={`${orderCoin.id}-${index}`}
           composition={orderCoin.composition}
-          name={orderCoin.name}
+          value={orderCoin.value}
           year={orderCoin.variant === 'coin' ? orderCoin.year : undefined}
           yearRange={
             orderCoin.variant === 'ref' ? orderCoin.yearRange : undefined

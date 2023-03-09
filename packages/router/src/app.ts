@@ -18,5 +18,7 @@ export const { getLink } = routes({
     'catalog.item': '/catalog/:catalogId',
     'my-collection': '/my-collection',
     'admin.dashboard': '/admin/dashboard',
+    'period.item': '/period/:periodId',
+    period: '/period',
   },
 });

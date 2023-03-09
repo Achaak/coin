@@ -83,7 +83,7 @@ const updateCoinRefPriceHistory = async (
       id: true,
       coins: {
         select: {
-          usersCoin: {
+          userCoins: {
             select: {
               price: true,
               currencyCode: true,
@@ -104,7 +104,7 @@ const updateCoinRefPriceHistory = async (
   const sum = coinRefPriceAvg.coins.reduce(
     (acc, coin) =>
       acc +
-      coin.usersCoin.reduce(
+      coin.userCoins.reduce(
         (acc2, userCoin) =>
           acc2 +
           (convertCurrencyToUSD({
@@ -119,7 +119,7 @@ const updateCoinRefPriceHistory = async (
     0
   );
   const count = coinRefPriceAvg.coins.reduce(
-    (acc, coin) => acc + coin.usersCoin.length,
+    (acc, coin) => acc + coin.userCoins.length,
     0
   );
   const avgPrice = sum / count;

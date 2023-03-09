@@ -71,7 +71,7 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
   const {
     data: coinRefPriceHistoryData,
     isLoading: coinRefPriceHistoryIsLoading,
-  } = trpc.coinRefPriceHistory.getById.useQuery({
+  } = trpc.coinRefPriceHistory.getByCoinRefId.useQuery({
     id: coinRef.id,
     startAt: historyStartAt,
   });
@@ -113,7 +113,10 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
         }
         price={priceData ?? null}
         priceLoading={priceIsLoading}
-        flagUrl={coinRef.catalog.period.flag}
+        period={{
+          name: coinRef.catalog.period.name,
+          flag: coinRef.catalog.period.flag,
+        }}
       />
 
       <Grid
@@ -122,6 +125,11 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
           default: 12,
         }}
         columnGap={{
+          default: 16,
+          md: 24,
+          xl: 32,
+        }}
+        rowGap={{
           default: 16,
           md: 24,
           xl: 32,
@@ -153,10 +161,14 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             diameter={coinRef.diameter}
             value={coinRef.value}
             weight={coinRef.weight}
-            period={`${coinRef.catalog.period.name} (${periodYears})`}
+            period={{
+              id: coinRef.catalog.period.id,
+              name: `${coinRef.catalog.period.name} (${periodYears})`,
+            }}
             shape={coinRef.shape}
             thickness={coinRef.thickness}
             type={coinRef.type}
+            demonetized={coinRef.demonetized}
           />
           <CoinPriceEvolution
             data={
@@ -173,6 +185,9 @@ export const CoinRefItemContainer: FC<CoinRefItemContainerProps> = ({
             }}
             loading={coinRefPriceHistoryIsLoading}
           />
+          <Card>
+            <Title as="h2">Pièce de cette référence</Title>
+          </Card>
         </Grid>
 
         <Grid

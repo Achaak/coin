@@ -29,6 +29,8 @@ const generateEuroCoins = ({
         mintageQtyPRF: randNumber({ min: 1000000, max: 10000000 }),
         mintageQtyUNC: randNumber({ min: 1000000, max: 10000000 }),
         mintId,
+        reverseImage: '/images/samples/2-euro-reverse.jpg',
+        observeImage: '/images/samples/2-euro-obverse.jpg',
         ...(mintMark && { mintMark }),
       });
     }

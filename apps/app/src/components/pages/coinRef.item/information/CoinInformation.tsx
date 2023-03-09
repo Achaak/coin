@@ -3,6 +3,13 @@ import { Card } from '../../../global/Card';
 import { Infos } from '../../../global/Infos';
 import { Title } from '@my-coin/ui/dist/components/title/index';
 import { CoinAlignment } from '@my-coin/database';
+import Link from 'next/link';
+import { getLink } from '@my-coin/router/dist/app';
+import { styled } from '@my-coin/ui';
+
+const Name = styled('span', {
+  color: '$primary',
+});
 
 type CoinInformationContainerProps = {
   composition: string | null;
@@ -14,8 +21,12 @@ type CoinInformationContainerProps = {
   thickness: number | null;
   type: string;
   shape: string | null;
-  period: string;
+  period: {
+    name: string;
+    id: string;
+  };
   alignment: CoinAlignment | null;
+  demonetized: boolean;
 };
 
 export const CoinInformation: FC<CoinInformationContainerProps> = ({
@@ -30,6 +41,7 @@ export const CoinInformation: FC<CoinInformationContainerProps> = ({
   shape,
   period,
   alignment,
+  demonetized,
 }) => (
   <Card
     css={{
@@ -47,7 +59,17 @@ export const CoinInformation: FC<CoinInformationContainerProps> = ({
         },
         {
           label: 'Period',
-          value: period,
+          value: (
+            <Link
+              href={getLink('period.item', {
+                queries: {
+                  periodId: period.id,
+                },
+              })}
+            >
+              <Name>{period.name}</Name>
+            </Link>
+          ),
         },
         ...(value
           ? [
@@ -122,6 +144,14 @@ export const CoinInformation: FC<CoinInformationContainerProps> = ({
               {
                 label: 'Thickness',
                 value: `${thickness} mm`,
+              },
+            ]
+          : []),
+        ...(demonetized !== null
+          ? [
+              {
+                label: 'Demonetized',
+                value: demonetized ? 'Yes' : 'No',
               },
             ]
           : []),

@@ -12,6 +12,7 @@ import { coinPriceHistoryRouter } from './coinPriceHistory';
 import { coinRefPriceHistoryRouter } from './coinRefPriceHistory';
 import { userCoinsPriceHistoryRouter } from './userCoinsPriceHistory';
 import { currencyRouter } from './currency';
+import { periodRouter } from './period';
 
 export const appRouter = router({
   user: userRouter,
@@ -27,6 +28,7 @@ export const appRouter = router({
   coinRefPriceHistory: coinRefPriceHistoryRouter,
   userCoinsPriceHistory: userCoinsPriceHistoryRouter,
   currency: currencyRouter,
+  period: periodRouter,
 });
 
 export type AppRouter = typeof appRouter;

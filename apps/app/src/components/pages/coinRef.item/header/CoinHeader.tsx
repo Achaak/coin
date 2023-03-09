@@ -5,8 +5,8 @@ import { Title } from '@my-coin/ui/dist/components/title/index';
 import { HeartSolidIcon } from '@my-coin/ui/dist/icons/HeartSolid';
 import { useSession } from 'next-auth/react';
 import { ClipLoader, PulseLoader } from '@my-coin/ui/dist/core/pikas-ui/Loader';
-import Image from 'next/image';
 import { useCurrency } from '../../../../utils/useCurrency';
+import { Flag } from '../../../global/Flag';
 
 const Header = styled('div', {
   display: 'flex',
@@ -79,7 +79,10 @@ type CoinHeaderProps = {
   id: string;
   onAddOrRemoveToFavorites: (id: string) => void;
   isLoadingAddOrRemoveToFavorites: boolean;
-  flagUrl: string;
+  period: {
+    name: string;
+    flag: string | null;
+  };
   currencyCode?: string;
 };
 
@@ -91,7 +94,7 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
   isFavorite,
   onAddOrRemoveToFavorites,
   isLoadingAddOrRemoveToFavorites,
-  flagUrl,
+  period,
   currencyCode,
 }) => {
   const { status } = useSession();
@@ -163,7 +166,7 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
     <Header>
       <Top>
         <ImageContainer>
-          <Image src={flagUrl} height={32} width={32} alt="Logo My Coin" />
+          <Flag url={period.flag} alt={period.name} />
         </ImageContainer>
         <Title as="h1">{title}</Title>
       </Top>
@@ -179,7 +182,7 @@ export const CoinHeader: FC<CoinHeaderProps> = ({
               },
             }}
           >
-            <Image src={flagUrl} height={32} width={32} alt="Logo My Coin" />
+            <Flag url={period.flag} alt={period.name} />
           </ImageContainer>
           <Title
             as="h1"

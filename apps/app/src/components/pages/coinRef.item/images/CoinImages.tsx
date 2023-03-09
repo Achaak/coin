@@ -4,16 +4,17 @@ import { Card } from '../../../global/Card';
 import { Grid } from '@my-coin/ui/dist/components/grid/index';
 import { CameraOffIcon } from '@my-coin/ui/dist/icons/CameraOff';
 import { Infos } from '../../../global/Infos';
+import Image from 'next/image';
 
 const CoinImageContainer = styled('div', {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '$8',
   backgroundColor: '$white',
   borderRadius: '$xl',
   height: '$256',
+  position: 'relative',
 
   '@xl': {
     padding: '$16',
@@ -64,7 +65,14 @@ export const CoinImages: FC<CoinImagesProps> = ({
     >
       <CoinImageContainer>
         {observeImage ? (
-          <img src={observeImage} alt="Obverse" />
+          <Image
+            src={observeImage}
+            alt="Obverse"
+            fill
+            style={{
+              objectFit: 'contain',
+            }}
+          />
         ) : (
           <CameraOffIcon size={80} colorName="gray" />
         )}
@@ -99,7 +107,14 @@ export const CoinImages: FC<CoinImagesProps> = ({
     >
       <CoinImageContainer>
         {reverseImage ? (
-          <img src={reverseImage} alt="Reverse" />
+          <Image
+            src={reverseImage}
+            alt="Reverse"
+            fill
+            style={{
+              objectFit: 'contain',
+            }}
+          />
         ) : (
           <CameraOffIcon size={80} colorName="gray" />
         )}

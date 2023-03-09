@@ -62,9 +62,11 @@ const generateEuroCoinRef = ({
     obverseDescription: 'Portrait of the Queen',
     reverseCreator: `${randUser().firstName} ${randUser().lastName}`,
     reverseDescription: 'European Union',
+    reverseImage: '/images/samples/2-euro-reverse.jpg',
+    observeImage: '/images/samples/2-euro-obverse.jpg',
   }));
 
 export const DEFAULT_COINS_REF = [
   ...generateEuroCoinRef({ id: '1', catalogId: '1' }), // Germany
   ...generateEuroCoinRef({ id: '2', catalogId: '2' }), // France
-] as Array<CoinRef>;
+] as CoinRef[];

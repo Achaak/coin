@@ -71,7 +71,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
   });
 
   const { data: coinPriceHistoryData, isLoading: coinPriceHistoryIsLoading } =
-    trpc.coinPriceHistory.getById.useQuery({
+    trpc.coinPriceHistory.getByCoinId.useQuery({
       id: coin.id,
       startAt: historyStartAt,
     });
@@ -94,7 +94,7 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
             url: '/france',
           },
           {
-            label: coin.ref.name,
+            label: coin.ref.value,
             url: getLink('coinRef.item', {
               queries: {
                 coinRefId: coin.ref.id,
@@ -102,14 +102,14 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
             }),
           },
           {
-            label: `${coin.ref.catalog.period.name} ${coin.ref.name},  ${coin.year}`,
+            label: `${coin.ref.catalog.period.name} ${coin.ref.value},  ${coin.year}`,
             current: true,
           },
         ]}
       />
       <CoinHeader
         id={coin.ref.id}
-        title={`${coin.ref.catalog.period.name} ${coin.ref.name},  ${coin.year}`}
+        title={`${coin.ref.catalog.period.name} ${coin.ref.value},  ${coin.year}`}
         onAddOrRemoveToFavorites={(id) =>
           addOrRemoveCoinWishlistMutation({ coinId: id })
         }
@@ -121,7 +121,10 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
         }
         price={priceData ?? null}
         priceLoading={priceIsLoading}
-        periodCode={coin.ref.catalog.period.code}
+        period={{
+          name: coin.ref.catalog.period.name,
+          flag: coin.ref.catalog.period.flag,
+        }}
       />
       <Grid
         type="container"
@@ -130,10 +133,13 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
         }}
         columnGap={{
           default: 16,
-          xl: 24,
+          md: 24,
+          xl: 32,
         }}
         rowGap={{
-          default: 32,
+          default: 16,
+          md: 24,
+          xl: 32,
         }}
       >
         <Grid
@@ -159,14 +165,17 @@ export const CoinItemContainer: FC<CoinItemContainerProps> = ({ coin }) => {
             composition={coin.ref.composition}
             edgeDescription={coin.ref.edgeDescription}
             edgeType={coin.ref.edgeType}
-            period={coin.ref.catalog.period.name}
             diameter={coin.ref.diameter}
-            name={coin.ref.name}
+            value={coin.ref.value}
             weight={coin.ref.weight}
-            period={`${coin.ref.catalog.name} (${periodYears})`}
+            period={{
+              id: coin.ref.catalog.period.name,
+              name: `${coin.ref.catalog.period.name} (${periodYears})`,
+            }}
             shape={coin.ref.shape}
             thickness={coin.ref.thickness}
             type={coin.ref.type}
+            demonetized={coin.ref.demonetized}
           />
           <Card
             css={{

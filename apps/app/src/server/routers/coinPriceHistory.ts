@@ -4,7 +4,7 @@ import { router, publicProcedure } from './trpc';
 
 export const coinPriceHistoryRouter = router({
   /* Get coin price history by coin id */
-  getById: publicProcedure
+  getByCoinId: publicProcedure
     .input(
       z.object({
         id: z.string(),

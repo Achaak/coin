@@ -1,5 +1,6 @@
 import { styled } from '@my-coin/ui';
 import { CameraOffIcon } from '@my-coin/ui/dist/icons/CameraOff';
+import Image from 'next/image';
 import type { FC } from 'react';
 
 const CoinImagesContainer = styled('div', {
@@ -30,14 +31,28 @@ export const CoinImages: FC<CoinProps> = ({ observeImage, reverseImage }) => (
   <CoinImagesContainer>
     <CoinImage>
       {observeImage ? (
-        <img src={observeImage} alt="Obverse" width={40} />
+        <Image
+          src={observeImage}
+          alt="Obverse"
+          fill
+          style={{
+            objectFit: 'contain',
+          }}
+        />
       ) : (
         <CameraOffIcon size={40} colorName="gray" />
       )}
     </CoinImage>
     <CoinImage>
       {reverseImage ? (
-        <img src={reverseImage} alt="Reverse" width={40} />
+        <Image
+          src={reverseImage}
+          alt="Reverse"
+          fill
+          style={{
+            objectFit: 'contain',
+          }}
+        />
       ) : (
         <CameraOffIcon size={40} colorName="gray" />
       )}

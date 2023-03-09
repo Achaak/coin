@@ -21,6 +21,7 @@ export const CoinExplorerCoinTable: FC = () => {
     return <>Loading...</>;
   }
 
+  // eslint-disable-next-line no-console
   console.log(coinRefsToPossess);
 
   return <></>;

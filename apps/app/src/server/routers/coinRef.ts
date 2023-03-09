@@ -74,7 +74,7 @@ export const coinRefRouter = router({
         where: {
           catalogId,
         },
-        select: selectCoinRef,
+        select: selectCoinRefFull,
       });
 
       return coinRefs;
@@ -142,7 +142,7 @@ export const coinRefRouter = router({
         where: {
           OR: [
             { composition: { contains: query, mode: 'insensitive' } },
-            { name: { contains: query, mode: 'insensitive' } },
+            { value: { contains: query, mode: 'insensitive' } },
             { obverseCreator: { contains: query, mode: 'insensitive' } },
             { reverseCreator: { contains: query, mode: 'insensitive' } },
             {

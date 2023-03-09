@@ -31,7 +31,7 @@ import { currencies } from '../../../configs/currency';
 //       id: true,
 //       coins: {
 //         select: {
-//           usersCoin: {
+//           userCoins: {
 //             select: {
 //               price: true,
 //             },
@@ -46,14 +46,14 @@ import { currencies } from '../../../configs/currency';
 //     sum: coinRefPriceAvg.coins.reduce(
 //       (acc, coin) =>
 //         acc +
-//         coin.usersCoin.reduce(
+//         coin.userCoins.reduce(
 //           (acc2, userCoin) => acc2 + (userCoin.price ?? 0),
 //           0
 //         ),
 //       0
 //     ),
 //     count: coinRefPriceAvg.coins.reduce(
-//       (acc, coin) => acc + coin.usersCoin.length,
+//       (acc, coin) => acc + coin.userCoins.length,
 //       0
 //     ),
 //   }));
