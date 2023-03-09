@@ -28,6 +28,7 @@
     "roboto",
     "superjson",
     "Typesafe",
+    "usehooks",
     "zustand"
   ],
   "workbench.colorCustomizations": {

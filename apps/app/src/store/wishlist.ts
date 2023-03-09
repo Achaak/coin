@@ -8,30 +8,30 @@ const getCoinsWishlist = async () => {
   return res;
 };
 
-const getCoinsRefWishlist = async () => {
+const getCoinRefsWishlist = async () => {
   const res = await trpcProxy.coinRefWishlist.getByUserId.query();
   return res;
 };
 
 type WishlistState = {
   coinsWishlist: CoinWishlist[];
-  coinsRefWishlist: CoinRefWishlist[];
+  coinRefsWishlist: CoinRefWishlist[];
   init: () => void;
   refresh: () => void;
   refreshCoinsWishlist: () => void;
-  refreshCoinsRefWishlist: () => void;
+  refreshCoinRefsWishlist: () => void;
 };
 
 export const wishlistStore = createStore<WishlistState>()((set, get) => ({
   coinsWishlist: [],
-  coinsRefWishlist: [],
+  coinRefsWishlist: [],
   init: async () => {
     await get().refresh();
   },
   refresh: async () => {
     await Promise.all([
       get().refreshCoinsWishlist(),
-      get().refreshCoinsRefWishlist(),
+      get().refreshCoinRefsWishlist(),
     ]);
   },
   refreshCoinsWishlist: async () => {
@@ -40,10 +40,10 @@ export const wishlistStore = createStore<WishlistState>()((set, get) => ({
       coinsWishlist,
     }));
   },
-  refreshCoinsRefWishlist: async () => {
-    const coinsRefWishlist = await getCoinsRefWishlist();
+  refreshCoinRefsWishlist: async () => {
+    const coinRefsWishlist = await getCoinRefsWishlist();
     set(() => ({
-      coinsRefWishlist,
+      coinRefsWishlist,
     }));
   },
 }));

@@ -45,13 +45,17 @@ export const CoinStatistics: FC<CoinStatisticsContainerProps> = ({
           value: usersWishingIt,
           loading: usersWishingItLoading,
         },
-        {
-          label: 'Rarity my coin',
-          value: rarity
-            ? `${getCoinRarity(rarity * 100)} (${rarity * 100})`
-            : '',
-          loading: rarityLoading,
-        },
+        ...(rarity
+          ? [
+              {
+                label: 'Rarity my coin',
+                value: rarity
+                  ? `${getCoinRarity(rarity * 100)} (${rarity * 100})`
+                  : '',
+                loading: rarityLoading,
+              },
+            ]
+          : []),
         {
           label: 'Rarity URS',
           value: getURS(mintage),

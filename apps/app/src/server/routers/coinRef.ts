@@ -1,6 +1,10 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { selectCoinRef, selectCoinRefFull } from '../../selector/coinRef';
+import {
+  selectCoinRef,
+  selectCoinRefFull,
+  selectCoinRefLowWithCoin,
+} from '../../selector/coinRef';
 import { router, publicProcedure } from './trpc';
 
 export const coinRefRouter = router({
@@ -70,7 +74,7 @@ export const coinRefRouter = router({
         where: {
           catalogId,
         },
-        select: selectCoinRef,
+        select: selectCoinRefFull,
       });
 
       return coinRefs;
@@ -102,6 +106,26 @@ export const coinRefRouter = router({
       return coinRefs;
     }),
 
+  /* Get coins ref low by catalog id */
+  getLowByCatalogId: publicProcedure
+    .input(
+      z.object({
+        catalogId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { catalogId } = input;
+
+      const coinRefs = await ctx.prisma.coinRef.findMany({
+        where: {
+          catalogId,
+        },
+        select: selectCoinRefLowWithCoin,
+      });
+
+      return coinRefs;
+    }),
+
   /* Search coin refs */
   search: publicProcedure
     .input(
@@ -118,7 +142,7 @@ export const coinRefRouter = router({
         where: {
           OR: [
             { composition: { contains: query, mode: 'insensitive' } },
-            { denomination: { contains: query, mode: 'insensitive' } },
+            { value: { contains: query, mode: 'insensitive' } },
             { obverseCreator: { contains: query, mode: 'insensitive' } },
             { reverseCreator: { contains: query, mode: 'insensitive' } },
             {

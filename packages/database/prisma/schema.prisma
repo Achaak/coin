@@ -42,22 +42,22 @@ model Session {
 }
 
 model User {
-  id                    String                  @id @default(cuid())
-  name                  String?
-  email                 String                  @unique
-  emailVerified         DateTime?
-  image                 String?
-  accounts              Account[]
-  sessions              Session[]
-  coins                 UserCoin[]
-  role                  UserRole                @default(USER)
-  messagesFrom          Message[]               @relation("messagesFrom")
-  messagesTo            Message[]               @relation("messagesTo")
-  coinsWishlist         CoinWishlist[]
-  coinsRefWishlist      CoinRefWishlist[]
-  contacts              Contact[]
-  userContacts          Contact[]               @relation("userContact")
-  userCoinsPriceHistory UserCoinsPriceHistory[]
+  id                      String                  @id @default(cuid())
+  name                    String?
+  email                   String                  @unique
+  emailVerified           DateTime?
+  image                   String?
+  accounts                Account[]
+  sessions                Session[]
+  coins                   UserCoin[]
+  role                    UserRole                @default(USER)
+  messagesFrom            Message[]               @relation("messagesFrom")
+  messagesTo              Message[]               @relation("messagesTo")
+  coinWishlist            CoinWishlist[]
+  coinRefWishlist         CoinRefWishlist[]
+  contacts                Contact[]
+  userContacts            Contact[]               @relation("userContact")
+  userCoinsPriceHistories UserCoinsPriceHistory[]
 }
 
 model VerificationToken {
@@ -68,48 +68,93 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-model Country {
-  code     String    @unique
+model Period {
+  id        String    @id @default(cuid())
+  flag      String?
+  name      String
+  yearStart Int
+  yearEnd   Int?
+  catalogs  Catalog[]
+}
+
+model Catalog {
+  id       String    @id @default(cuid())
   name     String
-  catalogs Catalog[]
+  coinRefs CoinRef[]
+  period   Period    @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId String
+  currency String
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@index([name])
+  @@index([periodId])
 }
 
 model CoinRef {
-  id              String         @id @default(cuid())
-  coins           Coin[]
-  type            CoinType
-  denomination    String
-  composition     String?
-  weight          Float?
-  diameter        Float?
-  thickness       Float?
+  id          String         @id @default(cuid())
+  type        CoinType
+  value       String
+  valueShort  String
+  composition String?
+  weight      Float?
+  diameter    Float?
+  thickness   Float?
+  shape       String?
+  alignment   CoinAlignment?
+  demonetized Boolean        @default(false)
+
   edgeType        String?
   edgeDescription String?
-  shape           String?
-  alignment       CoinAlignment?
-
-  catalog   Catalog @relation(fields: [catalogId], references: [id])
-  catalogId String
+  edgeImage       String?
+  // Todo: Image credit
 
   obverseCreator     String?
   obverseDescription String?
   observeImage       String?
+  // Todo: Image credit
 
   reverseCreator     String?
   reverseDescription String?
   reverseImage       String?
+  // Todo: Image credit
 
-  created_at          DateTime              @default(now())
-  updated_at          DateTime?             @updatedAt
-  wishlist            CoinRefWishlist[]
-  coinRefPriceHistory CoinRefPriceHistory[]
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  catalog   Catalog @relation(fields: [catalogId], references: [id])
+  catalogId String
+
+  coins                 Coin[]
+  wishlist              CoinRefWishlist[]
+  coinRefPriceHistories CoinRefPriceHistory[]
 
   @@index([catalogId])
 }
 
+model Mint {
+  id        String @id @default(cuid())
+  name      String
+  location  String
+  yearStart Int
+  yearEnd   Int?
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  coins      Coin[]
+
+  @@index([name])
+  @@index([location])
+}
+
 model Coin {
-  id    String  @id @default(cuid())
-  year  Int?
+  id       String  @id @default(cuid())
+  year     Int?
+  mintMark String?
+  mint     Mint?   @relation(fields: [mintId], references: [id])
+  mintId   String?
+
   ref   CoinRef @relation(fields: [refId], references: [id])
   refId String
 
@@ -120,28 +165,15 @@ model Coin {
   observeImage String?
   reverseImage String?
 
-  usersCoin UserCoin[]
-
-  created_at       DateTime           @default(now())
-  updated_at       DateTime?          @updatedAt
-  wishlist         CoinWishlist[]
-  coinPriceHistory CoinPriceHistory[]
-
-  @@index([refId])
-}
-
-model Catalog {
-  id          String    @id @default(cuid())
-  name        String
-  coinsRef    CoinRef[]
-  country     Country   @relation(fields: [countryCode], references: [code])
-  countryCode String
-
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  @@index([name])
-  @@index([countryCode])
+  userCoins          UserCoin[]
+  wishlist           CoinWishlist[]
+  coinPriceHistories CoinPriceHistory[]
+
+  @@index([refId])
+  @@index([mintId])
 }
 
 model UserCoin {

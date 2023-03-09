@@ -61,6 +61,32 @@ const LoaderContainer = styled('div', {
     },
   },
 });
+const NoDataContainer = styled('span', {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '$gray',
+  zIndex: '$high',
+  transition: 'opacity 0.2s ease-in-out',
+
+  variants: {
+    visible: {
+      true: {
+        opacity: 0.5,
+        pointerEvents: 'all',
+      },
+      false: {
+        opacity: 0,
+        pointerEvents: 'none',
+      },
+    },
+  },
+});
 
 const TooltipStyled = styled('div', {
   display: 'flex',
@@ -147,7 +173,7 @@ export const CoinPriceEvolution: FC<CoinPriceEvolutionProps> = ({
       }),
       date: dateFormat.format(item.date),
     }));
-  }, [data]);
+  }, [currencyCode, data]);
 
   if (!theme) {
     return null;
@@ -223,6 +249,9 @@ export const CoinPriceEvolution: FC<CoinPriceEvolutionProps> = ({
             />
           </AreaChart>
         </ResponsiveContainer>
+        <NoDataContainer visible={!dataFormatted.length}>
+          No price data available
+        </NoDataContainer>
         <LoaderContainer loading={loading}>
           <ClipLoader colorName="primary" size={64} />
         </LoaderContainer>

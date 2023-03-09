@@ -93,7 +93,7 @@ export const catalogRouter = router({
         where: {
           OR: [
             {
-              coinsRef: {
+              coinRefs: {
                 some: {
                   wishlist: {
                     some: {
@@ -104,7 +104,7 @@ export const catalogRouter = router({
               },
             },
             {
-              coinsRef: {
+              coinRefs: {
                 some: {
                   coins: {
                     some: {
@@ -144,11 +144,11 @@ export const catalogRouter = router({
 
       const count = await ctx.prisma.catalog.count({
         where: {
-          coinsRef: {
+          coinRefs: {
             some: {
               coins: {
                 some: {
-                  usersCoin: {
+                  userCoins: {
                     some: {
                       userId,
                     },
@@ -161,42 +161,6 @@ export const catalogRouter = router({
       });
 
       return count;
-    }),
-
-  /* Count countries by user id */
-  countCountryByUserId: publicProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { userId } = input;
-
-      const catalogs = await ctx.prisma.catalog.findMany({
-        where: {
-          coinsRef: {
-            some: {
-              coins: {
-                some: {
-                  usersCoin: {
-                    some: {
-                      userId,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
-
-      const count = catalogs
-        .map((catalog) => catalog.countryCode)
-        .filter(
-          (countryCode, index, self) => self.indexOf(countryCode) === index
-        );
-      return count.length;
     }),
 
   /* Search catalogs */
@@ -219,9 +183,11 @@ export const catalogRouter = router({
               },
             },
             {
-              countryCode: {
-                contains: query,
-                mode: 'insensitive',
+              period: {
+                name: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
               },
             },
           ],

@@ -8,9 +8,10 @@ import {
 } from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from '@my-coin/ui/dist/icons/ChevronDown';
 import { styled } from '@my-coin/ui';
-import Image from 'next/image';
 import { Catalog } from '../../../../selector/catalog';
 import { CoinExplorerContext } from '../CoinExplorer';
+import { Period } from '../../../../selector/period';
+import { Flag } from '../../Flag';
 
 const RootStyled = styled(Root, {
   all: 'unset',
@@ -56,33 +57,33 @@ export const CoinExplorerMenu: FC = () => {
   const { catalogsIsLoading, catalogs, setCatalogIdSelected } =
     useContext(CoinExplorerContext);
 
-  const orderByCountry = useMemo(
+  const orderByPeriod = useMemo(
     () =>
       catalogs?.reduce((acc, catalog) => {
-        const country = acc.find((c) => c.code === catalog.countryCode);
+        const period = acc.find((c) => c.period.id === catalog.periodId);
 
-        if (country) {
-          if (!country.catalogs.some((c) => c.id === catalog.id)) {
-            country.catalogs.push(catalog);
+        if (period) {
+          if (!period.catalogs.some((c) => c.id === catalog.id)) {
+            period.catalogs.push(catalog);
           }
         } else {
           acc.push({
-            code: catalog.countryCode,
-            name: catalog.country.name,
+            period: catalog.period,
+            name: catalog.period.name,
             catalogs: [catalog],
           });
         }
 
         return acc;
-      }, [] as Array<{ code: string; name: string; catalogs: Catalog[] }>),
+      }, [] as Array<{ period: Period; name: string; catalogs: Catalog[] }>),
     [catalogs]
   );
 
   useEffect(() => {
-    if (orderByCountry?.length) {
-      setCatalogIdSelected(orderByCountry[0].catalogs[0].id);
+    if (orderByPeriod?.length) {
+      setCatalogIdSelected(orderByPeriod[0].catalogs[0].id);
     }
-  }, [orderByCountry, setCatalogIdSelected]);
+  }, [orderByPeriod, setCatalogIdSelected]);
 
   if (catalogsIsLoading) {
     return <>Loading...</>;
@@ -91,27 +92,26 @@ export const CoinExplorerMenu: FC = () => {
   return (
     <RootStyled
       type="single"
-      defaultValue={orderByCountry?.[0].code}
+      defaultValue={orderByPeriod?.[0].period.id}
       collapsible
     >
-      {orderByCountry?.map((country) => (
-        <Item value={country.code}>
+      {orderByPeriod?.map((element) => (
+        <Item value={element.period.id}>
           <Header>
             <TriggerStyled>
               <TriggerLeft>
-                <Image
-                  src={`/flags/${country.code}.svg`}
-                  height={24}
-                  width={24}
-                  alt="Logo My Coin"
+                <Flag
+                  url={element.period.flag}
+                  alt={element.period.name}
+                  size={24}
                 />
-                {country.name}
+                {element.name}
               </TriggerLeft>
               <ChevronDownIcon aria-hidden />
             </TriggerStyled>
           </Header>
           <ContentStyled>
-            {country.catalogs.map((catalog) => (
+            {element.catalogs.map((catalog) => (
               <ContentItem onClick={() => setCatalogIdSelected(catalog.id)}>
                 {catalog.name}
               </ContentItem>

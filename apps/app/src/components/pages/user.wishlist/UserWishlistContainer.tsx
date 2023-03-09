@@ -29,7 +29,7 @@ export const UserWishlistContainer: FC<UserWishlistContainerProps> = ({
       }
     );
 
-  const { data: coinsRef, isLoading: isLoadingCoinsRef } =
+  const { data: coinRefs, isLoading: isLoadingCoinRefs } =
     trpc.coinRef.getWishlistByUserIdAndCatalogId.useQuery(
       {
         userId: user.id,
@@ -50,8 +50,8 @@ export const UserWishlistContainer: FC<UserWishlistContainerProps> = ({
         onCatalogSelected={(catalogId) => setCatalogIdSelected(catalogId)}
         coins={coins}
         coinsIsLoading={isLoadingCoins}
-        coinsRef={coinsRef}
-        coinsRefIsLoading={isLoadingCoinsRef}
+        coinRefs={coinRefs}
+        coinRefsIsLoading={isLoadingCoinRefs}
       />
     </>
   );

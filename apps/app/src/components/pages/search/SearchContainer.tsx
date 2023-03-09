@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { trpc } from '../../../utils/trpc';
 import { SearchCatalogsContainer } from './catalogs';
-import { SearchCoinsRefsContainer } from './coinRef';
+import { SearchCoinRefsContainer } from './coinRef';
 import { SearchUsersContainer } from './users';
 
 export const SearchContainer: FC = () => {
@@ -14,7 +14,7 @@ export const SearchContainer: FC = () => {
       query: q as string,
     });
 
-  const { data: coinsRefsData, isLoading: coinsRefsLoading } =
+  const { data: coinRefsData, isLoading: coinRefsLoading } =
     trpc.coinRef.search.useQuery({
       query: q as string,
     });
@@ -27,12 +27,12 @@ export const SearchContainer: FC = () => {
   if (
     usersData?.length === 0 &&
     catalogsData?.length === 0 &&
-    coinsRefsData?.length === 0
+    coinRefsData?.length === 0
   ) {
     return <div>Nothing found</div>;
   }
 
-  if (usersLoading || catalogsLoading || coinsRefsLoading) {
+  if (usersLoading || catalogsLoading || coinRefsLoading) {
     return <div>Loading...</div>;
   }
 
@@ -42,8 +42,8 @@ export const SearchContainer: FC = () => {
       {!!catalogsData?.length && (
         <SearchCatalogsContainer catalogs={catalogsData} />
       )}
-      {!!coinsRefsData?.length && (
-        <SearchCoinsRefsContainer coinsRefs={coinsRefsData} />
+      {!!coinRefsData?.length && (
+        <SearchCoinRefsContainer coinRefs={coinRefsData} />
       )}
     </>
   );

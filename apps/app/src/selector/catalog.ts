@@ -1,5 +1,5 @@
 import type { Prisma } from '@my-coin/database';
-import { selectCountry } from './country';
+import { selectPeriod } from './period';
 
 import type { CheckSelectKeys } from './types';
 
@@ -10,10 +10,10 @@ const createCatalogSelect = <T extends Prisma.CatalogSelect>(
 export const selectCatalog = createCatalogSelect({
   id: true,
   name: true,
-  country: {
-    select: selectCountry,
+  period: {
+    select: selectPeriod,
   },
-  countryCode: true,
+  periodId: true,
   created_at: true,
   updated_at: true,
 });

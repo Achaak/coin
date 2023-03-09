@@ -3,8 +3,8 @@ import { selectCoinRefPriceHistory } from '../../selector/coinRefPriceHistory';
 import { router, publicProcedure } from './trpc';
 
 export const coinRefPriceHistoryRouter = router({
-  /* Get coin price history by coin id */
-  getById: publicProcedure
+  /* Get coin price history by coin ref id */
+  getByCoinRefId: publicProcedure
     .input(
       z.object({
         id: z.string(),

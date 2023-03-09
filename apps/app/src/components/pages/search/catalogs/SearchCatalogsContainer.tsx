@@ -2,10 +2,10 @@ import { getLink } from '@my-coin/router/dist/app';
 import { styled } from '@my-coin/ui';
 import { Grid } from '@my-coin/ui/dist/components/grid/index';
 import { Title } from '@my-coin/ui/dist/components/title/index';
-import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 import { Catalog } from '../../../../selector/catalog';
+import { Flag } from '../../../global/Flag';
 
 const Container = styled('div', {
   display: 'flex',
@@ -91,12 +91,7 @@ const CatalogItem: FC<{ catalog: Catalog }> = ({ catalog }) => (
   >
     <CatalogItemStyled>
       <CatalogItemFlag>
-        <Image
-          src={`/flags/${catalog.countryCode}.svg`}
-          alt={catalog.countryCode}
-          width={24}
-          height={24}
-        />
+        <Flag alt={catalog.period.name} url={catalog.period.flag} size={24} />
       </CatalogItemFlag>
       <CatalogItemName>{catalog.name}</CatalogItemName>
     </CatalogItemStyled>

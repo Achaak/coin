@@ -3,10 +3,17 @@ import { Card } from '../../../global/Card';
 import { Infos } from '../../../global/Infos';
 import { Title } from '@my-coin/ui/dist/components/title/index';
 import { CoinAlignment } from '@my-coin/database';
+import Link from 'next/link';
+import { getLink } from '@my-coin/router/dist/app';
+import { styled } from '@my-coin/ui';
+
+const Name = styled('span', {
+  color: '$primary',
+});
 
 type CoinInformationContainerProps = {
   composition: string | null;
-  denomination: string;
+  value: string;
   diameter: number | null;
   edgeType: string | null;
   edgeDescription: string | null;
@@ -14,14 +21,17 @@ type CoinInformationContainerProps = {
   thickness: number | null;
   type: string;
   shape: string | null;
-  country: string;
-  period: string | null;
+  period: {
+    name: string;
+    id: string;
+  };
   alignment: CoinAlignment | null;
+  demonetized: boolean;
 };
 
 export const CoinInformation: FC<CoinInformationContainerProps> = ({
   composition,
-  denomination,
+  value,
   diameter,
   edgeType,
   edgeDescription,
@@ -29,9 +39,9 @@ export const CoinInformation: FC<CoinInformationContainerProps> = ({
   thickness,
   type,
   shape,
-  country,
   period,
   alignment,
+  demonetized,
 }) => (
   <Card
     css={{
@@ -48,22 +58,24 @@ export const CoinInformation: FC<CoinInformationContainerProps> = ({
           value: 'KM#123',
         },
         {
-          label: 'Country',
-          value: country,
+          label: 'Period',
+          value: (
+            <Link
+              href={getLink('period.item', {
+                queries: {
+                  periodId: period.id,
+                },
+              })}
+            >
+              <Name>{period.name}</Name>
+            </Link>
+          ),
         },
-        ...(denomination
+        ...(value
           ? [
               {
-                label: 'Denomination',
-                value: denomination,
-              },
-            ]
-          : []),
-        ...(period
-          ? [
-              {
-                label: 'Period',
-                value: period,
+                label: 'Value',
+                value: value,
               },
             ]
           : []),
@@ -132,6 +144,14 @@ export const CoinInformation: FC<CoinInformationContainerProps> = ({
               {
                 label: 'Thickness',
                 value: `${thickness} mm`,
+              },
+            ]
+          : []),
+        ...(demonetized !== null
+          ? [
+              {
+                label: 'Demonetized',
+                value: demonetized ? 'Yes' : 'No',
               },
             ]
           : []),
